@@ -1,0 +1,151 @@
+/* Basic CSS for Portfolio Website */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Colors */
+:root {
+  --sage: #94A187;
+  --cream: #F5F5F0;
+  --charcoal: #2F3337;
+  --stone: #D7D7D2;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  padding: 2rem;
+}
+
+header {
+  text-align: center;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--stone);
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: var(--sage);
+  margin-bottom: 1rem;
+}
+
+nav {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+nav a {
+  color: var(--charcoal);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  margin: 0 1rem;
+}
+
+nav a:hover {
+  background-color: var(--sage);
+  color: var(--cream);
+}
+
+section {
+  background-color: white;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+  color: var(--sage);
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--stone);
+  padding-bottom: 0.5rem;
+}
+
+ul, ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+#projects article {
+  border: 1px solid var(--stone);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+#projects h3 {
+  color: var(--sage);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--stone);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button {
+  background-color: var(--sage);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+  border-top: 2px solid var(--stone);
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+
+  nav a {
+    display: block;
+    margin: 0.5rem 0;
+  }
+
+  section {
+    padding: 1.5rem;
+  }
+}
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  section {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  nav {
+    display: none;
+  }
+}

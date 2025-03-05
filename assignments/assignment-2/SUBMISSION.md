@@ -1,12 +1,11 @@
 # CSC 317 Assignment 2 Submission
+**Name:** Damian Perez
+**Student ID:** 923803696
+**GitHub Username:** banksybanksy
+**Assignment Number:** 2
 
-Name: Damian Perez
-Student ID: 923803696
-GitHub Username: banksybanksy
-Assignment Number: 2
-
-## HTML Personal Portfolio Website Assignment
-### Description:
+# HTML Personal Portfolio Website Assignment
+## Description:
 This assignment involved creating a personal portfolio website using HTML. The goal was to structure a webpage that introduces myself, my experience, education, and projects in a clear and accessible manner. The website serves as an online resume showcasing my skills, work history, and relevant coursework. The key tasks included:
 - Designing a semantic and well-structured HTML layout.
 - Including navigation links for different sections (About, Experience, Education, Projects, Contact).
@@ -14,7 +13,7 @@ This assignment involved creating a personal portfolio website using HTML. The g
 - Embedding images, a Google Map, and interactive elements.
 - Ensuring a responsive design using appropriate HTML tags.
 
-### Approach / What I Did:
+## Approach / What I Did:
 As a student working on my first real portfolio website, I wanted to build something that is clean, structured, and easy to navigate, while also showcasing my skills and experience in a professional way. My goal was to create a well-organized, readable HTML layout that I could later enhance with CSS and JavaScript.
 
 I started by breaking down my site into sections that would best represent me:
@@ -40,7 +39,7 @@ I started by breaking down my site into sections that would best represent me:
    2. I plan to later improve this with JavaScript validation.
 
 
-### Code Explanation:
+## Code Explanation:
 Here are some key elements of my HTML code and their purposes:
 
 #### Navigation Bar

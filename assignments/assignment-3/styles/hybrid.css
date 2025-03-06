@@ -1,106 +1,59 @@
-/* Hybrid CSS - Combining minimalist elements from styles.css with modern features from ai-2.css */
+/* Hybrid CSS - A combination of styles.css and ai-2.css */
 
-/* From ai-2.css: Using Inter font for modern typography */
+/* Import Google Fonts - From ai-2.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* From styles.css: Core color system with some modernization */
+/* Core Variables - Colors and Effects Only */
 :root {
     /* Colors */
-    --primary: #2B9DF4;
-    --accent: #9D4EDD;
-    --dark: #1A1A1A;
-    --light: #FFFFFF;
-    --muted: #6B7280;
-    --border: rgba(0, 0, 0, 0.1);
-    --hover: #F4F5F7;
+    --primary: #2B9DF4;    /* Main blue */
+    --accent: #9D4EDD;     /* Purple accent */
+    --dark: #1A1A1A;       /* Text color */
+    --light: #FFFFFF;      /* Background */
+    --muted: #6B7280;      /* Subtle text */
     
-    /* From ai-2.css: Enhanced spacing system */
-    --sp-1: 0.5rem;
-    --sp-2: 1rem;
-    --sp-3: 1.5rem;
-    --sp-4: 2rem;
-    --sp-5: 3rem;
-    
-    /* From ai-2.css: Responsive typography scale */
-    --text-xs: clamp(0.75rem, 2vw, 0.875rem);
-    --text-sm: clamp(0.875rem, 2vw, 1rem);
-    --text-md: clamp(1rem, 2vw, 1.125rem);
-    --text-lg: clamp(1.125rem, 2vw, 1.25rem);
-    --text-xl: clamp(1.25rem, 3vw, 1.5rem);
-    --text-2xl: clamp(1.5rem, 4vw, 2rem);
-    --text-3xl: clamp(2rem, 5vw, 2.5rem);
-    
-    /* From styles.css: Subtle effects */
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* Effects */
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
 }
 
-/* From styles.css: Basic reset */
+/* Reset Styles - Always start with a clean slate */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* From ai-2.css: Enhanced typography with Inter */
+/* Base Styles - From styles.css */
 body {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: var(--text-md);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 1rem;
     line-height: 1.6;
     background-color: var(--light);
     color: var(--dark);
-    -webkit-font-smoothing: antialiased;
+    padding: 1.5rem;
 }
 
-/* From ai-2.css: Container layout */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--sp-3);
-}
-
-/* From styles.css: Header with ai-2.css gradient */
+/* Header Styles - Combined from both files */
 header {
     text-align: center;
-    padding: var(--sp-5) var(--sp-3);
-    margin-bottom: var(--sp-4);
+    padding: 3rem;
+    margin-bottom: 2rem;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     color: var(--light);
-    position: relative;
-    overflow: hidden;
-}
-
-header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
-    z-index: 1;
 }
 
 header h1 {
-    font-size: var(--text-3xl);
-    margin-bottom: var(--sp-2);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
-    position: relative;
-    z-index: 2;
 }
 
-header p {
-    font-size: var(--text-lg);
-    opacity: 0.9;
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
-}
-
-/* From ai-2.css: Navigation */
+/* Navigation - From styles.css with ai-2.css enhancements */
 nav {
     background: var(--light);
-    padding: var(--sp-3);
-    margin-bottom: var(--sp-4);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
     box-shadow: var(--shadow);
     position: sticky;
     top: 0;
@@ -111,14 +64,14 @@ nav ul {
     list-style: none;
     display: flex;
     justify-content: center;
-    gap: var(--sp-2);
+    gap: 1rem;
     flex-wrap: wrap;
 }
 
 nav a {
     color: var(--dark);
     text-decoration: none;
-    padding: var(--sp-1) var(--sp-2);
+    padding: 0.5rem 1rem;
     border-radius: 20px;
     font-weight: 500;
     transition: var(--transition);
@@ -126,93 +79,90 @@ nav a {
 
 nav a:hover {
     color: var(--primary);
-    background: var(--hover);
+    background-color: rgba(43, 157, 244, 0.1);
 }
 
-/* From styles.css: Section styling with ai-2.css enhancements */
+/* Section Styles - From styles.css */
 section {
-    padding: var(--sp-4);
-    margin-bottom: var(--sp-4);
+    padding: 2rem;
+    margin-bottom: 2rem;
     background: var(--light);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-}
-
-section:hover {
+    border-radius: 8px;
     box-shadow: var(--shadow);
 }
 
 section h2 {
-    font-size: var(--text-2xl);
-    margin-bottom: var(--sp-4);
-    padding-bottom: var(--sp-2);
-    border-bottom: 3px solid var(--primary);
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary);
+    color: var(--dark);
 }
 
-section h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 4px;
-    background: linear-gradient(to right, var(--primary), var(--accent));
-    border-radius: 2px;
-}
-
-/* From ai-2.css: Projects grid layout */
+/* Projects Section - Simple and Clean */
 #projects {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--sp-3);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem 0;
 }
 
 #projects article {
-    padding: var(--sp-3);
-    border-radius: 12px;
-    border: 1px solid var(--border);
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #eee;
     transition: var(--transition);
 }
 
 #projects article:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
+    transform: translateY(-4px);
     border-color: var(--primary);
 }
 
 #projects h3 {
-    color: var(--primary);
-    font-size: var(--text-lg);
-    margin-bottom: var(--sp-2);
+    color: var(--dark);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--primary);
+    padding-left: 1rem;
 }
 
 #projects p {
     color: var(--muted);
+    line-height: 1.6;
 }
 
-/* From styles.css: Form elements with ai-2.css aesthetics */
+#projects img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Form Elements - From styles.css */
 form {
     max-width: 600px;
     margin: 0 auto;
 }
 
 .form-group {
-    margin-bottom: var(--sp-3);
+    margin-bottom: 1.5rem;
 }
 
 label {
     display: block;
-    margin-bottom: var(--sp-1);
+    margin-bottom: 0.5rem;
     color: var(--dark);
     font-weight: 500;
 }
 
 input, textarea {
     width: 100%;
-    padding: var(--sp-2);
-    border: 2px solid var(--border);
-    border-radius: 12px;
+    padding: 1rem;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
     font: inherit;
     transition: var(--transition);
 }
@@ -227,8 +177,8 @@ button {
     background: var(--primary);
     color: var(--light);
     border: none;
-    border-radius: 12px;
-    padding: var(--sp-2) var(--sp-4);
+    border-radius: 8px;
+    padding: 1rem 2rem;
     font: inherit;
     font-weight: 500;
     cursor: pointer;
@@ -236,77 +186,15 @@ button {
 }
 
 button:hover {
+    background: var(--accent);
     transform: translateY(-2px);
-    background: linear-gradient(to right, var(--primary), var(--accent));
-    box-shadow: var(--shadow);
 }
 
-/* From ai-2.css: Enhanced table styles */
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: var(--sp-3) 0;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-}
-
-th, td {
-    padding: var(--sp-2) var(--sp-3);
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-}
-
-th {
-    background: var(--hover);
-    font-weight: 600;
-    font-size: var(--text-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-}
-
-tr:last-child td {
-    border-bottom: none;
-}
-
-tr:hover {
-    background: var(--hover);
-}
-
-/* From styles.css: Footer */
+/* Footer */
 footer {
     text-align: center;
-    padding: var(--sp-4);
+    padding: 2rem;
     color: var(--muted);
-    border-top: 1px solid var(--border);
-}
-
-/* From ai-2.css: Responsive design */
-@media (max-width: 768px) {
-    nav {
-        padding: var(--sp-2);
-    }
-    
-    nav ul {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    nav a {
-        display: block;
-        padding: var(--sp-2);
-    }
-    
-    section {
-        padding: var(--sp-3);
-    }
-}
-
-/* From styles.css: Print styles */
-@media print {
-    nav { display: none; }
-    body { color: black; background: white; }
-    section { break-inside: avoid; box-shadow: none; }
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-top: 3rem;
 }

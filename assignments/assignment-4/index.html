@@ -400,18 +400,23 @@
         // Update the stylesheet
         document.getElementById('theme-stylesheet').href = 'styles/' + themeName + '.css';
         
+        // Save theme preference
+        localStorage.setItem('portfolio-theme', themeName);
+        
         // Update button states
         const buttons = document.querySelectorAll('.theme-button');
         buttons.forEach(button => {
-            button.classList.remove('active');
-            button.setAttribute('aria-pressed', 'false');
+            const buttonTheme = button.getAttribute('onclick').match(/switchTheme\('(.+?)'\)/)[1];
+            button.classList.toggle('active', buttonTheme === themeName);
+            button.setAttribute('aria-pressed', buttonTheme === themeName);
         });
-        
-        // Update the clicked button
-        const clickedButton = event.target;
-        clickedButton.classList.add('active');
-        clickedButton.setAttribute('aria-pressed', 'true');
     }
+
+    // Load saved theme preference
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('portfolio-theme') || 'assign3-styles';
+        switchTheme(savedTheme);
+    });
 </script>
 
 </body>

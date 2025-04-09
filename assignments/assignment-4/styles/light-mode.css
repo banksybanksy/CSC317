@@ -3,18 +3,18 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #000;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .calculator {
-    background-color: #1c1c1c; 
-    border-radius: 30px; 
+    position: relative;
+    background-color: var(--calc-bg);
+    border-radius: 30px;
     padding: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 320px; 
+    max-width: 320px;
     box-sizing: border-box;
 }
 
@@ -27,7 +27,7 @@ body {
 }
 
 .history {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--history-text);
     text-align: right;
     font-size: 24px;
     min-height: 30px;
@@ -37,71 +37,73 @@ body {
 
 #display {
     width: 100%;
-    background-color: transparent; 
+    background-color: transparent;
     border: none;
-    color: #fff;
-    font-size: 64px; 
+    color: var(--display-text);
+    font-size: 64px;
     text-align: right;
-    padding: 10px 5px; 
+    padding: 10px 5px;
     box-sizing: border-box;
-    font-weight: 300; 
-    height: 80px; 
+    font-weight: 300;
+    height: 80px;
     line-height: 80px;
-    overflow: hidden; 
-    white-space: nowrap; 
-    text-overflow: ellipsis; 
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px; 
+    gap: 12px;
 }
 
 .button {
-    background-color: #505050; 
+    background-color: var(--number-btn-bg);
     border: none;
-    border-radius: 50%; 
-    color: #fff;
-    font-size: 28px; 
+    border-radius: 50%;
+    color: var(--number-btn-text);
+    font-size: 28px;
     font-weight: 400;
     cursor: pointer;
-    aspect-ratio: 1 / 1; 
+    aspect-ratio: 1 / 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .button:active {
-    filter: brightness(1.2); 
+    filter: brightness(1.2);
 }
 
 /* Specific button styles */
 .button.utility {
-    background-color: #d4d4d2; 
-    color: #1c1c1c; 
+    background-color: var(--utility-btn-bg);
+    color: var(--utility-btn-text);
 }
 
 .button.operator {
-    background-color: #ff9500; 
-    color: #fff;
-    font-size: 32px; 
+    background-color: var(--operator-btn-bg);
+    color: var(--operator-btn-text);
+    font-size: 32px;
 }
 
+/* Special case for equals button */
 .button[data-action="calculate"] {
-     background-color: #ff9500;
-     color: #fff;
+    background-color: var(--operator-btn-bg);
+    color: var(--operator-btn-text);
 }
 
 .button.number.zero {
-    grid-column: span 2; 
-    border-radius: 40px; 
-    aspect-ratio: auto; 
-    justify-content: flex-start; 
-    padding-left: 28px; 
+    grid-column: span 2;
+    border-radius: 40px;
+    aspect-ratio: auto;
+    justify-content: flex-start;
+    padding-left: 28px;
 }
 
+/* Active and hover effects */
 .button.active-key {
     filter: brightness(1.5) !important;
 }
@@ -110,14 +112,15 @@ body {
     .button:hover {
         filter: brightness(0.8);
     }
-     .button.utility:hover {
-         filter: brightness(0.9);
-     }
-     .button.operator:hover {
-         filter: brightness(1.1); 
-     }
+    .button.utility:hover {
+        filter: brightness(0.9);
+    }
+    .button.operator:hover {
+        filter: brightness(1.1);
+    }
 }
 
+/* Basic Responsiveness */
 @media (max-width: 350px) {
     .calculator {
         padding: 15px;

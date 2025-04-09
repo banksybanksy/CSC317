@@ -18,12 +18,18 @@ body {
     box-sizing: border-box;
 }
 
-.display {
-    margin-bottom: 20px;
+.calculator .display {
+    background-color: var(--calc-bg, #1c1c1c);
+    color: var(--calc-text, #ffffff);
+    text-align: right;
+    padding: 20px;
+    border-radius: 10px 10px 0 0; /* Round top corners */
+    min-height: 80px; /* Ensure minimum height */
     display: flex;
     flex-direction: column;
-    height: 120px;
-    justify-content: flex-end;
+    justify-content: space-between;
+    word-wrap: break-word;
+    overflow: hidden; /* Prevent overflow */
 }
 
 .history {
@@ -33,6 +39,16 @@ body {
     min-height: 30px;
     padding: 0 5px;
     margin-bottom: 5px;
+}
+
+.calculator #history {
+    font-size: 18px;
+    color: var(--calc-history-text, #a0a0a0);
+    margin-bottom: 5px;
+    height: 25px; /* Fixed height for history */
+    overflow: hidden; /* Hide overflow */
+    white-space: nowrap; /* Prevent wrapping */
+    text-overflow: ellipsis; /* Show ellipsis for long history */
 }
 
 #display {
@@ -52,7 +68,26 @@ body {
     text-overflow: ellipsis; 
 }
 
+.calculator #display {
+    font-size: 48px;
+    font-weight: 300;
+    border: none;
+    background: none;
+    color: inherit; /* Inherit color from parent */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    text-align: right; /* Ensure text stays right-aligned */
+}
+
 .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px; 
+}
+
+.calculator .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px; 
@@ -132,4 +167,55 @@ body {
     .buttons {
         gap: 10px;
     }
+}
+
+/* Memory Log Styles */
+.calculator-layout-container {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: flex-start; /* Align items to the top */
+    gap: 30px; /* Space between calculator and log */
+    padding: 80px 20px 20px; /* Adjust padding as needed */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.memory-log-container {
+    background-color: var(--calc-bg, #1c1c1c); /* Match calculator bg */
+    color: var(--calc-text, #ffffff); /* Match calculator text */
+    border-radius: 15px;
+    padding: 20px;
+    width: 100%; /* Default to full width */
+    max-width: 250px; /* Set a max width for the log */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: fit-content; /* Adjust height based on content */
+    max-height: 400px; /* Limit max height */
+    overflow-y: auto; /* Add scroll if content overflows */
+}
+
+.memory-log-container h3 {
+    color: var(--calc-utility-text, #e0e0e0); /* Use a slightly different color */
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--calc-utility-bg, #505050);
+    padding-bottom: 10px;
+    font-size: 16px;
+}
+
+#memory-log-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+#memory-log-list li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--calc-utility-bg, #505050);
+    word-wrap: break-word; /* Wrap long lines */
+}
+
+#memory-log-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
 }

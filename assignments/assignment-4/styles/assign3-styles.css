@@ -120,6 +120,122 @@ footer {
   border-top: 2px solid var(--stone);
 }
 
+/* Styles moved from index.html inline <style> block */
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+/* Theme Switcher */
+.theme-switcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    border: 1px solid #e1e1e1;
+}
+
+.theme-switcher p {
+    margin: 0 0 12px 0;
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+}
+
+.theme-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.theme-button {
+    padding: 10px 20px;
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    background: #f8f8f8;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    transition: all 0.2s ease;
+    min-width: 100px;
+    text-align: center;
+}
+
+.theme-button:hover {
+    background: #eef2ff;
+    border-color: #818cf8;
+    color: #4f46e5;
+    transform: translateY(-1px);
+}
+
+/* Project styles */
+.project-preview {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.project-preview img {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    height: auto;
+}
+
+.project-link {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #818cf8; /* Using theme color directly for default */
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.project-link:hover {
+    background-color: #0056b3; /* Consider making this themeable too */
+}
+
+.theme-button.active {
+    background: #818cf8;
+    border-color: #4f46e5;
+    color: white;
+    font-weight: 600;
+}
+
+/* Make theme switcher responsive */
+@media (max-width: 768px) {
+    .theme-switcher {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+    }
+
+    .theme-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .theme-button {
+        flex: 1;
+        min-width: 90px;
+    }
+}
+
 @media (max-width: 768px) {
   body {
     padding: 1rem;

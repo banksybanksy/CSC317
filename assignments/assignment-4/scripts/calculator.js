@@ -11,45 +11,72 @@ function toggleTheme() {
 // Memory handling
 let memoryValue = parseFloat(localStorage.getItem('calculator-memory')) || 0;
 const memoryIndicator = document.getElementById('memory-indicator');
+// Define memoryLogList globally; will be assigned in DOMContentLoaded
+let memoryLogList;
+
+// Function to add an entry to the memory log
+function logMemoryOperation(message) {
+    if (!memoryLogList) return; // Exit if log list element isn't available yet
+
+    const listItem = document.createElement('li');
+    listItem.textContent = message;
+    // Prepend the new log entry to show the latest at the top
+    memoryLogList.insertBefore(listItem, memoryLogList.firstChild);
+
+    // Optional: Limit the number of log entries (e.g., keep last 15)
+    const maxLogEntries = 15;
+    while (memoryLogList.children.length > maxLogEntries) {
+        memoryLogList.removeChild(memoryLogList.lastChild);
+    }
+}
 
 function updateMemoryIndicator() {
     memoryIndicator.style.display = memoryValue !== 0 ? 'block' : 'none';
 }
 
-function showMemoryFeedback(message) {
-    const feedback = document.getElementById('memory-feedback');
-    feedback.textContent = message;
-    feedback.classList.add('show');
-    setTimeout(() => feedback.classList.remove('show'), 1500);
-}
-
 function handleMemory(action) {
     const currentValue = parseFloat(displayElement.value) || 0;
+    let logMessage = ''; // Initialize log message
 
     switch(action) {
         case 'mc':
             memoryValue = 0;
-            showMemoryFeedback('Memory Cleared');
+            logMessage = 'Memory Cleared';
+            if (memoryLogList) memoryLogList.innerHTML = ''; // Clear visual log
             break;
         case 'mr':
+            // Update display and internal state
             displayElement.value = memoryValue;
-            showMemoryFeedback('Memory Recalled: ' + memoryValue);
-            waitingForSecondOperand = true;
+            displayValue = String(memoryValue); // Update internal displayValue
+            logMessage = `Recalled: ${memoryValue}`;
+            
+            // Reset calculator state after MR to treat recalled value as a new input
+            waitingForSecondOperand = false;
+            calculationComplete = false;
+            // If an operation was pending, keep it, otherwise clear operator
+            // currentEquation = displayValue; // Start new equation history? Or keep old? Let's reset.
+            firstOperand = parseFloat(displayValue); // Set the recalled value as the start
+            operator = null; // Clear pending operator
+            currentEquation = displayValue; // Reset equation history
             break;
         case 'mplus':
             memoryValue += currentValue;
-            showMemoryFeedback('Added to Memory: ' + currentValue);
-            waitingForSecondOperand = true;
+            logMessage = `${currentValue} Added | Mem: ${memoryValue}`;
+            waitingForSecondOperand = true; // Allow starting new number after M+
             break;
         case 'mminus':
             memoryValue -= currentValue;
-            showMemoryFeedback('Subtracted from Memory: ' + currentValue);
-            waitingForSecondOperand = true;
+            logMessage = `${currentValue} Subtracted | Mem: ${memoryValue}`;
+            waitingForSecondOperand = true; // Allow starting new number after M-
             break;
     }
 
     localStorage.setItem('calculator-memory', memoryValue);
     updateMemoryIndicator();
+    if (logMessage) { // Log the operation if a message was generated
+        logMemoryOperation(logMessage);
+    }
+    updateDisplay(); // Update display after memory operation, especially MR
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -65,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize memory indicator
     updateMemoryIndicator();
+
+    // Assign memoryLogList here since DOM is loaded
+    memoryLogList = document.getElementById('memory-log');
 
     // Memory button handling
     memoryButtons.addEventListener('click', (e) => {

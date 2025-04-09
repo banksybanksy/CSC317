@@ -43,13 +43,22 @@
             transform: translateY(-1px);
         }
 
+        .calculator-layout-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            padding: 80px 20px 20px;
+            gap: 20px;
+        }
+
         .calculator-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 80px 20px 20px;
+            padding: 20px;
             gap: 20px;
         }
 
@@ -64,7 +73,19 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
-        .memory-section {
+        .memory-indicator {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 14px;
+            color: #818cf8;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .display {
             background-color: var(--calc-bg, #1c1c1c);
             border-radius: 15px;
             padding: 15px;
@@ -74,23 +95,46 @@
             position: relative;
         }
 
-        .memory-feedback {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
+        .history {
+            color: #818cf8;
             font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.1);
         }
 
-        .memory-feedback.show {
-            opacity: 1;
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .button {
+            background-color: #818cf8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .button:hover {
+            background-color: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        .memory-section {
+            background-color: var(--calc-bg, #1c1c1c);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 320px;
+            position: relative;
         }
 
         .memory-buttons {
@@ -120,20 +164,7 @@
             background-color: #4f46e5;
         }
 
-        .memory-indicator {
-            position: absolute;
-            top: 10px;
-            left: 15px;
-            font-size: 14px;
-            color: #818cf8;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        /* Test Instructions */
-        .test-instructions {
+        .memory-log-container {
             background-color: white;
             border-radius: 15px;
             padding: 20px;
@@ -143,100 +174,74 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .test-instructions h3 {
+        .memory-log-container h3 {
             color: var(--sage, #94A187);
             margin-bottom: 10px;
         }
 
-        .test-instructions ol {
+        .memory-log-container ul {
             margin-left: 20px;
             color: var(--charcoal, #2F3337);
         }
 
-        .test-instructions li {
+        .memory-log-container li {
             margin-bottom: 8px;
         }
     </style>
 </head>
 <body>
     <div class="calculator-header">
-        <a href="index.html" class="back-link">← Back to Portfolio</a>
+        <a href="index.html" class="back-link">Back to Portfolio</a>
         <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
     </div>
-    <div class="calculator-container">
-        <div class="calculator">
-            <div class="memory-indicator" id="memory-indicator" style="display: none;">M</div>
-        <div class="display">
-            <div id="history" class="history"></div>
-            <input type="text" id="display" value="0" disabled>
-        </div>
-        <div class="buttons">
-            <button class="button utility" data-action="clear">AC</button>
-            <button class="button utility" data-action="toggle-sign">+/-</button>
-            <button class="button utility" data-action="percentage">%</button>
-            <button class="button operator" data-action="divide">÷</button>
+    <div class="calculator-layout-container">
+        <div class="calculator-container">
+            <div class="calculator">
+                <div class="memory-indicator" id="memory-indicator" style="display: none;">M</div>
+                <div class="display">
+                    <div id="history" class="history"></div>
+                    <input type="text" id="display" value="0" disabled>
+                </div>
+                <div class="buttons">
+                    <button class="button utility" data-action="clear">AC</button>
+                    <button class="button utility" data-action="toggle-sign">+/-</button>
+                    <button class="button utility" data-action="percentage">%</button>
+                    <button class="button operator" data-action="divide">÷</button>
 
-            <button class="button number" data-value="7">7</button>
-            <button class="button number" data-value="8">8</button>
-            <button class="button number" data-value="9">9</button>
-            <button class="button operator" data-action="multiply">×</button>
+                    <button class="button number" data-value="7">7</button>
+                    <button class="button number" data-value="8">8</button>
+                    <button class="button number" data-value="9">9</button>
+                    <button class="button operator" data-action="multiply">×</button>
 
-            <button class="button number" data-value="4">4</button>
-            <button class="button number" data-value="5">5</button>
-            <button class="button number" data-value="6">6</button>
-            <button class="button operator" data-action="subtract">−</button>
+                    <button class="button number" data-value="4">4</button>
+                    <button class="button number" data-value="5">5</button>
+                    <button class="button number" data-value="6">6</button>
+                    <button class="button operator" data-action="subtract">−</button>
 
-            <button class="button number" data-value="1">1</button>
-            <button class="button number" data-value="2">2</button>
-            <button class="button number" data-value="3">3</button>
-            <button class="button operator" data-action="add">+</button>
+                    <button class="button number" data-value="1">1</button>
+                    <button class="button number" data-value="2">2</button>
+                    <button class="button number" data-value="3">3</button>
+                    <button class="button operator" data-action="add">+</button>
 
-            <button class="button number zero" data-value="0">0</button>
-            <button class="button" data-action="decimal">.</button>
-            <button class="button operator" data-action="calculate">=</button>
-        </div>
-        <div class="memory-section">
-            <div class="memory-feedback" id="memory-feedback"></div>
-            <div class="memory-buttons">
-                <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
-            </div>
-            <div class="buttons">
-                <button class="button utility" data-action="clear">AC</button>
-                <button class="button utility" data-action="toggle-sign">+/-</button>
-                <button class="button utility" data-action="percentage">%</button>
-                <button class="button operator" data-action="divide">÷</button>
-
-                <button class="button number" data-value="7">7</button>
-                <button class="button number" data-value="8">8</button>
-                <button class="button number" data-value="9">9</button>
-                <button class="button operator" data-action="multiply">×</button>
-
-                <button class="button number" data-value="4">4</button>
-                <button class="button number" data-value="5">5</button>
-                <button class="button number" data-value="6">6</button>
-                <button class="button operator" data-action="subtract">−</button>
-
-                <button class="button number" data-value="1">1</button>
-                <button class="button number" data-value="2">2</button>
-                <button class="button number" data-value="3">3</button>
-                <button class="button operator" data-action="add">+</button>
-
-                <button class="button number zero" data-value="0">0</button>
-                <button class="button" data-action="decimal">.</button>
-                <button class="button operator" data-action="calculate">=</button>
-            </div>
-            <div class="memory-section">
-                <div class="memory-feedback" id="memory-feedback"></div>
-                <div class="memory-buttons">
-                    <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
-                    <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
-                    <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
-                    <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
+                    <button class="button number zero" data-value="0">0</button>
+                    <button class="button" data-action="decimal">.</button>
+                    <button class="button operator" data-action="calculate">=</button>
+                </div>
+                <div class="memory-section">
+                    <div class="memory-buttons">
+                        <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
+                        <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
+                        <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
+                        <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="memory-log-container" id="memory-log">
+            <h3>Memory Log</h3>
+            <ul id="memory-log-list"></ul>
+        </div>
     </div>
-    <button id="theme-toggle" class="theme-toggle">Switch Theme</button>
     <script src="scripts/calculator.js"></script>
     <script>
         // Theme switching functionality

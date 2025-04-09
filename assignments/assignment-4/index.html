@@ -1,43 +1,418 @@
+<!-- Portfolio Page -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iOS Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Default theme -->
+    <link id="theme-stylesheet" rel="stylesheet" href="styles/styles.css">
+
+    <!-- Basic Metadata -->
+    <meta name="description" content="Damian Perez's personal portfolio website showcasing iOS-focused projects and experiences.">
+    <meta name="keywords" content="Damian Perez, iOS, portfolio, software engineering, Apple Developer, Swift, machine learning">
+    <meta name="author" content="Damian Perez">
+
+    <title>Damian Perez - Portfolio</title>
+
+    <!-- Basic Styles -->
+    <style>
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            border: 1px solid #e1e1e1;
+        }
+
+        .theme-switcher p {
+            margin: 0 0 12px 0;
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-button {
+            padding: 10px 20px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            background: #f8f8f8;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.2s ease;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .theme-button:hover {
+            background: #eef2ff;
+            border-color: #818cf8;
+            color: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        /* Project styles */
+        .project-preview {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .project-preview img {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            height: auto;
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #007AFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .project-link:hover {
+            background-color: #0056b3;
+        }
+
+        .theme-button.active {
+            background: #818cf8;
+            border-color: #4f46e5;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Make theme switcher responsive */
+        @media (max-width: 768px) {
+            .theme-switcher {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+            }
+
+            .theme-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .theme-button {
+                flex: 1;
+                min-width: 90px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="calculator">
-        <div class="display">
-            <div id="history" class="history"></div>
-            <input type="text" id="display" value="0" disabled>
+
+<header>
+    <h1>Damian Perez</h1>
+    <p><em>Prospective Software Engineer</em></p>
+</header>
+
+<nav>
+    <a href="#about">About</a> |
+    <a href="#experience">Experience</a> |
+    <a href="#education">Education</a> |
+    <a href="#projects">Projects</a> |
+    <a href="#extra">Extra-Curricular</a> |
+    <a href="#contact">Contact</a>
+</nav>
+
+<hr>
+
+<main>
+    <!-- About Section -->
+    <section id="about">
+        <h2>About</h2>
+
+        <p>
+            Hello! I'm Damian, a Junior majoring in Computer Science at
+            <strong>San Francisco State University</strong>
+            <img src="images/SFSU_Logo.png" alt="SFSU Logo" width="25">.
+            I specialize in iOS development, blending my love for creative problem-solving
+            with the power of Swift. My interests revolve around exploring machine learning,
+            vision-based applications, and pushing the boundaries of what mobile platforms can do.
+            Outside of coding, you can find me at EDM shows, sampling new cuisines, or planning
+            my next adventure. I'm a firm believer in continuous growth and the importance of
+            staying curious in a fast-paced tech world.
+        </p>
+        <img src="images/SF_Image.jpg" alt="San Francisco aerial photo" width="400">
+
+        <div id="map">
+            <iframe
+                    width="400"
+                    height="250"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d31538.53376511675!2d-122.4497457!3d37.7671738!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085815368dfa48b%3A0x50f7421102ce9e17!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1676502089409!5m2!1sen!2sus">
+            </iframe>
         </div>
-        <div class="buttons">
-            <button class="button utility" data-action="clear">AC</button>
-            <button class="button utility" data-action="toggle-sign">+/-</button>
-            <button class="button utility" data-action="percentage">%</button>
-            <button class="button operator" data-action="divide">÷</button>
 
-            <button class="button number" data-value="7">7</button>
-            <button class="button number" data-value="8">8</button>
-            <button class="button number" data-value="9">9</button>
-            <button class="button operator" data-action="multiply">×</button>
+    </section>
 
-            <button class="button number" data-value="4">4</button>
-            <button class="button number" data-value="5">5</button>
-            <button class="button number" data-value="6">6</button>
-            <button class="button operator" data-action="subtract">−</button>
+    <hr>
 
-            <button class="button number" data-value="1">1</button>
-            <button class="button number" data-value="2">2</button>
-            <button class="button number" data-value="3">3</button>
-            <button class="button operator" data-action="add">+</button>
+    <!-- Experience Section -->
+    <section id="experience">
+        <h2>Experience</h2>
+        <ol>
+            <li>
+                <strong>Expert, Apple</strong><br>
+                <em>December 2024 - Present</em>
+            </li>
+            <li>
+                <strong>Specialist, Apple</strong><br>
+                <em>May 2024 - December 2024</em>
+            </li>
+            <li>
+                <strong>Team Lead, Best Buy</strong><br>
+                <em>November 2023 - May 2024</em>
+            </li>
+            <li>
+                <strong>Apple Pro, Best Buy</strong><br>
+                <em>March 2022 - May 2024</em>
+            </li>
+        </ol>
+    </section>
 
-            <button class="button number zero" data-value="0">0</button>
-            <button class="button" data-action="decimal">.</button>
-            <button class="button operator" data-action="calculate">=</button>
-        </div>
+    <hr>
+
+    <!-- Education Section -->
+    <section id="education">
+        <h2>Education</h2>
+        <ul>
+            <li>
+                <strong>San Francisco State University</strong>
+                <ul>
+                    <li>Bachelor of Science in Computer Science</li>
+                    <li>Expected Graduation: Spring 2026</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Diablo Valley College</strong>
+                <ul>
+                    <li>Associate of Science in Computer Science</li>
+                    <li>Graduated: May 2024</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Relevant Courses</h3>
+        <table>
+            <tr>
+                <th>Course</th>
+                <th>Semester</th>
+            </tr>
+            <tr>
+                <td>Advanced Programming</td>
+                <td>Fall 2024</td>
+            </tr>
+            <tr>
+                <td>Data Structures</td>
+                <td>Fall 2024</td>
+            </tr>
+            <tr>
+                <td>Web Development</td>
+                <td>Spring 2025</td>
+            </tr>
+            <tr>
+                <td>Programming Methodology</td>
+                <td>Spring 2025</td>
+            </tr>
+        </table>
+    </section>
+
+    <hr>
+
+    <!-- Hypothetical Projects Section -->
+    <section id="projects">
+        <h2>Projects</h2>
+
+        <article>
+            <h3>JavaScript Calculator</h3>
+            <div class="project-preview">
+                <img src="images/calculator-preview.jpg" alt="Calculator Preview" width="300">
+            </div>
+            <p>
+                A fully responsive, zero-dependency calculator that faithfully replicates the iOS calculator in both look and logic — powered purely by vanilla JavaScript                <ul>
+                    <li>iOS-inspired design and functionality</li>
+                    <li>Handles all core arithmetic operations: addition, subtraction, multiplication, and division</li>
+                    <li>Supports precise decimal input and formatting</li>
+                    <li>Respects operator precedence (PEMDAS) using Shunting Yard algorithm</li>
+                    <li>Fully navigable via keyboard with responsive key mappings</li>
+                    <li>Adaptive, touch-friendly UI that works seamlessly across devices</li>
+                </ul>
+                <a href="calculator.html" class="project-link">Try the Calculator →</a>
+            </p>
+        </article>
+
+        <article>
+            <h3>SwiftSight</h3>
+            <p>
+                An iOS app leveraging the device camera and Core ML for object recognition in real-time.
+                Developed to help visually impaired users identify everyday objects with instant feedback.
+            </p>
+        </article>
+
+        <article>
+            <h3>Mindful Tasks</h3>
+            <p>
+                A native iOS to-do list application built using SwiftUI. Implements local notifications
+                to remind users of scheduled tasks, with a clean and intuitive UI.
+            </p>
+        </article>
+
+        <article>
+            <h3>Healthy Bites</h3>
+            <p>
+                An iPhone app focusing on meal-tracking and recipe suggestions. Features user authentication,
+                progress charts (using Charts framework), and integration with HealthKit to track calorie intake.
+            </p>
+        </article>
+    </section>
+
+    <hr>
+
+    <!-- Extra-Curricular Section -->
+    <section id="extra">
+        <h2>Extra-Curricular</h2>
+
+        <article>
+            <h3>Wilder (Swift Student Challenge 2024)</h3>
+            <p>
+                Created a macOS, iPadOS, and visionOS application to educate users about endangered animal
+                species. The app provides in-depth information, scientific facts, and interactive elements,
+                including Spatial Audio integration that immerses users in authentic animal sounds.
+            </p>
+        </article>
+
+        <article>
+            <h3>Anato (Swift Student Challenge 2023)</h3>
+            <p>
+                Developed an iOS application to assist students in studying medical anatomy
+                through an engaging and interactive experience. The app features a vibrant,
+                user-friendly interface, memory-based learning games, and structured study modules
+                built using Swift and SwiftUI.
+            </p>
+        </article>
+    </section>
+
+    <hr>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <form action="mailto:dperez52@sfsu.edu" method="post" enctype="text/plain">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" placeholder="Your name" required><br><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" placeholder="me@apple.com" required><br><br>
+
+            <label for="subject">Subject:</label><br>
+            <input type="text" id="subject" name="subject" placeholder="Subject" required><br><br>
+
+            <label for="message">Message:</label><br>
+            <textarea id="message" name="message" rows="4" placeholder="Your message" required></textarea><br><br>
+
+            <button type="submit">Send</button>
+        </form>
+    </section>
+</main>
+
+<hr>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 Damian Perez | All Rights Reserved</p>
+</footer>
+
+<!-- Theme Switcher -->
+<div class="theme-switcher" role="region" aria-label="Theme Selection">
+    <p>Select Theme:</p>
+    <div class="theme-buttons">
+        <button 
+            class="theme-button active" 
+            onclick="switchTheme('styles')"
+            aria-label="Switch to styles theme"
+            aria-pressed="true">
+            styles
+        </button>
+        <button 
+            class="theme-button" 
+            onclick="switchTheme('ai-1')"
+            aria-label="Switch to ai-1 theme"
+            aria-pressed="false">
+            ai-1
+        </button>
+        <button 
+            class="theme-button" 
+            onclick="switchTheme('ai-2')"
+            aria-label="Switch to ai-2 theme"
+            aria-pressed="false">
+            ai-2
+        </button>
+        <button 
+            class="theme-button" 
+            onclick="switchTheme('hybrid')"
+            aria-label="Switch to hybrid theme"
+            aria-pressed="false">
+            hybrid
+        </button>
     </div>
-    <script src="script.js"></script>
+</div>
+
+<script>
+    // Theme switching function
+    function switchTheme(themeName) {
+        // Update the stylesheet
+        document.getElementById('theme-stylesheet').href = 'styles/' + themeName + '.css';
+        
+        // Update button states
+        const buttons = document.querySelectorAll('.theme-button');
+        buttons.forEach(button => {
+            button.classList.remove('active');
+            button.setAttribute('aria-pressed', 'false');
+        });
+        
+        // Update the clicked button
+        const clickedButton = event.target;
+        clickedButton.classList.add('active');
+        clickedButton.setAttribute('aria-pressed', 'true');
+    }
+</script>
+
 </body>
 </html>

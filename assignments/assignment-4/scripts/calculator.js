@@ -1,8 +1,65 @@
+// Theme handling
+function toggleTheme() {
+    const body = document.documentElement;
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('calculator-theme', newTheme);
+}
+
+// Memory handling
+let memoryValue = parseFloat(localStorage.getItem('calculator-memory')) || 0;
+const memoryIndicator = document.getElementById('memory-indicator');
+
+function updateMemoryIndicator() {
+    memoryIndicator.style.display = memoryValue !== 0 ? 'block' : 'none';
+}
+
+function handleMemory(action) {
+    const currentValue = parseFloat(displayElement.value) || 0;
+
+    switch(action) {
+        case 'mc':
+            memoryValue = 0;
+            break;
+        case 'mr':
+            displayElement.value = memoryValue;
+            waitingForSecondOperand = true;
+            break;
+        case 'mplus':
+            memoryValue += currentValue;
+            waitingForSecondOperand = true;
+            break;
+        case 'mminus':
+            memoryValue -= currentValue;
+            waitingForSecondOperand = true;
+            break;
+    }
+
+    localStorage.setItem('calculator-memory', memoryValue);
+    updateMemoryIndicator();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Get references to DOM elements we'll need to manipulate
-  const displayElement = document.getElementById('display');
-  const historyElement = document.getElementById('history');
-  const buttonsContainer = document.querySelector('.buttons');
+    const displayElement = document.getElementById('display');
+    const historyElement = document.getElementById('history');
+    const buttonsContainer = document.querySelector('.buttons');
+    const memoryButtons = document.querySelector('.memory-buttons');
+
+    // Initialize theme
+    const savedTheme = localStorage.getItem('calculator-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Initialize memory indicator
+    updateMemoryIndicator();
+
+    // Memory button handling
+    memoryButtons.addEventListener('click', (e) => {
+        const button = e.target;
+        if (button.dataset.memory) {
+            handleMemory(button.dataset.memory);
+        }
+    });
   const acButton = document.querySelector('button[data-action="clear"]');
 
   // Calculator state variables

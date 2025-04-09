@@ -1,0 +1,200 @@
+/* Hybrid CSS - A combination of styles.css and ai-2.css */
+
+/* Import Google Fonts - From ai-2.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Core Variables - Colors and Effects Only */
+:root {
+    /* Colors */
+    --primary: #2B9DF4;    /* Main blue */
+    --accent: #9D4EDD;     /* Purple accent */
+    --dark: #1A1A1A;       /* Text color */
+    --light: #FFFFFF;      /* Background */
+    --muted: #6B7280;      /* Subtle text */
+    
+    /* Effects */
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* Reset Styles - Always start with a clean slate */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base Styles - From styles.css */
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    background-color: var(--light);
+    color: var(--dark);
+    padding: 1.5rem;
+}
+
+/* Header Styles - Combined from both files */
+header {
+    text-align: center;
+    padding: 3rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: var(--light);
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Navigation - From styles.css with ai-2.css enhancements */
+nav {
+    background: var(--light);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: var(--dark);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+nav a:hover {
+    color: var(--primary);
+    background-color: rgba(43, 157, 244, 0.1);
+}
+
+/* Section Styles - From styles.css */
+section {
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background: var(--light);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary);
+    color: var(--dark);
+}
+
+/* Projects Section - Simple and Clean */
+#projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+}
+
+#projects article {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    transition: var(--transition);
+}
+
+#projects article:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+}
+
+#projects h3 {
+    color: var(--dark);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--primary);
+    padding-left: 1rem;
+}
+
+#projects p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+#projects img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Form Elements - From styles.css */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+    font-weight: 500;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font: inherit;
+    transition: var(--transition);
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(43, 157, 244, 0.1);
+}
+
+button {
+    background: var(--primary);
+    color: var(--light);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+button:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-top: 3rem;
+}

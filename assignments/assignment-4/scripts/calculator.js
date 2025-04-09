@@ -2,10 +2,22 @@ let displayElement;
 // Theme handling
 function toggleTheme() {
     const body = document.documentElement;
-    const currentTheme = body.getAttribute('data-theme');
+    const currentTheme = body.getAttribute('data-theme') || 'dark';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    // Set the theme attribute on the document element
     body.setAttribute('data-theme', newTheme);
+    
+    // Save theme preference to localStorage
     localStorage.setItem('calculator-theme', newTheme);
+    
+    // Update button text to indicate current theme
+    const themeToggleBtn = document.querySelector('.theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.textContent = newTheme === 'light' ? 'Switch to Dark' : 'Switch to Light';
+    }
+    
+    console.log('Theme switched to:', newTheme);
 }
 
 // Memory handling
@@ -89,6 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize theme
     const savedTheme = localStorage.getItem('calculator-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Update theme toggle button text based on current theme
+    const themeToggleBtn = document.querySelector('.theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.textContent = savedTheme === 'light' ? 'Switch to Dark' : 'Switch to Light';
+    }
 
     // Initialize memory indicator
     updateMemoryIndicator();

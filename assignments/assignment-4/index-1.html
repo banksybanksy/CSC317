@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Interaction</title>
+</head>
+<body>
+  <h1>Discover JavaScript</h1>
+  <button id="greetingBtn">Click to Greet</button>
+  <div id="displayMsg"></div>
+
+  <!-- Link to the JavaScript file -->
+  <script src="hello.js"></script>
+  <script>
+    const greetButton = document.getElementById('greetingBtn');
+    const displayMsg = document.getElementById('displayMsg');
+
+    // When the button is clicked, update the page with the greeting message
+    greetButton.addEventListener('click', () => {
+      displayMsg.textContent = composeMessage("JavaScript");
+    });
+  </script>
+</body>
+</html>

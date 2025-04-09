@@ -20,6 +20,19 @@ body {
 
 .display {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    justify-content: flex-end;
+}
+
+.history {
+    color: rgba(255, 255, 255, 0.6);
+    text-align: right;
+    font-size: 24px;
+    min-height: 30px;
+    padding: 0 5px;
+    margin-bottom: 5px;
 }
 
 #display {
@@ -90,7 +103,11 @@ body {
     padding-left: 28px; /* Add padding for text alignment */
 }
 
-/* Hover effects (optional, but good for desktop) */
+/* Active and hover effects */
+.button.active-key {
+    filter: brightness(1.5) !important;
+}
+
 @media (hover: hover) {
     .button:hover {
         filter: brightness(0.8);

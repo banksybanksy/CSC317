@@ -1,77 +1,87 @@
-/* Theme variables */
+/* Theme variables - iOS Calculator Style */
 :root[data-theme='dark'] {
+    /* iOS Dark Mode Colors */
     --body-bg: #000000;
-    --calc-bg: #1c1c1c;
+    --calc-bg: #000000;
     --calc-text: #ffffff;
     --calc-history-text: #a0a0a0;
-    --button-bg: #505050;
+    --button-number-bg: #333333; /* Dark gray for number buttons */
     --button-text: #ffffff;
-    --button-operator-bg: #ff9f0a;
+    --button-operator-bg: #ff9f0a; /* Orange for operation buttons */
     --button-operator-text: #ffffff;
-    --button-utility-bg: #a5a5a5;
+    --button-utility-bg: #a5a5a5; /* Light gray for utility buttons */
     --button-utility-text: #000000;
-    --memory-indicator-bg: rgba(0, 0, 0, 0.2);
-    --memory-indicator-text: #818cf8;
-    --memory-button-bg: #313131;
+    --memory-indicator-bg: rgba(255, 255, 255, 0.2);
+    --memory-indicator-text: #ff9f0a;
+    --memory-button-bg: #1c1c1c;
     --memory-button-text: #ffffff;
     --memory-log-bg: #1c1c1c;
     --memory-log-text: #ffffff;
-    --memory-log-border: #313131;
+    --memory-log-border: #333333;
+    --header-bg: #000000;
+    --header-text: #ffffff;
 }
 
 :root[data-theme='light'] {
-    --body-bg: #f0f0f0;
-    --calc-bg: #ffffff;
+    /* iOS Light Mode Colors */
+    --body-bg: #f2f2f7;
+    --calc-bg: #f2f2f7;
     --calc-text: #000000;
     --calc-history-text: #666666;
-    --button-bg: #e0e0e0;
+    --button-number-bg: #e5e5ea; /* Light gray for number buttons */
     --button-text: #000000;
-    --button-operator-bg: #ff9f0a;
+    --button-operator-bg: #ff9f0a; /* Orange for operation buttons */
     --button-operator-text: #ffffff;
-    --button-utility-bg: #d8d8d8;
+    --button-utility-bg: #d1d1d6; /* Medium gray for utility buttons */
     --button-utility-text: #000000;
     --memory-indicator-bg: rgba(0, 0, 0, 0.1);
-    --memory-indicator-text: #4f46e5;
-    --memory-button-bg: #e0e0e0;
+    --memory-indicator-text: #ff9f0a;
+    --memory-button-bg: #e5e5ea;
     --memory-button-text: #000000;
     --memory-log-bg: #ffffff;
     --memory-log-text: #000000;
-    --memory-log-border: #e0e0e0;
+    --memory-log-border: #e5e5ea;
+    --header-bg: #f2f2f7;
+    --header-text: #000000;
 }
 
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: var(--body-bg);
     margin: 0;
+    padding-top: 60px; /* Space for header */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .calculator {
     background-color: var(--calc-bg); 
     border-radius: 30px; 
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 15px;
     width: 100%;
-    max-width: 320px; 
+    max-width: 375px; /* iOS calculator width */
     box-sizing: border-box;
     color: var(--calc-text);
+    overflow: hidden;
 }
 
 .calculator .display {
-    background-color: var(--calc-bg, #1c1c1c);
-    color: var(--calc-text, #ffffff);
+    background-color: var(--calc-bg);
+    color: var(--calc-text);
     text-align: right;
-    padding: 20px;
-    border-radius: 10px 10px 0 0; /* Round top corners */
-    min-height: 80px; /* Ensure minimum height */
+    padding: 0 15px 10px;
+    min-height: 100px; /* Taller display for iOS style */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end; /* Align content to bottom */
     word-wrap: break-word;
     overflow: hidden; /* Prevent overflow */
+    margin-bottom: 10px;
 }
 
 .history {
@@ -84,13 +94,14 @@ body {
 }
 
 .calculator #history {
-    font-size: 18px;
+    font-size: 20px;
     color: var(--calc-history-text);
     margin-bottom: 5px;
     height: 25px; /* Fixed height for history */
     overflow: hidden; /* Hide overflow */
     white-space: nowrap; /* Prevent wrapping */
     text-overflow: ellipsis; /* Show ellipsis for long history */
+    font-weight: 300;
 }
 
 #display {
@@ -109,8 +120,8 @@ body {
 }
 
 .calculator #display {
-    font-size: 48px;
-    font-weight: 300;
+    font-size: 60px; /* Larger font for iOS style */
+    font-weight: 200; /* Lighter font weight */
     border: none;
     background: none;
     color: inherit; /* Inherit color from parent */
@@ -119,33 +130,46 @@ body {
     padding: 0;
     margin: 0;
     text-align: right; /* Ensure text stays right-aligned */
+    line-height: 1.1; /* Tighter line height */
+}
+
+.calculator-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.main-buttons {
+    flex: 3;
+}
+
+.memory-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px; 
-}
-
-.calculator .buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px; 
+    gap: 12px;
 }
 
 .button {
-    background-color: var(--button-bg); 
+    background-color: var(--button-number-bg); 
     border: none;
     color: var(--button-text);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     border-radius: 50%;
-    width: 65px;
-    height: 65px;
+    width: 75px;
+    height: 75px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    font-weight: 400;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .button:active {
@@ -156,11 +180,14 @@ body {
 .button.utility {
     background-color: var(--button-utility-bg);
     color: var(--button-utility-text);
+    font-weight: 500;
 }
 
 .button.operator {
     background-color: var(--button-operator-bg);
     color: var(--button-operator-text);
+    font-weight: 500;
+    font-size: 2rem;
 }
 
 .button[data-action="calculate"] {
@@ -170,11 +197,12 @@ body {
 }
 
 .button.number.zero {
-    grid-column: span 2; 
-    border-radius: 40px; 
-    aspect-ratio: auto; 
-    justify-content: flex-start; 
-    padding-left: 28px; 
+    grid-column: span 2;
+    width: auto;
+    border-radius: 40px; /* More oval shape for zero button */
+    justify-content: flex-start;
+    padding-left: 30px;
+    text-align: left;
 }
 
 .button.active-key {
@@ -214,8 +242,8 @@ body {
     background-color: var(--button-operator-bg);
     color: var(--button-operator-text);
     border: none;
-    border-radius: 8px;
-    padding: 10px 15px;
+    border-radius: 20px; /* More rounded */
+    padding: 8px 16px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -237,53 +265,91 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    background-color: var(--body-bg);
+    background-color: var(--header-bg);
     z-index: 100;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 .back-link {
-    color: var(--calc-text);
+    color: var(--header-text);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.back-link:before {
+    content: '←';
+    font-size: 18px;
 }
 
 .back-link:hover {
     color: var(--button-operator-bg);
 }
 
+/* Memory Buttons and Log Styles */
+.memory-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.memory-button {
+    background-color: var(--memory-button-bg);
+    color: var(--memory-button-text);
+    border: none;
+    border-radius: 50%; /* Circular buttons */
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.memory-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
 /* Memory Log Styles */
 .calculator-layout-container {
     display: flex;
-    justify-content: center; /* Center items horizontally */
-    align-items: flex-start; /* Align items to the top */
-    gap: 30px; /* Space between calculator and log */
-    padding: 80px 20px 20px; /* Adjust padding as needed */
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
 }
 
 .memory-log-container {
     background-color: var(--memory-log-bg); 
     color: var(--memory-log-text); 
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px;
     width: 100%; /* Default to full width */
-    max-width: 250px; /* Set a max width for the log */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    height: fit-content; /* Adjust height based on content */
-    max-height: 400px; /* Limit max height */
+    flex: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow-y: auto; /* Add scroll if content overflows */
     border: 1px solid var(--memory-log-border);
+    min-height: 200px;
+    max-height: 300px;
 }
 
 .memory-log-container h3 {
-    color: var(--calc-utility-text, #e0e0e0); /* Use a slightly different color */
+    color: var(--memory-indicator-text); /* Use accent color */
     margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid var(--calc-utility-bg, #505050);
-    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--memory-log-border);
+    padding-bottom: 8px;
     font-size: 16px;
+    font-weight: 500;
 }
 
 #memory-log-list {
@@ -294,13 +360,44 @@ body {
 }
 
 #memory-log-list li {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed var(--calc-utility-bg, #505050);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--memory-log-border);
     word-wrap: break-word; /* Wrap long lines */
+    font-size: 14px;
+    line-height: 1.4;
 }
 
 #memory-log-list li:last-child {
     border-bottom: none;
     margin-bottom: 0;
+}
+
+/* Add iOS-style active states */
+.button:active {
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+.memory-button:active {
+    opacity: 0.7;
+    transform: scale(0.9);
+}
+
+/* Memory indicator styling */
+.memory-indicator {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 16px;
+    color: var(--memory-indicator-text);
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 50%;
+    background-color: var(--memory-indicator-bg);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

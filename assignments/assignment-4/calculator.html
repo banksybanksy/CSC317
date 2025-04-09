@@ -65,12 +65,32 @@
         }
 
         .memory-section {
-            background-color: var(--stone, #D7D7D2);
+            background-color: var(--calc-bg, #1c1c1c);
             border-radius: 15px;
             padding: 15px;
             margin-top: 20px;
             width: 100%;
             max-width: 320px;
+            position: relative;
+        }
+
+        .memory-feedback {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .memory-feedback.show {
+            opacity: 1;
         }
 
         .memory-buttons {
@@ -176,11 +196,12 @@
             <button class="button operator" data-action="calculate">=</button>
         </div>
         <div class="memory-section">
+            <div class="memory-feedback" id="memory-feedback"></div>
             <div class="memory-buttons">
-                <button class="memory-button" data-memory="mc">MC</button>
-                <button class="memory-button" data-memory="mr">MR</button>
-                <button class="memory-button" data-memory="mplus">M+</button>
-                <button class="memory-button" data-memory="mminus">M-</button>
+                <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
+                <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
+                <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
+                <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
             </div>
         </div>
         <div class="test-instructions">

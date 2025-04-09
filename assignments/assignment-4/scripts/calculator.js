@@ -15,23 +15,34 @@ function updateMemoryIndicator() {
     memoryIndicator.style.display = memoryValue !== 0 ? 'block' : 'none';
 }
 
+function showMemoryFeedback(message) {
+    const feedback = document.getElementById('memory-feedback');
+    feedback.textContent = message;
+    feedback.classList.add('show');
+    setTimeout(() => feedback.classList.remove('show'), 1500);
+}
+
 function handleMemory(action) {
     const currentValue = parseFloat(displayElement.value) || 0;
 
     switch(action) {
         case 'mc':
             memoryValue = 0;
+            showMemoryFeedback('Memory Cleared');
             break;
         case 'mr':
             displayElement.value = memoryValue;
+            showMemoryFeedback('Memory Recalled: ' + memoryValue);
             waitingForSecondOperand = true;
             break;
         case 'mplus':
             memoryValue += currentValue;
+            showMemoryFeedback('Added to Memory: ' + currentValue);
             waitingForSecondOperand = true;
             break;
         case 'mminus':
             memoryValue -= currentValue;
+            showMemoryFeedback('Subtracted from Memory: ' + currentValue);
             waitingForSecondOperand = true;
             break;
     }

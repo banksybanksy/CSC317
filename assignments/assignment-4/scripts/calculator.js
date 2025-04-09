@@ -1,3 +1,4 @@
+let displayElement;
 // Theme handling
 function toggleTheme() {
     const body = document.documentElement;
@@ -52,10 +53,11 @@ function handleMemory(action) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const displayElement = document.getElementById('display');
+    displayElement = document.getElementById('display');
     const historyElement = document.getElementById('history');
     const buttonsContainer = document.querySelector('.buttons');
     const memoryButtons = document.querySelector('.memory-buttons');
+    memoryButtons.style.marginBottom = '15px';
 
     // Initialize theme
     const savedTheme = localStorage.getItem('calculator-theme') || 'dark';

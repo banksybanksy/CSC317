@@ -5,11 +5,11 @@
     --calc-bg: #000000;
     --calc-text: #ffffff;
     --calc-history-text: #a0a0a0;
-    --button-number-bg: #333333; /* Dark gray for number buttons */
+    --button-number-bg: #333333;
     --button-text: #ffffff;
-    --button-operator-bg: #ff9f0a; /* Orange for operation buttons */
+    --button-operator-bg: #ff9f0a;
     --button-operator-text: #ffffff;
-    --button-utility-bg: #a5a5a5; /* Light gray for utility buttons */
+    --button-utility-bg: #a5a5a5;
     --button-utility-text: #000000;
     --memory-indicator-bg: rgba(255, 255, 255, 0.2);
     --memory-indicator-text: #ff9f0a;
@@ -20,6 +20,8 @@
     --memory-log-border: #333333;
     --header-bg: #000000;
     --header-text: #ffffff;
+    --button-active-opacity: 0.7;
+    --button-hover-brightness: 1.2;
 }
 
 :root[data-theme='light'] {
@@ -59,15 +61,26 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.calculator-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 .calculator {
     background-color: var(--calc-bg); 
-    border-radius: 30px; 
-    padding: 15px;
+    border-radius: 39px; 
+    padding: 20px;
     width: 100%;
-    max-width: 375px; /* iOS calculator width */
+    max-width: 375px;
     box-sizing: border-box;
     color: var(--calc-text);
     overflow: hidden;
+    flex: 0 0 auto;
 }
 
 .calculator .display {
@@ -108,15 +121,16 @@ body {
     width: 100%;
     background-color: transparent; 
     border: none;
-    font-size: 2.5rem; 
+    font-size: 90px;
     text-align: right;
     color: var(--calc-text); 
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     padding: 0;
     font-weight: 300;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
+    line-height: 1;
 }
 
 .calculator #display {
@@ -298,19 +312,20 @@ body {
 }
 
 .memory-button {
-    background-color: var(--memory-button-bg);
-    color: var(--memory-button-text);
+    background-color: var(--button-utility-bg);
+    color: var(--button-utility-text);
     border: none;
-    border-radius: 50%; /* Circular buttons */
-    width: 40px;
-    height: 40px;
-    font-size: 14px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease-out;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 5px;
 }
 
 .memory-button:hover {
@@ -331,15 +346,16 @@ body {
 .memory-log-container {
     background-color: var(--memory-log-bg); 
     color: var(--memory-log-text); 
-    border-radius: 15px;
-    padding: 15px;
-    width: 100%; /* Default to full width */
-    flex: 1;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow-y: auto; /* Add scroll if content overflows */
+    border-radius: 20px;
+    padding: 20px;
+    width: 250px;
+    flex: 0 0 auto;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
     border: 1px solid var(--memory-log-border);
-    min-height: 200px;
-    max-height: 300px;
+    min-height: 400px;
+    max-height: 600px;
+    margin-left: 20px;
 }
 
 .memory-log-container h3 {
@@ -375,13 +391,33 @@ body {
 
 /* Add iOS-style active states */
 .button:active {
-    opacity: 0.7;
-    transform: scale(0.95);
+    opacity: var(--button-active-opacity);
+    transform: scale(0.93);
 }
 
 .memory-button:active {
-    opacity: 0.7;
-    transform: scale(0.9);
+    opacity: var(--button-active-opacity);
+    transform: scale(0.93);
+}
+
+.button.operator {
+    background-color: var(--button-operator-bg);
+    color: var(--button-operator-text);
+    font-size: 40px;
+}
+
+.button.utility {
+    background-color: var(--button-utility-bg);
+    color: var(--button-utility-text);
+    font-size: 32px;
+}
+
+.button.number.zero {
+    grid-column: span 2;
+    width: 168px;
+    border-radius: 40px;
+    justify-content: flex-start;
+    padding-left: 31px;
 }
 
 /* Memory indicator styling */

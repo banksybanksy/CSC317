@@ -1,10 +1,29 @@
+// Initialize global variables
 let displayElement;
+let historyDisplay;
+let buttonsContainer;
+let acButton;
 let displayValue = '0';
 let firstOperand = null;
 let operator = null;
 let waitingForSecondOperand = false;
 let calculationComplete = false;
 let currentEquation = '';
+let lastResult = null;
+
+// Initialize the calculator when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    displayElement = document.getElementById('display');
+    historyDisplay = document.getElementById('history');
+    buttonsContainer = document.querySelector('.buttons');
+    acButton = document.querySelector('[data-action="clear"]');
+    memoryLogList = document.getElementById('memory-log-list');
+
+    // Initialize display
+    if (displayElement) {
+        displayElement.value = displayValue;
+    }
+
 
 // Theme handling
 function toggleTheme() {
@@ -570,104 +589,106 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 }
 
-  // Set up event listeners for button clicks
-  buttonsContainer.addEventListener('click', (event) => {
-    // Only process button clicks (ignore clicks on container)
-    if (!event.target.matches('button')) return;
-    
-    // Don't allow most actions when in error state except clear
-    if (displayValue === 'Error' && event.target.dataset.action !== 'clear') return;
+    // Set up event listeners for button clicks
+    if (buttonsContainer) {
+        buttonsContainer.addEventListener('click', (event) => {
+            // Only process button clicks (ignore clicks on container)
+            if (!event.target.matches('button')) return;
+            
+            // Don't allow most actions when in error state except clear
+            if (displayValue === 'Error' && event.target.dataset.action !== 'clear') return;
 
-    const button = event.target;
-    const action = button.dataset.action;  // The button action (clear, add, etc.)
-    const value = button.dataset.value;    // For number buttons (0-9)
+            const button = event.target;
+            const action = button.dataset.action;  // The button action (clear, add, etc.)
+            const value = button.dataset.value;    // For number buttons (0-9)
 
-    // Map of actions to their handler functions
-    const actions = {
-      add: () => handleOperator('add'),
-      subtract: () => handleOperator('subtract'),
-      multiply: () => handleOperator('multiply'),
-      divide: () => handleOperator('divide'),
-      decimal: () => inputDecimal('.'),
-      clear: () => acButton.textContent === 'C' ? handleDelete() : resetCalculator(),  // C or AC behavior
-      calculate: () => handleEquals(),
-      'toggle-sign': () => toggleSign(),
-      percentage: () => inputPercentage()
-    };
+            // Map of actions to their handler functions
+            const actions = {
+                add: () => handleOperator('add'),
+                subtract: () => handleOperator('subtract'),
+                multiply: () => handleOperator('multiply'),
+                divide: () => handleOperator('divide'),
+                decimal: () => inputDecimal('.'),
+                clear: () => acButton.textContent === 'C' ? handleDelete() : resetCalculator(),  // C or AC behavior
+                calculate: () => handleEquals(),
+                'toggle-sign': () => toggleSign(),
+                percentage: () => inputPercentage()
+            };
 
-    // Call the appropriate handler based on the button pressed
-    if (action in actions) {
-      actions[action]();  // Call the appropriate function from our map
-    } else if (button.classList.contains('number')) {
-      inputDigit(value);  // Handle number button presses
-    }
-  });
+            // Call the appropriate handler based on the button pressed
+            if (action in actions) {
+                actions[action]();  // Call the appropriate function from our map
+            } else if (button.classList.contains('number')) {
+                inputDigit(value);  // Handle number button presses
+            }
+        });
 
-  // Keyboard support for the calculator
-  document.addEventListener('keydown', (event) => {
-    if (displayValue === 'Error' && event.key !== 'Escape' && event.key !== 'Delete' && event.key !== 'Backspace') {
-      return;
-    }
+        // Keyboard support for the calculator
+        document.addEventListener('keydown', (event) => {
+            if (displayValue === 'Error' && event.key !== 'Escape' && event.key !== 'Delete' && event.key !== 'Backspace') {
+                return;
+            }
 
-    let keyAction = null;
-    let keyValue = null;
+            let keyAction = null;
+            let keyValue = null;
 
-    if (event.key >= '0' && event.key <= '9') {
-      inputDigit(event.key);
-      keyAction = 'number';
-      keyValue = event.key;
-    } else if (event.key === '.') {
-      inputDecimal('.');
-      keyAction = 'decimal';
-    } else if (event.key === '+') {
-      handleOperator('add');
-      keyAction = 'operator';
-    } else if (event.key === '-') {
-      handleOperator('subtract');
-      keyAction = 'operator';
-    } else if (event.key === '*') {
-      handleOperator('multiply');
-      keyAction = 'operator';
-    } else if (event.key === '/') {
-      event.preventDefault();
-      handleOperator('divide');
-      keyAction = 'operator';
-    } else if (event.key === '=' || event.key === 'Enter') {
-      event.preventDefault();
-      handleEquals();
-      keyAction = 'calculate';
-    } else if (event.key === 'Escape') {
-      resetCalculator();
-      keyAction = 'clear';
-    } else if (event.key === 'Backspace' || event.key === 'Delete') {
-      handleDelete();
-      keyAction = 'delete';
-    } else if (event.key === '%') {
-      inputPercentage();
-      keyAction = 'percentage';
-    }
+            if (event.key >= '0' && event.key <= '9') {
+                inputDigit(event.key);
+                keyAction = 'number';
+                keyValue = event.key;
+            } else if (event.key === '.') {
+                inputDecimal('.');
+                keyAction = 'decimal';
+            } else if (event.key === '+') {
+                handleOperator('add');
+                keyAction = 'operator';
+            } else if (event.key === '-') {
+                handleOperator('subtract');
+                keyAction = 'operator';
+            } else if (event.key === '*') {
+                handleOperator('multiply');
+                keyAction = 'operator';
+            } else if (event.key === '/') {
+                event.preventDefault();
+                handleOperator('divide');
+                keyAction = 'operator';
+            } else if (event.key === '=' || event.key === 'Enter') {
+                event.preventDefault();
+                handleEquals();
+                keyAction = 'calculate';
+            } else if (event.key === 'Escape') {
+                resetCalculator();
+                keyAction = 'clear';
+            } else if (event.key === 'Backspace' || event.key === 'Delete') {
+                handleDelete();
+                keyAction = 'delete';
+            } else if (event.key === '%') {
+                inputPercentage();
+                keyAction = 'percentage';
+            }
 
-    // Visual feedback for key presses
-    let targetButton = null;
-    if (keyAction === 'number') {
-      targetButton = document.querySelector(`.button[data-value="${keyValue}"]`);
-    } else if (keyAction === 'operator') {
-      const opMap = { '+': 'add', '-': 'subtract', '*': 'multiply', '/': 'divide' };
-      targetButton = document.querySelector(`.button[data-action="${opMap[event.key]}"]`);
-    } else if (keyAction === 'calculate') {
-      targetButton = document.querySelector(`.button[data-action="calculate"]`);
-    } else if (keyAction === 'decimal') {
-      targetButton = document.querySelector(`.button[data-action="decimal"]`);
-    } else if (keyAction === 'clear') {
-      targetButton = document.querySelector(`.button[data-action="clear"]`);
-    }
+            // Visual feedback for key presses
+            let targetButton = null;
+            if (keyAction === 'number') {
+                targetButton = document.querySelector(`.button[data-value="${keyValue}"]`);
+            } else if (keyAction === 'operator') {
+                const opMap = { '+': 'add', '-': 'subtract', '*': 'multiply', '/': 'divide' };
+                targetButton = document.querySelector(`.button[data-action="${opMap[event.key]}"]`);
+            } else if (keyAction === 'calculate') {
+                targetButton = document.querySelector(`.button[data-action="calculate"]`);
+            } else if (keyAction === 'decimal') {
+                targetButton = document.querySelector(`.button[data-action="decimal"]`);
+            } else if (keyAction === 'clear') {
+                targetButton = document.querySelector(`.button[data-action="clear"]`);
+            }
 
-    if (targetButton) {
-      targetButton.classList.add('active-key');
-      setTimeout(() => targetButton.classList.remove('active-key'), 100);
-    }
-  });
+            if (targetButton) {
+                targetButton.classList.add('active-key');
+                setTimeout(() => targetButton.classList.remove('active-key'), 100);
+            }
+        });
 
-    // Initialize display on load
-    updateDisplay();
+        // Initialize display on load
+        updateDisplay();
+    });
 });

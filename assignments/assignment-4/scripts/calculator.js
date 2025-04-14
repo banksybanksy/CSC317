@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
     html.classList.toggle('dark-mode');
 
     const themeStyle = document.getElementById('theme-style');
-    themeStyle.href = `styles/${newTheme}-mode.css`;
+    // Use styles.css for dark, light-mode.css for light
+    themeStyle.href = newTheme === 'dark' ? 'styles/styles.css' : 'styles/light-mode.css';
     localStorage.setItem('calculator-theme', newTheme);
 
     const themeToggleBtn = document.getElementById('theme-toggle');
@@ -54,15 +55,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Set up initial theme from localStorage
-  const savedTheme = localStorage.getItem('calculator-theme') || 'dark';
+  const savedTheme = localStorage.getItem('calculator-theme') || 'dark'; // Default to dark
   const html = document.documentElement;
   if (savedTheme === 'light') {
     html.classList.remove('dark-mode');
-    document.getElementById('theme-style').href = 'styles/light-mode.css';
+    document.getElementById('theme-style').href = 'styles/light-mode.css'; // Ensure correct light mode path
     document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
   } else {
     html.classList.add('dark-mode');
-    document.getElementById('theme-style').href = 'styles/styles.css';
+    document.getElementById('theme-style').href = 'styles/styles.css'; // Ensure correct dark mode path
     document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
   }
   document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
@@ -308,7 +309,12 @@ document.addEventListener('DOMContentLoaded', function() {
           inputDigit(buttonContent);
           break;
         case 'operator':
-          handleOperator(buttonContent);
+          // Map visual symbols to calculation symbols
+          let op = buttonContent;
+          if (op === '÷') op = '/';
+          if (op === '×') op = '*';
+          if (op === '−') op = '-'; // Ensure correct minus sign
+          handleOperator(op);
           break;
         case 'decimal':
           inputDecimal();
@@ -359,6 +365,10 @@ document.addEventListener('DOMContentLoaded', function() {
           break;
         case 'negate': // +/- button
           toggleSign();
+          break;
+        case 'percentage': // Add placeholder for percentage
+          console.log('Percentage action not yet implemented.');
+          // Optional: Implement percentage logic here
           break;
         default:
           // Handle memory buttons if not handled separately

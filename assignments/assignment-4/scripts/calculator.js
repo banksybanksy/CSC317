@@ -137,18 +137,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Updates the display element and AC/C button text
   function updateDisplay() {
-    // For displaying the equation in progress or result
-    if (currentEquation && !calculationComplete) {
-      // Show equation in progress
-      displayElement.value = displayValue;
-      if (historyDisplay) historyDisplay.textContent = currentEquation;
+    if (!calculationComplete) {
+        // While input is in progress, display the current equation (e.g., "3 + 3")
+        displayElement.value = currentEquation;
     } else {
-      // Show just the value (after calculation or at start)
-      displayElement.value = displayValue;
-      // If calculation is complete, show the full equation in history
-      if (historyDisplay && calculationComplete) {
+        // After equals is pressed (or Enter), move the full equation to the history and display result
         historyDisplay.textContent = currentEquation;
-      }
+        displayElement.value = displayValue;
     }
     
     // Change AC to C if there's input other than '0' or after an error

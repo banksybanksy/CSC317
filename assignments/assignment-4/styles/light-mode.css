@@ -1,23 +1,113 @@
+/* light-mode.css - Light Mode version of Calculator */
+
+/* Global styles */
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header and Controls */
+.header-controls {
+    background-color: #f8f8f8;
+    padding: 10px;
+}
+
+.back-button {
+    color: #007aff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.theme-toggle-button {
+    background-color: #e0e0e0;
+    color: #000000;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Calculator Layout */
+.calculator-layout-container {
+    padding: 10px;
+}
+
+.calculator-container {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+/* Button Styles */
+button {
+    background-color: #e0e0e0;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Display elements */
+.display {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    text-align: right;
+    font-size: 32px;
+    padding: 10px;
+}
+
+.history-display {
+    text-align: right;
+    font-size: 18px;
+    color: #666666;
+    padding: 5px 10px;
+}
+
+/* Responsive desktop friendly adjustments */
+@media (min-width: 768px) {
+  .calculator-layout-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+  }
+  .calculator-container {
+      max-width: 500px;
+      margin: 40px auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+  }
+}
+
+/* Additional rules as copied from styles.css with modifications for light mode */
+
 :root {
     /* Light mode colors */
-    --body-bg: #f2f2f7;
-    --calc-bg: #f2f2f7;
+    --body-bg: #ffffff;
+    --calc-bg: #f0f0f0;
     --calc-text: #000000;
     --calc-history-text: #666666;
-    --button-number-bg: #e5e5ea;
+    --button-number-bg: #e0e0e0;
     --button-text: #000000;
-    --button-operator-bg: #ff9f0a;
+    --button-operator-bg: #007aff;
     --button-operator-text: #ffffff;
     --button-utility-bg: #d1d1d6;
     --button-utility-text: #000000;
     --memory-indicator-bg: rgba(0, 0, 0, 0.1);
-    --memory-indicator-text: #ff9f0a;
-    --memory-button-bg: #e5e5ea;
+    --memory-indicator-text: #007aff;
+    --memory-button-bg: #e0e0e0;
     --memory-button-text: #000000;
     --memory-log-bg: #ffffff;
     --memory-log-text: #000000;
-    --memory-log-border: #e5e5ea;
-    --header-bg: #f2f2f7;
+    --memory-log-border: #e0e0e0;
+    --header-bg: #f8f8f8;
     --header-text: #000000;
     --button-active-opacity: 0.7;
     --button-hover-brightness: 1.2;

@@ -115,7 +115,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
- Main Container Layout */
+/* Main Container Layout */
 .calculator-layout-container {
     display: flex;
     flex-direction: column;
@@ -372,4 +372,19 @@ body {
     .buttons {
         gap: 10px;
     }
+}
+
+/* Responsive adjustments for desktop */
+@media (min-width: 768px) {
+  .calculator-layout-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+  }
+  .calculator {
+      max-width: 500px;
+      margin: 40px auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
 }

@@ -1,7 +1,7 @@
 :root[data-theme='light'] {
     /* Background & general elements */
     --body-bg: #f2f2f7;
-    --calc-bg: #f2f2f7;
+    --calc-bg: transparent;
     --header-bg: #f2f2f7;
     --header-text: #000000;
 
@@ -10,9 +10,9 @@
     --calc-history-text: #8e8e93;
 
     /* Buttons */
-    --button-number-bg: #e5e5ea;
+    --button-number-bg: #ffffff;
     --button-operator-bg: #ff9f0a;
-    --button-utility-bg: #d1d1d6;
+    --button-utility-bg: #d4d4d2;
     --button-text: #000000;
     --button-operator-text: #ffffff;
     --button-utility-text: #000000;
@@ -97,18 +97,20 @@ body {
     border-radius: 0;
     padding: var(--button-gap);
     width: 100%;
-    max-width: 375px; /* Standardized */
+    max-width: 375px;
     box-sizing: border-box;
-    margin: 0; /* Remove margin auto if centered by parent */
-    flex-shrink: 0; /* Prevent shrinking */
+    margin: 0;
+    flex-shrink: 0;
 }
 
 .display {
     width: 100%;
     text-align: right;
-    font-size: 48px;
+    font-size: var(--display-font-size);
     padding: 10px;
     box-sizing: border-box;
+    background: transparent;
+    color: var(--calc-text);
 }
 
 .history {

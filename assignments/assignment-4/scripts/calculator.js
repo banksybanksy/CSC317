@@ -1,4 +1,11 @@
 let displayElement;
+let displayValue = '0';
+let firstOperand = null;
+let operator = null;
+let waitingForSecondOperand = false;
+let calculationComplete = false;
+let currentEquation = '';
+
 // Theme handling
 function toggleTheme() {
     const html = document.documentElement;
@@ -510,6 +517,48 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
   }
 
+  function updateDisplay() {
+    if (!displayElement) return;
+
+    if (displayValue === 'Error') {
+        displayElement.value = displayValue;
+        if (acButton) acButton.textContent = 'AC';
+        return;
+    }
+
+    // Format number for display
+    let formattedValue = displayValue;
+    if (displayValue !== '' && !isNaN(parseFloat(displayValue))) {
+        const number = parseFloat(displayValue);
+        formattedValue = number.toString();
+        // Handle large numbers and decimals
+        if (formattedValue.length > 9) {
+            if (formattedValue.includes('e')) {
+                formattedValue = number.toPrecision(6);
+            } else if (formattedValue.includes('.')) {
+                formattedValue = number.toFixed(
+                    Math.max(0, 9 - formattedValue.split('.')[0].length - 1)
+                );
+            } else {
+                formattedValue = number.toPrecision(9);
+            }
+        }
+    }
+
+    displayElement.value = formattedValue || '0';
+    if (acButton) {
+        acButton.textContent = displayValue === '' || displayValue === '0' ? 'AC' : 'C';
+    }
+
+    // Update font size based on length
+    updateFontSize();
+
+    // Update equation display
+    if (historyDisplay) {
+        historyDisplay.textContent = currentEquation || '';
+    }
+}
+
   // Set up event listeners for button clicks
   buttonsContainer.addEventListener('click', (event) => {
     // Only process button clicks (ignore clicks on container)
@@ -561,10 +610,13 @@ document.addEventListener('DOMContentLoaded', () => {
       keyAction = 'decimal';
     } else if (event.key === '+') {
       handleOperator('add');
+      keyAction = 'operator';
     } else if (event.key === '-') {
       handleOperator('subtract');
+      keyAction = 'operator';
     } else if (event.key === '*') {
       handleOperator('multiply');
+      keyAction = 'operator';
     } else if (event.key === '/') {
       event.preventDefault();
       handleOperator('divide');
@@ -605,6 +657,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Initialize display on load
-  updateDisplay();
+    // Initialize display on load
+    updateDisplay();
 });

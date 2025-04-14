@@ -137,7 +137,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Updates the display element and AC/C button text
   function updateDisplay() {
-    displayElement.value = displayValue;
+    // For displaying the equation in progress or result
+    if (currentEquation && !calculationComplete) {
+      // Show equation in progress
+      displayElement.value = displayValue;
+      if (historyDisplay) historyDisplay.textContent = currentEquation;
+    } else {
+      // Show just the value (after calculation or at start)
+      displayElement.value = displayValue;
+      // If calculation is complete, show the full equation in history
+      if (historyDisplay && calculationComplete) {
+        historyDisplay.textContent = currentEquation;
+      }
+    }
+    
     // Change AC to C if there's input other than '0' or after an error
     if (acButton) {
       if (displayValue !== '0' && displayValue !== 'Error') {
@@ -146,9 +159,15 @@ document.addEventListener('DOMContentLoaded', function() {
         acButton.textContent = 'AC';
       }
     }
-    // Adjust font size if needed (optional)
-    // ... logic to adjust font size based on length ...
-    console.log(`Display Updated: ${displayValue}, waiting: ${waitingForSecondOperand}, op1: ${firstOperand}, op: ${operator}`);
+    
+    // Adjust font size if needed based on length
+    if (displayElement.value.length > 10) {
+      displayElement.style.fontSize = '40px';
+    } else {
+      displayElement.style.fontSize = 'var(--display-font-size)';
+    }
+    
+    console.log(`Display Updated: ${displayValue}, waiting: ${waitingForSecondOperand}, op1: ${firstOperand}, op: ${operator}, eq: ${currentEquation}`);
   }
 
   // Handles digit input
@@ -186,11 +205,18 @@ document.addEventListener('DOMContentLoaded', function() {
   function handleOperator(nextOperator) {
     const inputValue = parseFloat(displayValue);
 
-    // If an operator is already pending, calculate the intermediate result
+    // Map operators to their display symbols for better user experience
+    const displayOperator = nextOperator === '/' ? '÷' : 
+                         nextOperator === '*' ? '×' : 
+                         nextOperator === '-' ? '−' : 
+                         nextOperator;
+
+    // If an operator is already pending, just change the operator
     if (operator && waitingForSecondOperand) {
       operator = nextOperator; // Update the operator if user changes their mind
-      currentEquation = `${firstOperand} ${operator}`;
-      if (historyDisplay) historyDisplay.textContent = currentEquation;
+      // Update equation display with new operator
+      currentEquation = `${firstOperand} ${displayOperator}`;
+      updateDisplay();
       return;
     }
 
@@ -199,27 +225,36 @@ document.addEventListener('DOMContentLoaded', function() {
       firstOperand = inputValue;
     } else if (operator) {
       // If there is an operator, perform the calculation
-      const result = calculate(firstOperand, inputValue, operator);
+      const secondOperand = inputValue;
+      const result = calculate(firstOperand, secondOperand, operator);
       if (result === 'Error') {
           displayValue = 'Error';
           firstOperand = null;
           operator = null;
           waitingForSecondOperand = false;
           calculationComplete = true;
+          currentEquation = ''; // Clear equation on error
           updateDisplay();
           return;
       }
+      // Update variables with the result of this calculation
       displayValue = String(result);
       firstOperand = result;
+      // This calculation becomes our new 'first operand' for the next operation
+      // Example: User enters 3 + 4 * ... should show 7 * ... after this
+      currentEquation = `${result} ${displayOperator}`;
+    } else {
+      // First operation - display equation with the first operand and operator
+      currentEquation = `${inputValue} ${displayOperator}`;
     }
 
     waitingForSecondOperand = true;
     operator = nextOperator;
     calculationComplete = false;
-    currentEquation = `${firstOperand} ${operator}`;
-    if (historyDisplay) historyDisplay.textContent = currentEquation; // Show equation in history
-    updateDisplay(); // Update display to show result before next input if calculation happened
-    console.log(`Operator: ${operator}, Operand1: ${firstOperand}, Waiting: ${waitingForSecondOperand}`);
+    
+    // Now update the display to show the current state
+    updateDisplay();
+    console.log(`Operator: ${operator}, Operand1: ${firstOperand}, Waiting: ${waitingForSecondOperand}, Equation: ${currentEquation}`);
   }
 
   // Performs the calculation
@@ -330,20 +365,36 @@ document.addEventListener('DOMContentLoaded', function() {
         case 'calculate': // Equals button
           if (operator && firstOperand !== null && !waitingForSecondOperand) {
             const secondOperand = parseFloat(displayValue);
+            
+            // Map operators to display symbols for better readability
+            const displayOperator = operator === '/' ? '÷' : 
+                                  operator === '*' ? '×' : 
+                                  operator === '-' ? '−' : 
+                                  operator;
+            
+            // Build and store the full equation first (before calculating result)
+            const fullEquation = `${firstOperand} ${displayOperator} ${secondOperand} =`;
+            
+            // Calculate the result
             const result = calculate(firstOperand, secondOperand, operator);
-             if (result === 'Error') {
+             
+            if (result === 'Error') {
                 displayValue = 'Error';
                 currentEquation = ''; // Clear history on error
             } else {
-                displayValue = String(result);
-                currentEquation = `${firstOperand} ${operator} ${secondOperand} =`;
+                // Update equation and result
+                currentEquation = fullEquation; // Store the full equation with =
+                displayValue = String(result);  // Display just the result
                 lastResult = result; // Store result for potential chaining
             }
-            if (historyDisplay) historyDisplay.textContent = currentEquation;
+            
+            // Update state variables
             firstOperand = null; // Ready for new calculation
             operator = null;
             waitingForSecondOperand = false;
             calculationComplete = true; // Mark that calculation was just done
+            
+            // Update both displays (equation in history, result in main display)
             updateDisplay();
           } else if (operator && waitingForSecondOperand && lastResult !== null) {
             // Allow repeating the last operation with the result (iOS style)

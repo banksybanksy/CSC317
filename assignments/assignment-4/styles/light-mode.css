@@ -1,4 +1,5 @@
-:root[data-theme='light'] {
+:root {
+    /* Light mode colors */
     --body-bg: #f2f2f7;
     --calc-bg: #f2f2f7;
     --calc-text: #000000;
@@ -21,10 +22,10 @@
     --button-active-opacity: 0.7;
     --button-hover-brightness: 1.2;
     --button-gap: 12px;
-    --display-font-size: 90px;
-    --button-font-size: 35px;
-    --operator-font-size: 45px;
-    --button-size: 80px;
+    --display-font-size: 60px;
+    --button-font-size: 30px;
+    --operator-font-size: 40px;
+    --button-size: 75px;
 }
 
 body {

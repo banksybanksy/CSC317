@@ -1,8 +1,11 @@
 // Initialize global variables
-let displayElement;
-let historyDisplay;
-let buttonsContainer;
-let acButton;
+let displayElement = null;
+let historyDisplay = null;
+let buttonsContainer = null;
+let acButton = null;
+let memoryLogList = null;
+
+// Calculator state
 let displayValue = '0';
 let firstOperand = null;
 let operator = null;
@@ -10,7 +13,6 @@ let waitingForSecondOperand = false;
 let calculationComplete = false;
 let currentEquation = '';
 let lastResult = null;
-let memoryLogList;
 
 // Initialize the calculator when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {

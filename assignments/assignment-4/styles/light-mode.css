@@ -18,12 +18,12 @@
     --header-bg: #ffffff;
     --header-text: #000000;
     --button-active-opacity: 0.7;
-    --button-hover-brightness: 1.2;
     --button-gap: 12px;
-    --display-font-size: 90px;
-    --button-font-size: 35px;
-    --operator-font-size: 45px;
-    --button-size: 80px;
+    /* Smaller sizes for a compact design */
+    --display-font-size: 70px;
+    --button-font-size: 28px;
+    --operator-font-size: 32px;
+    --button-size: 60px;
   }
   
   body {
@@ -44,15 +44,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
   }
   
+  /* Back Button - More Stylish */
   .back-button {
     color: var(--header-text);
     text-decoration: none;
     font-size: 16px;
+    padding: 6px 12px;
+    border: 2px solid var(--header-text);
+    border-radius: 20px;
+    transition: background 0.3s, color 0.3s;
+  }
+  .back-button:hover {
+    background-color: var(--header-text);
+    color: var(--header-bg);
   }
   
   .theme-toggle-button {
@@ -68,7 +77,7 @@
   .calculator-layout-container {
     padding-top: 70px;
     width: 100%;
-    max-width: 500px;
+    max-width: 350px;
     margin: 0 auto;
   }
   
@@ -76,7 +85,7 @@
     background-color: var(--calc-bg);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
     color: var(--calc-text);
   }
   
@@ -86,11 +95,17 @@
   
   .history-display {
     width: 100%;
-    font-size: 24px;
+    font-size: 20px;
     color: var(--calc-history-text);
     border: none;
     background: transparent;
     text-align: right;
+    opacity: 0.6;
+  }
+  
+  .history-display.active-history {
+    font-size: 16px;
+    opacity: 0.4;
   }
   
   .display {
@@ -121,7 +136,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: all 0.1s ease-out;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
   }
   
   .button.operator {
@@ -142,6 +157,15 @@
     border-radius: calc(var(--button-size) / 2);
     justify-content: flex-start;
     padding-left: calc(var(--button-size) / 2 - 4px);
+  }
+  
+  .button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .button:active {
+    transform: scale(0.95);
+    opacity: var(--button-active-opacity);
   }
   
   .memory-section {
@@ -175,7 +199,7 @@
     border: 1px solid var(--memory-log-border);
     border-radius: 10px;
     padding: 15px;
-    max-height: 300px;
+    max-height: 200px;
     overflow-y: auto;
   }
   

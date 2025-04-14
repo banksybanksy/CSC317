@@ -1,7 +1,6 @@
 /* calculator.js */
 let displayElement;
 let historyDisplay;
-let buttonsContainer;
 let clearButton;
 let memoryLogList;
 let displayValue = '0';
@@ -16,13 +15,11 @@ let memoryValue = parseFloat(localStorage.getItem('calculator-memory')) || 0;
 document.addEventListener('DOMContentLoaded', function () {
   displayElement = document.getElementById('display');
   historyDisplay = document.getElementById('history');
-  buttonsContainer = document.querySelector('.calculator');
   clearButton = document.getElementById('clear');
   memoryLogList = document.getElementById('memory-log-list');
 
   // Initialize displays
-  displayElement.value = (currentEquation ? currentEquation + ' ' : '') + displayValue;
-  historyDisplay.textContent = '';
+  updateDisplay();
 
   // Theme toggle
   function toggleTheme() {
@@ -90,9 +87,28 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', () => handleMemory(btn.dataset.memory));
   });
 
-  // Always show the equation being built
+  // Update display function adjusts clear button text,
+  // scales font for longer text, and sets history if calculation complete.
   function updateDisplay() {
-    displayElement.value = (currentEquation ? currentEquation + ' ' : '') + displayValue;
+    // If calculation is complete, show the full equation in history (small, lower opacity)
+    if (calculationComplete) {
+      historyDisplay.textContent = currentEquation;
+      historyDisplay.classList.add('active-history');
+    } else {
+      historyDisplay.textContent = '';
+      historyDisplay.classList.remove('active-history');
+    }
+    displayElement.value = (currentEquation && !calculationComplete ? currentEquation + ' ' : '') + displayValue;
+    // Set clear button text to C when there is input, else AC.
+    clearButton.textContent = (displayValue !== '0' || currentEquation !== '') ? "C" : "AC";
+    // Dynamic font sizing (simple algorithm)
+    const len = displayElement.value.length;
+    if (len > 10) {
+      const newSize = Math.max(30, 90 - (len - 10) * 2);
+      displayElement.style.fontSize = newSize + "px";
+    } else {
+      displayElement.style.fontSize = "90px";
+    }
   }
 
   function inputDigit(digit) {
@@ -201,69 +217,69 @@ document.addEventListener('DOMContentLoaded', function () {
     updateDisplay();
   }
 
-  if (buttonsContainer) {
-    buttonsContainer.addEventListener('click', (event) => {
-      if (!event.target.matches('button')) return;
-      const button = event.target;
-      const action = button.dataset.action;
-      const buttonContent = button.textContent.trim();
+  // Button event listener with feedback handled via CSS.
+  document.querySelector('.calculator').addEventListener('click', (event) => {
+    if (!event.target.matches('button')) return;
+    const button = event.target;
+    const action = button.dataset.action;
+    const buttonContent = button.textContent.trim();
 
-      switch (action) {
-        case 'digit':
-          inputDigit(buttonContent);
-          break;
-        case 'operator': {
-          let op = buttonContent;
-          if (op === '÷') op = '/';
-          if (op === '×') op = '*';
-          if (op === '−') op = '-';
-          handleOperator(op);
-          break;
-        }
-        case 'decimal':
-          inputDecimal();
-          break;
-        case 'clear':
-          if (clearButton.textContent === 'AC') {
-            resetCalculator();
-          } else {
-            clearEntry();
-          }
-          break;
-        case 'calculate':
-          if (operator && firstOperand !== null && !waitingForSecondOperand) {
-            const secondOperand = parseFloat(displayValue);
-            const displayOperator =
-              operator === '/' ? '÷' :
-              operator === '*' ? '×' :
-              operator === '-' ? '−' : operator;
-            const fullEquation = currentEquation + ' ' + displayValue + ' =';
-            const result = calculate(firstOperand, secondOperand, operator);
-            displayValue = result === 'Error' ? 'Error' : String(result);
-            currentEquation = fullEquation;
-            firstOperand = null;
-            operator = null;
-            waitingForSecondOperand = false;
-            calculationComplete = true;
-            updateDisplay();
-          }
-          break;
-        case 'delete':
-          deleteLastDigit();
-          break;
-        case 'negate':
-          toggleSign();
-          break;
-        case 'percentage':
-          // Percentage not implemented
-          break;
-        default:
-          if (button.classList.contains('memory-button')) {
-            handleMemory(button.dataset.memory);
-          }
+    switch (action) {
+      case 'digit':
+        inputDigit(buttonContent);
+        break;
+      case 'operator': {
+        let op = buttonContent;
+        if (op === '÷') op = '/';
+        if (op === '×') op = '*';
+        if (op === '−') op = '-';
+        handleOperator(op);
+        break;
       }
-    });
-  }
+      case 'decimal':
+        inputDecimal();
+        break;
+      case 'clear':
+        if (clearButton.textContent === 'AC') {
+          resetCalculator();
+        } else {
+          clearEntry();
+        }
+        break;
+      case 'calculate':
+        if (operator && firstOperand !== null && !waitingForSecondOperand) {
+          const secondOperand = parseFloat(displayValue);
+          const displayOperator =
+            operator === '/' ? '÷' :
+            operator === '*' ? '×' :
+            operator === '-' ? '−' : operator;
+          const fullEquation = currentEquation + ' ' + displayValue + ' =';
+          const result = calculate(firstOperand, secondOperand, operator);
+          displayValue = result === 'Error' ? 'Error' : String(result);
+          currentEquation = fullEquation;
+          firstOperand = null;
+          operator = null;
+          waitingForSecondOperand = false;
+          calculationComplete = true;
+          updateDisplay();
+        }
+        break;
+      case 'delete':
+        deleteLastDigit();
+        break;
+      case 'negate':
+        toggleSign();
+        break;
+      case 'percentage':
+        // Percentage not implemented.
+        break;
+      default:
+        // Memory buttons (handled separately)
+        if (button.classList.contains('memory-button')) {
+          handleMemory(button.dataset.memory);
+        }
+    }
+  });
 
   document.addEventListener('keydown', (event) => {
     const key = event.key;

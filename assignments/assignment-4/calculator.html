@@ -1,97 +1,70 @@
 <!-- Calculator Page -->
-
 <!DOCTYPE html>
 <html lang="en" class="dark-mode">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator with Memory Functions</title>
-    <link rel="stylesheet" href="styles/styles.css" id="theme-style">
-    <script src="scripts/calculator.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator with Memory Functions</title>
+  <!-- Default to dark mode CSS -->
+  <link rel="stylesheet" href="styles/dark-mode.css" id="theme-style">
+  <script src="scripts/calculator.js" defer></script>
 </head>
 <body>
-    <div class="header-controls">
-        <a href="../index.html" class="back-button">← Back to Portfolio</a>
-        <button id="theme-toggle" class="theme-toggle-button">Switch to Light Mode</button>
-    </div>
-    <div class="calculator-layout-container">
-        <div class="calculator-container">
-            <div class="display">
-                <div id="history" class="history"></div>
-                <input type="text" id="display" value="0" disabled>
+  <div class="header-controls">
+    <a href="../index.html" class="back-button">← Back to Portfolio</a>
+    <!-- The theme toggle button will be initialized by calculator.js -->
+    <button id="theme-toggle" class="theme-toggle-button">Switch to Light Mode</button>
+  </div>
+  <div class="calculator-layout-container">
+    <div class="calculator-container">
+      <div class="display">
+        <div id="history" class="history"></div>
+        <input type="text" id="display" value="0" disabled>
+      </div>
+      <div class="calculator-wrapper">
+        <div class="calculator-grid">
+          <div class="main-buttons">
+            <div class="buttons">
+              <button class="button utility" data-action="clear">AC</button>
+              <button class="button utility" data-action="toggle-sign">+/-</button>
+              <button class="button utility" data-action="percentage">%</button>
+              <button class="button operator" data-action="divide">÷</button>
+
+              <button class="button number" data-value="7">7</button>
+              <button class="button number" data-value="8">8</button>
+              <button class="button number" data-value="9">9</button>
+              <button class="button operator" data-action="multiply">×</button>
+
+              <button class="button number" data-value="4">4</button>
+              <button class="button number" data-value="5">5</button>
+              <button class="button number" data-value="6">6</button>
+              <button class="button operator" data-action="subtract">−</button>
+
+              <button class="button number" data-value="1">1</button>
+              <button class="button number" data-value="2">2</button>
+              <button class="button number" data-value="3">3</button>
+              <button class="button operator" data-action="add">+</button>
+
+              <button class="button number zero" data-value="0">0</button>
+              <button class="button" data-action="decimal">.</button>
+              <button class="button operator" data-action="calculate">=</button>
             </div>
-            <div class="calculator-wrapper">
-                <div class="calculator-grid">
-                    <div class="main-buttons">
-                        <div class="buttons">
-                            <button class="button utility" data-action="clear">AC</button>
-                            <button class="button utility" data-action="toggle-sign">+/-</button>
-                            <button class="button utility" data-action="percentage">%</button>
-                            <button class="button operator" data-action="divide">÷</button>
-
-                            <button class="button number" data-value="7">7</button>
-                            <button class="button number" data-value="8">8</button>
-                            <button class="button number" data-value="9">9</button>
-                            <button class="button operator" data-action="multiply">×</button>
-
-                            <button class="button number" data-value="4">4</button>
-                            <button class="button number" data-value="5">5</button>
-                            <button class="button number" data-value="6">6</button>
-                            <button class="button operator" data-action="subtract">−</button>
-
-                            <button class="button number" data-value="1">1</button>
-                            <button class="button number" data-value="2">2</button>
-                            <button class="button number" data-value="3">3</button>
-                            <button class="button operator" data-action="add">+</button>
-
-                            <button class="button number zero" data-value="0">0</button>
-                            <button class="button" data-action="decimal">.</button>
-                            <button class="button operator" data-action="calculate">=</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="memory-section">
-                    <div class="memory-buttons">
-                        <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
-                        <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
-                        <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
-                        <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
-                    </div>
-                    <div class="memory-log-container" id="memory-log">
-                        <h3>Memory Log</h3>
-                        <ul id="memory-log-list"></ul>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="memory-section">
+          <div class="memory-buttons">
+            <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
+            <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
+            <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
+            <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
+          </div>
+          <div class="memory-log-container" id="memory-log">
+            <h3>Memory Log</h3>
+            <ul id="memory-log-list"></ul>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- Theme script inline, calculator.js already loaded with defer -->
-    <script>
-        // Theme switching functionality
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeStyle = document.getElementById('theme-style');
-        let isDarkTheme = true;
-
-        // Load saved theme preference
-        const savedTheme = localStorage.getItem('calculator-theme');
-        if (savedTheme === 'light') {
-            themeStyle.href = 'styles/light-mode.css';
-            isDarkTheme = false;
-            themeToggle.textContent = 'Switch to Dark Theme';
-            document.documentElement.setAttribute('data-theme', 'light');
-        } else {
-            themeStyle.href = 'styles/styles.css';
-            themeToggle.textContent = 'Switch to Light Theme';
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            isDarkTheme = !isDarkTheme;
-            themeStyle.href = isDarkTheme ? 'styles/styles.css' : 'styles/light-mode.css';
-            themeToggle.textContent = isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme';
-            localStorage.setItem('calculator-theme', isDarkTheme ? 'dark' : 'light');
-            document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
-        });
-    </script>
+  </div>
 </body>
 </html>

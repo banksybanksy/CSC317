@@ -1,6 +1,4 @@
-
 :root[data-theme='light'] {
-    /* iOS Light Mode Colors */
     --body-bg: #f2f2f7;
     --calc-bg: #f2f2f7;
     --calc-text: #000000;
@@ -378,18 +376,24 @@ body {
     }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 374px) {
+    .calculator {
+        padding: 8px;
+        max-width: 100%;
+    }
     .button {
-        font-size: 24px;
+        font-size: calc(var(--button-font-size) * 0.9);
     }
     #display {
-        font-size: 56px;
+        font-size: calc(var(--display-font-size) * 0.85);
     }
     .buttons {
-        gap: 10px;
+        gap: 8px;
+    }
+    .button.number.zero {
+        width: calc(var(--button-size) * 2 + var(--button-gap));
     }
 }
-
 
 .calculator-container {
     display: flex;
@@ -457,11 +461,11 @@ body {
     min-height: 30px;
     padding: 0 5px;
     margin-bottom: 5px;
-    height: 25px; /* Match dark mode */
+    height: 25px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-weight: 300; /* Match dark mode */
+    font-weight: 300;
 }
 
 #display {
@@ -489,7 +493,6 @@ body {
     gap: var(--button-gap);
 }
 
-/* Base Button Styles */
 .button {
     background-color: var(--button-number-bg);
     border: none;
@@ -502,159 +505,4 @@ body {
     align-items: center;
     justify-content: center;
     transition: all 0.1s ease;
-}
-
-/* Active and hover effects */
-.button:active {
-    opacity: var(--button-active-opacity);
-    transform: scale(0.92);
-}
-
-@media (hover: hover) {
-    .button:hover {
-        filter: brightness(var(--button-hover-brightness));
-    }
-}
-
-/* Specific Button Types */
-
-/* Operator buttons use a larger font for clear emphasis */
-.button.operator {
-    background-color: var(--button-operator-bg);
-    color: var(--button-operator-text);
-    font-size: var(--operator-font-size); /* Standardized */
-}
-
-/* Utility buttons (e.g., C, +/-) */
-.button.utility {
-    background-color: var(--button-utility-bg);
-    color: var(--button-utility-text);
-    font-size: var(--button-font-size); /* Standardized */
-}
-
-/* Equals button matching operator style */
-.button[data-action="calculate"] {
-    background-color: var(--button-operator-bg);
-    color: var(--button-operator-text);
-}
-
-/* Zero button spans two grid columns with modified style */
-.button.number.zero {
-    grid-column: span 2;
-    width: calc(var(--button-size) * 2 + var(--button-gap)); /* Standardized */
-    border-radius: calc(var(--button-size) / 2); /* Standardized Pill shape */
-    justify-content: flex-start;
-    padding-left: calc(var(--button-size) / 2 - 4px); /* Standardized */
-}
-
-/* Memory Button */
-.memory-button {
-    background-color: var(--memory-button-bg);
-    color: var(--memory-button-text);
-    border: none;
-    border-radius: 50%;
-    width: 44px; /* Match dark mode */
-    height: 44px; /* Match dark mode */
-    font-size: 15px; /* Match dark mode */
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.1s ease-out; /* Match dark mode transition */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 4px; /* Match dark mode margin */
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Memory Log Container */
-.memory-log-container {
-    background-color: var(--memory-log-bg);
-    color: var(--memory-log-text);
-    border-radius: 20px;
-    padding: 20px;
-    width: 250px;
-    flex: 0 0 auto; /* Don't grow or shrink */
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    border: 1px solid var(--memory-log-border);
-    min-height: 400px; /* Reduced min-height slightly if needed */
-    max-height: 550px; /* Match calc height better */
-    margin-left: 0; /* Remove margin, rely on parent gap */
-    align-self: flex-start; /* Align to top */
-}
-
-.memory-log-container h3 {
-    color: var(--memory-indicator-text);
-    margin-top: 0;
-    margin-bottom: 10px;
-    border-bottom: 1px solid var(--memory-log-border);
-    padding-bottom: 8px;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-#memory-log-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 14px;
-}
-
-#memory-log-list li {
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed var(--memory-log-border);
-    word-wrap: break-word;
-    line-height: 1.4;
-}
-
-#memory-log-list li:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.memory-cleared {
-    margin-top: 5px;
-    font-size: 14px;
-    color: #444;
-    text-align: center;
-}
-
-/* Basic Responsiveness */
-@media (max-width: 720px) { /* Adjust breakpoint for layout change */
-    .calculator-layout-container {
-        flex-direction: column; /* Stack vertically on smaller screens */
-        align-items: center;
-        max-width: 375px; /* Fit calculator width */
-        gap: 20px;
-    }
-    .memory-log-container {
-        width: 100%; /* Take full width when stacked */
-        max-width: 375px; /* Limit width */
-        max-height: 200px; /* Limit height when stacked */
-        min-height: 150px;
-    }
-}
-
-@media (max-width: 374px) {
-    .calculator {
-        padding: 8px;
-        max-width: 100%;
-    }
-    /* Adjust button size if needed for very small screens, ensure consistency */
-    /* Example: --button-size: 68px; */
-    .button {
-        /* width: var(--button-size); */ /* Uncomment and adjust if needed */
-        /* height: var(--button-size); */
-        font-size: calc(var(--button-font-size) * 0.9); 
-    }
-    #display {
-        font-size: calc(var(--display-font-size) * 0.85); /* Further reduce */
-    }
-    .buttons {
-        gap: 8px;
-    }
-    .button.number.zero {
-        width: calc(var(--button-size) * 2 + var(--button-gap));
-    }
 }

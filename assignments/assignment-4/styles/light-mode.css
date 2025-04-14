@@ -1,34 +1,27 @@
+
 :root[data-theme='light'] {
-    /* Background & general elements */
+    /* iOS Light Mode Colors */
     --body-bg: #f2f2f7;
-    --calc-bg: transparent;
-    --header-bg: #f2f2f7;
-    --header-text: #000000;
-
-    /* Display */
+    --calc-bg: #f2f2f7;
     --calc-text: #000000;
-    --calc-history-text: #8e8e93;
-
-    /* Buttons */
-    --button-number-bg: #ffffff;
-    --button-operator-bg: #ff9f0a;
-    --button-utility-bg: #d4d4d2;
+    --calc-history-text: #666666;
+    --button-number-bg: #e5e5ea;
     --button-text: #000000;
+    --button-operator-bg: #ff9f0a;
     --button-operator-text: #ffffff;
+    --button-utility-bg: #d1d1d6;
     --button-utility-text: #000000;
-
-    /* Memory and log */
     --memory-indicator-bg: rgba(0, 0, 0, 0.1);
     --memory-indicator-text: #ff9f0a;
+    --memory-button-bg: #e5e5ea;
+    --memory-button-text: #000000;
     --memory-log-bg: #ffffff;
     --memory-log-text: #000000;
     --memory-log-border: #e5e5ea;
-    --memory-button-bg: #f2f2f7;
-    --memory-button-text: #000000;
-
-    /* Interaction effects */
+    --header-bg: #f2f2f7;
+    --header-text: #000000;
     --button-active-opacity: 0.7;
-    --button-hover-brightness: 0.95;
+    --button-hover-brightness: 1.2;
     --button-gap: 12px;
     --display-font-size: 90px;
     --button-font-size: 35px;
@@ -42,9 +35,9 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    background-color: var(--body-bg);
     margin: 0;
     padding: 0;
-    background-color: var(--body-bg);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -62,6 +55,341 @@ body {
     margin: 0 auto;
     height: 100vh;
 }
+
+.calculator-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.calculator {
+    background-color: var(--calc-bg);
+    border-radius: 0;
+    padding: var(--button-gap);
+    width: 100%;
+    max-width: 375px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    color: var(--calc-text);
+    overflow: hidden;
+    flex: 0 0 auto;
+}
+
+.calculator .display {
+    background-color: var(--calc-bg);
+    color: var(--calc-text);
+    text-align: right;
+    padding: 0 15px 10px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    word-wrap: break-word;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.history {
+    color: var(--calc-history-text);
+    text-align: right;
+    font-size: 24px;
+    min-height: 30px;
+    padding: 0 5px;
+    margin-bottom: 5px;
+}
+
+.calculator #history {
+    font-size: 20px;
+    color: var(--calc-history-text);
+    margin-bottom: 5px;
+    height: 25px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 300;
+}
+
+#display {
+    width: 100%;
+    text-align: right;
+    font-size: var(--display-font-size);
+    margin-bottom: var(--button-gap);
+    min-height: 96px;
+    word-wrap: break-word;
+    color: var(--calc-text);
+    line-height: 1.1;
+    padding: 0 var(--button-gap);
+    text-overflow: ellipsis;
+    background: transparent;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--button-gap);
+}
+
+.button {
+    background-color: var(--button-number-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 50%;
+    width: var(--button-size);
+    height: var(--button-size);
+    font-size: var(--button-font-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s ease;
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none;
+}
+
+.button:active {
+    opacity: var(--button-active-opacity);
+    transform: scale(0.92);
+}
+
+@media (hover: hover) {
+    .button:hover {
+        filter: brightness(0.95);
+    }
+    .button.utility:hover {
+        filter: brightness(0.97);
+    }
+    .button.operator:hover {
+        filter: brightness(1.1);
+    }
+}
+
+.button.operator {
+    background-color: var(--button-operator-bg);
+    color: var(--button-operator-text);
+    font-size: var(--operator-font-size);
+}
+
+.button.utility {
+    background-color: var(--button-utility-bg);
+    color: var(--button-utility-text);
+    font-size: var(--button-font-size);
+}
+
+.button[data-action="calculate"] {
+    background-color: var(--button-operator-bg);
+    color: var(--button-operator-text);
+}
+
+.button.number.zero {
+    grid-column: span 2;
+    width: calc(var(--button-size) * 2 + var(--button-gap));
+    border-radius: calc(var(--button-size) / 2);
+    justify-content: flex-start;
+    padding-left: calc(var(--button-size) / 2 - 4px);
+}
+
+.memory-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.memory-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.memory-button {
+    background-color: var(--memory-button-bg);
+    color: var(--memory-button-text);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.1s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 4px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.memory-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.memory-log-container {
+    background-color: var(--memory-log-bg);
+    color: var(--memory-log-text);
+    border-radius: 20px;
+    padding: 15px;
+    width: 100%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+    border: 1px solid var(--memory-log-border);
+    min-height: 200px;
+    max-height: 300px;
+}
+
+.memory-log-container h3 {
+    color: var(--memory-indicator-text);
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--memory-log-border);
+    padding-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#memory-log-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+#memory-log-list li {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--memory-log-border);
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+#memory-log-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.memory-button:active {
+    opacity: var(--button-active-opacity);
+    transform: scale(0.93);
+}
+
+.theme-toggle {
+    background-color: var(--button-operator-bg);
+    color: var(--button-operator-text);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.header-controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--header-bg);
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+    color: var(--header-text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+.back-button:hover {
+    color: var(--button-operator-bg);
+    background-color: rgba(255, 159, 10, 0.1);
+}
+
+.theme-toggle-button {
+    background-color: var(--button-operator-bg);
+    color: var(--button-operator-text);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.calculator-layout-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 700px;
+    padding-top: 60px;
+}
+
+@media (max-width: 720px) {
+    .calculator-layout-container {
+        flex-direction: column;
+        align-items: center;
+        max-width: 375px;
+        gap: 20px;
+    }
+    .memory-log-container {
+        width: 100%;
+        max-width: 375px;
+        max-height: 200px;
+        min-height: 150px;
+    }
+}
+
+@media (max-width: 350px) {
+    .button {
+        font-size: 24px;
+    }
+    #display {
+        font-size: 56px;
+    }
+    .buttons {
+        gap: 10px;
+    }
+}
+
 
 .calculator-container {
     display: flex;

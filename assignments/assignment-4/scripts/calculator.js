@@ -21,6 +21,19 @@ document.addEventListener('DOMContentLoaded', function() {
     acButton = document.querySelector('[data-action="clear"]');
     memoryLogList = document.getElementById('memory-log-list');
     
+    // Initialize display with the starting value
+    if (displayElement) {
+        displayElement.value = displayValue;
+    } else {
+        console.error('Display element not found!');
+    }
+    
+    // Defensive: if memoryLogList is null, log a warning
+    if (!memoryLogList) {
+        console.warn('memory-log-list element not found. Memory log features will be disabled.');
+    }
+    
+    // Log initialization status after all elements are initialized
     console.log('DOM loaded, elements initialized:', { 
         display: displayElement, 
         history: historyDisplay,
@@ -165,6 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Assign memoryLogList here since DOM is loaded
     memoryLogList = document.getElementById('memory-log-list');
+// Defensive: if memoryLogList is null, log a warning
+if (!memoryLogList) {
+    console.warn('memory-log-list element not found. Memory log features will be disabled.');
+}
     updateMemoryIndicator(); // Show memory indicator if there's a stored value
 
     // Set up memory buttons
@@ -252,6 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Handles digit button presses (0-9)
   function inputDigit(digit) {
+  console.log('[inputDigit] Called with:', digit, 'Current displayValue:', displayValue);
     if (displayValue === 'Error') return;
 
     // If we just completed a calculation, start fresh
@@ -268,338 +286,371 @@ document.addEventListener('DOMContentLoaded', () => {
     if (displayValue === '0' && digit !== '.') {
         displayValue = digit;
     } else {
-        displayValue += digit;
+        }
     }
 
-    // Update the display input
-    if (displayElement) {
-        displayElement.value = displayValue;
-    }
-
-    updateDisplay();
-  }
-
-  function inputDecimal(dot) {
-    if (calculationComplete) {
-      resetCalculator();
-      displayValue = '0.';
-    } else if (waitingForSecondOperand) {
-      displayValue = '0.';
-      waitingForSecondOperand = false;
-    } else if (!displayValue.includes(dot)) {
-      displayValue += dot;
-    }
-    updateDisplay();
-  }
-
-  function toggleSign() {
-    const currentValue = parseFloat(displayValue);
-    if (currentValue !== 0) {
-      displayValue = String(-currentValue);
-      if (!waitingForSecondOperand) {
+    // Updates the calculator display based on current state
+    function updateDisplay() {
+        console.log('[updateDisplay] Called');
+        // Determine what to show in the main display
+        let mainDisplay;
         if (calculationComplete) {
-          currentEquation = displayValue;
-        } else if (currentEquation) {
-          const lastSpace = currentEquation.lastIndexOf(' ');
-          currentEquation = lastSpace !== -1 ?
-            currentEquation.slice(0, lastSpace + 1) + displayValue :
-            displayValue;
-        }
-      }
-      updateDisplay();
-    }
-  }
-
-  function inputPercentage() {
-    const currentValue = parseFloat(displayValue);
-    if (currentValue !== 0) {
-      const percentValue = currentValue / 100;
-      displayValue = String(percentValue);
-      if (!waitingForSecondOperand) {
-        if (calculationComplete) {
-          currentEquation = displayValue;
-        } else if (currentEquation) {
-          const lastSpace = currentEquation.lastIndexOf(' ');
-          currentEquation = lastSpace !== -1 ?
-            currentEquation.slice(0, lastSpace + 1) + displayValue :
-            displayValue;
-        }
-      }
-      updateDisplay();
-    }
-  }
-
-  function getOperatorSymbol(op) {
-    const symbols = {
-      add: ' + ',
-      subtract: ' - ',
-      multiply: ' × ',
-      divide: ' ÷ '
-    };
-    return symbols[op] || '';
-  }
-
-  // Returns the precedence of an operator (1 for addition and subtraction, 2 for multiplication and division)
-  function getOperatorPrecedence(op) {
-    const precedence = {
-      add: 1,
-      subtract: 1,
-      multiply: 2,
-      divide: 2
-    };
-    return precedence[op] || 0;
-  }
-
-  function performCalculation(operand1, operand2, operator) {
-    switch (operator) {
-      case 'add':
-        return operand1 + operand2;
-      case 'subtract':
-        return operand1 - operand2;
-      case 'multiply':
-        return operand1 * operand2;
-      case 'divide':
-        if (operand2 === 0) {
-          return 'Error';
-        }
-        return operand1 / operand2;
-      default:
-        return operand2; // Fallback case (should not occur)
-    }
-  }
-
-  // Evaluate an expression array using PEMDAS operator precedence
-  function evaluateExpression(expression) {
-    // Use the Shunting Yard algorithm to convert infix expression to Reverse Polish Notation (RPN)
-    let outputQueue = [];
-    let operatorStack = [];
-    // Define operator precedence: multiplication and division have higher precedence than addition and subtraction
-    const precedence = { 'add': 1, 'subtract': 1, 'multiply': 2, 'divide': 2 };
-    
-    // Process each token from the expression array
-    for (let token of expression) {
-      if (typeof token === 'number') {
-        // Numbers are directly added to the output queue
-        outputQueue.push(token);
-      } else {
-        // For operators, pop from operatorStack to outputQueue if top of the stack has greater or equal precedence
-        while (operatorStack.length && precedence[operatorStack[operatorStack.length - 1]] >= precedence[token]) {
-          outputQueue.push(operatorStack.pop());
-        }
-        // Push the current operator onto the stack
-        operatorStack.push(token);
-      }
-    }
-    // Append any remaining operators from the stack to the output queue
-    while (operatorStack.length) {
-      outputQueue.push(operatorStack.pop());
-    }
-    
-    // Evaluate the RPN expression using a stack
-    let evaluationStack = [];
-    for (let token of outputQueue) {
-      if (typeof token === 'number') {
-        evaluationStack.push(token);
-      } else {
-        let operand2 = evaluationStack.pop();
-        let operand1 = evaluationStack.pop();
-        let result = performCalculation(operand1, operand2, token);
-        // Return 'Error' immediately if a calculation error occurs (e.g., division by zero)
-        if (result === 'Error') {
-          return 'Error';
-        }
-        evaluationStack.push(result);
-      }
-    }
-    return evaluationStack[0];
-  }
-
-  // Handles operator button press without immediate evaluation
-  function handleOperator(nextOperator) {
-    if (displayValue === 'Error') return;
-
-    const inputValue = parseFloat(displayValue);
-    if (calculationComplete) {
-      firstOperand = inputValue;
-      currentEquation = displayValue;
-      calculationComplete = false;
-    } else if (operator && waitingForSecondOperand) {
-      // Just change the operator
-      operator = nextOperator;
-      currentEquation = currentEquation.slice(0, -3);
-    } else if (operator) {
-      // Just store the number, don't calculate yet
-      firstOperand = parseFloat(currentEquation);
-      currentEquation = currentEquation + displayValue;
-    } else {
-      firstOperand = inputValue;
-      currentEquation = displayValue;
-    }
-
-    operator = nextOperator;
-    waitingForSecondOperand = true;
-    currentEquation += getOperatorSymbol(nextOperator);
-    updateDisplay();
-  }
-
-  // Handles equals button press
-  function handleEquals() {
-    // Don't do anything if we're in an error state, have no operator,
-    if (displayValue === 'Error' || !operator || waitingForSecondOperand) return;
-
-    // Build the complete equation
-    const fullEquation = currentEquation + displayValue;
-
-    // Parse the equation into numbers and operators
-    const parts = fullEquation.split(/\s*[+×÷-]\s*/);  // Split by operators with spaces
-    const operators = fullEquation.match(/[+×÷-]/g);      // Get all operators
-
-    // Calculate the result following order of operations
-    let result = parseFloat(parts[0]);  // Start with first number
-    
-    // Process each operator and number in sequence
-    for (let i = 0; i < operators.length; i++) {
-      const nextNum = parseFloat(parts[i + 1]);
-      switch (operators[i]) {
-        case '+': result += nextNum; break;
-        case '-': result -= nextNum; break;
-        case '×': result *= nextNum; break;
-        case '÷': 
-          // Handle division by zero
-          if (nextNum === 0) {
-            result = 'Error';
-          } else {
-            result = result / nextNum;
-          }
-          break;
-      }
-      
-      // Stop if we hit an error
-      if (result === 'Error') break;
-    }
-
-    // Update the calculator state based on result
-    if (result === 'Error') {
-      displayValue = 'Error';
-      currentEquation = fullEquation + ' =';
-    } else {
-      // Format the result to avoid unnecessary decimal places
-      displayValue = String(parseFloat(result.toFixed(10)));
-      currentEquation = fullEquation + ' =';  // Add equals sign to equation
-      firstOperand = result;  // Store result for potential follow-up operations
-    }
-
-    // Reset state for next calculation
-    operator = null;
-    waitingForSecondOperand = false;
-    calculationComplete = true;
-    updateDisplay();
-  }
-
-  // Toggle the sign of the current number
-  function toggleSign() {
-    if (displayValue === 'Error') return;
-    const currentNumber = parseFloat(displayValue);
-    if (currentNumber === 0) return;
-    displayValue = String(currentNumber * -1);
-    updateDisplay();
-  }
-
-  // Convert the current number to a percentage
-  function inputPercentage() {
-    if (displayValue === 'Error') return;
-    const currentNumber = parseFloat(displayValue);
-    displayValue = String(currentNumber / 100);
-    updateDisplay();
-  }
-
-// Handles backspace/delete functionality with digit-by-digit deletion
-  function handleDelete() {
-    if (calculationComplete || displayValue === 'Error') {
-      resetCalculator();
-      return;
-    }
- 
-    // Handle operator deletion when no second number entered
-    if (waitingForSecondOperand) {
-      operator = null;
-      waitingForSecondOperand = false;
-      currentEquation = String(firstOperand);
-      displayValue = currentEquation;
-    }
-    // Handle first number deletion
-    else if (operator === null) {
-      if (displayValue.length === 1) {
-        displayValue = '0';
-      } else {
-        displayValue = displayValue.slice(0, -1);
-      }
-      currentEquation = displayValue;
-    }
-    // Handle second number deletion
-    else {
-      if (displayValue === "") {
-        operator = null;
-        waitingForSecondOperand = false;
-        currentEquation = String(firstOperand);
-        displayValue = currentEquation;
-      } else {
-        if (displayValue.length === 1) {
-          displayValue = "";
+            // After equals is pressed, show result in main display and equation in history
+            mainDisplay = displayValue;
+            historyElement.textContent = currentEquation;
+        } else if (operator) {
+            // While building an equation with operators, show the full equation
+            mainDisplay = currentEquation + (waitingForSecondOperand ? '' : displayValue);
+            historyElement.textContent = '';
         } else {
-          displayValue = displayValue.slice(0, -1);
+            // Just showing a number with no operators yet
+            mainDisplay = displayValue;
+            historyElement.textContent = '';
         }
-        currentEquation = String(firstOperand) + getOperatorSymbol(operator) + displayValue;
-      }
+
+        // Dynamic font sizing based on content length
+        const baseSize = 48;  // Default font size
+        const minSize = 24;   // Smallest allowable font size
+        const maxCharacters = 11;  // Maximum characters at full size
+        let textLength = mainDisplay.length;
+        let newSize = baseSize;
+
+        if (textLength > maxCharacters) {
+            newSize = baseSize * (maxCharacters / textLength);
+            newSize = Math.max(newSize, minSize);  // Don't go smaller than minSize
+        }
+        displayElement.style.fontSize = `${newSize}px`;
+        displayElement.value = mainDisplay;
+        console.log('[updateDisplay] Set displayElement.value to:', displayElement.value);
+
+        // Show AC when at initial state, C when there's something to clear
+        const showAC = (displayValue === '0' && !currentEquation) || calculationComplete;
+        acButton.textContent = showAC ? 'AC' : 'C';
     }
- 
-    updateDisplay();
-  }
 
-  function updateDisplay() {
-    if (!displayElement) return;
-
-    if (displayValue === 'Error') {
-        displayElement.value = displayValue;
-        if (acButton) acButton.textContent = 'AC';
-        return;
+    // Resets the calculator to its initial state
+    function resetCalculator() {
+        displayValue = '0';                // Reset display to zero
+        firstOperand = null;               // Clear first operand
+        operator = null;                   // Clear current operator
+        waitingForSecondOperand = false;   // Not waiting for second operand
+        currentEquation = '';             // Clear the equation
+        calculationComplete = false;      // No calculation has been completed
+        updateDisplay();                  // Update the display
     }
 
-    // Format number for display
-    let formattedValue = displayValue;
-    if (displayValue !== '' && !isNaN(parseFloat(displayValue))) {
-        const number = parseFloat(displayValue);
-        formattedValue = number.toString();
-        // Handle large numbers and decimals
-        if (formattedValue.length > 9) {
-            if (formattedValue.includes('e')) {
-                formattedValue = number.toPrecision(6);
-            } else if (formattedValue.includes('.')) {
-                formattedValue = number.toFixed(
-                    Math.max(0, 9 - formattedValue.split('.')[0].length - 1)
-                );
+    // Handles clear entry (C button)
+    function clearEntry() {
+        handleDelete();  // Delegate to handleDelete for consistent behavior
+    }
+
+    // Handles digit button presses (0-9)
+    function inputDigit(digit) {
+        console.log('[inputDigit] Called with:', digit, 'Current displayValue:', displayValue);
+        if (displayValue === 'Error') return;
+
+        // If we just completed a calculation, start fresh
+        if (lastResult !== null) {
+            displayValue = '';
+            lastResult = null;
+            currentEquation = '';
+        }
+
+        // Don't allow numbers to start with multiple zeros
+        if (displayValue === '0' && digit === '0') return;
+
+        // Replace initial zero unless decimal
+        if (displayValue === '0' && digit !== '.') {
+            displayValue = digit;
+        } else {
+            displayValue += digit;
+        }
+
+        // Update the display input
+        if (displayElement) {
+            displayElement.value = displayValue;
+            console.log('[inputDigit] Updated displayElement.value to:', displayElement.value);
+        }
+
+        updateDisplay();
+    }
+
+    function inputDecimal(dot) {
+        if (calculationComplete) {
+            resetCalculator();
+            displayValue = '0.';
+        } else if (waitingForSecondOperand) {
+            displayValue = '0.';
+            waitingForSecondOperand = false;
+        } else if (!displayValue.includes(dot)) {
+            displayValue += dot;
+        }
+        updateDisplay();
+    }
+
+    function toggleSign() {
+        const currentValue = parseFloat(displayValue);
+        if (currentValue !== 0) {
+            displayValue = String(-currentValue);
+            if (!waitingForSecondOperand) {
+                if (calculationComplete) {
+                    currentEquation = displayValue;
+                } else if (currentEquation) {
+                    const lastSpace = currentEquation.lastIndexOf(' ');
+                    currentEquation = lastSpace !== -1 ?
+                        currentEquation.slice(0, lastSpace + 1) + displayValue :
+                        displayValue;
+                }
+            }
+            updateDisplay();
+        }
+    }
+
+    function inputPercentage() {
+        const currentValue = parseFloat(displayValue);
+        if (currentValue !== 0) {
+            const percentValue = currentValue / 100;
+            displayValue = String(percentValue);
+            if (!waitingForSecondOperand) {
+                if (calculationComplete) {
+                    currentEquation = displayValue;
+                } else if (currentEquation) {
+                    const lastSpace = currentEquation.lastIndexOf(' ');
+                    currentEquation = lastSpace !== -1 ?
+                        currentEquation.slice(0, lastSpace + 1) + displayValue :
+                        displayValue;
+                }
+            }
+            updateDisplay();
+        }
+    }
+
+    function getOperatorSymbol(op) {
+        const symbols = {
+            add: ' + ',
+            subtract: ' - ',
+            multiply: ' × ',
+            divide: ' ÷ '
+        };
+        return symbols[op] || '';
+    }
+
+    // Returns the precedence of an operator (1 for addition and subtraction, 2 for multiplication and division)
+    function getOperatorPrecedence(op) {
+        const precedence = {
+            add: 1,
+            subtract: 1,
+            multiply: 2,
+            divide: 2
+        };
+        return precedence[op] || 0;
+    }
+
+    function performCalculation(operand1, operand2, operator) {
+        switch (operator) {
+            case 'add':
+                return operand1 + operand2;
+            case 'subtract':
+                return operand1 - operand2;
+            case 'multiply':
+                return operand1 * operand2;
+            case 'divide':
+                if (operand2 === 0) {
+                    return 'Error';
+                }
+                return operand1 / operand2;
+            default:
+                return operand2; // Fallback case (should not occur)
+        }
+    }
+
+    // Evaluate an expression array using PEMDAS operator precedence
+    function evaluateExpression(expression) {
+        // Use the Shunting Yard algorithm to convert infix expression to Reverse Polish Notation (RPN)
+        let outputQueue = [];
+        let operatorStack = [];
+        // Define operator precedence: multiplication and division have higher precedence than addition and subtraction
+        const precedence = { 'add': 1, 'subtract': 1, 'multiply': 2, 'divide': 2 };
+        
+        // Process each token from the expression array
+        for (let token of expression) {
+            if (typeof token === 'number') {
+                // Numbers are directly added to the output queue
+                outputQueue.push(token);
             } else {
-                formattedValue = number.toPrecision(9);
+                // For operators, pop from operatorStack to outputQueue if top of the stack has greater or equal precedence
+                while (operatorStack.length && precedence[operatorStack[operatorStack.length - 1]] >= precedence[token]) {
+                    outputQueue.push(operatorStack.pop());
+                }
+                // Push the current operator onto the stack
+                operatorStack.push(token);
             }
         }
+        // Append any remaining operators from the stack to the output queue
+        while (operatorStack.length) {
+            outputQueue.push(operatorStack.pop());
+        }
+        
+        // Evaluate the RPN expression using a stack
+        let evaluationStack = [];
+        for (let token of outputQueue) {
+            if (typeof token === 'number') {
+                evaluationStack.push(token);
+            } else {
+                let operand2 = evaluationStack.pop();
+                let operand1 = evaluationStack.pop();
+                let result = performCalculation(operand1, operand2, token);
+                // Return 'Error' immediately if a calculation error occurs (e.g., division by zero)
+                if (result === 'Error') {
+                    return 'Error';
+                }
+                evaluationStack.push(result);
+            }
+        }
+        return evaluationStack[0];
     }
 
-    // Update the display input
-    displayElement.value = formattedValue || '0';
+    // Handles operator button press without immediate evaluation
+    function handleOperator(nextOperator) {
+        if (displayValue === 'Error') return;
 
-    // Update AC/C button text
-    if (acButton) {
-        acButton.textContent = displayValue === '' || displayValue === '0' ? 'AC' : 'C';
+        const inputValue = parseFloat(displayValue);
+        if (calculationComplete) {
+            firstOperand = inputValue;
+            currentEquation = displayValue;
+            calculationComplete = false;
+        } else if (operator && waitingForSecondOperand) {
+            // Just change the operator
+            operator = nextOperator;
+            currentEquation = currentEquation.slice(0, -3);
+        } else if (operator) {
+            // Just store the number, don't calculate yet
+            firstOperand = parseFloat(currentEquation);
+            currentEquation = currentEquation + displayValue;
+        } else {
+            firstOperand = inputValue;
+            currentEquation = displayValue;
+        }
+
+        operator = nextOperator;
+        waitingForSecondOperand = true;
+        currentEquation += getOperatorSymbol(nextOperator);
+        updateDisplay();
     }
 
-    // Update font size based on length
-    updateFontSize();
+    // Handles equals button press
+    function handleEquals() {
+        // Don't do anything if we're in an error state, have no operator,
+        if (displayValue === 'Error' || !operator || waitingForSecondOperand) return;
 
-    // Update equation display
-    if (historyDisplay) {
-        historyDisplay.textContent = currentEquation || '';
+        // Build the complete equation
+        const fullEquation = currentEquation + displayValue;
+
+        // Parse the equation into numbers and operators
+        const parts = fullEquation.split(/\s*[+×÷-]\s*/);  // Split by operators with spaces
+        const operators = fullEquation.match(/[+×÷-]/g);      // Get all operators
+
+        // Calculate the result following order of operations
+        let result = parseFloat(parts[0]);  // Start with first number
+        
+        // Process each operator and number in sequence
+        for (let i = 0; i < operators.length; i++) {
+            const nextNum = parseFloat(parts[i + 1]);
+            switch (operators[i]) {
+                case '+': result += nextNum; break;
+                case '-': result -= nextNum; break;
+                case '×': result *= nextNum; break;
+                case '÷': 
+                    // Handle division by zero
+                    if (nextNum === 0) {
+                        result = 'Error';
+                    } else {
+                        result = result / nextNum;
+                    }
+                    break;
+            }
+            
+            // Stop if we hit an error
+            if (result === 'Error') break;
+        }
+
+        // Update the calculator state based on result
+        if (result === 'Error') {
+            displayValue = 'Error';
+            currentEquation = fullEquation + ' =';
+        } else {
+            // Format the result to avoid unnecessary decimal places
+            displayValue = String(parseFloat(result.toFixed(10)));
+            currentEquation = fullEquation + ' =';  // Add equals sign to equation
+            firstOperand = result;  // Store result for potential follow-up operations
+        }
+
+        // Reset state for next calculation
+        operator = null;
+        waitingForSecondOperand = false;
+        calculationComplete = true;
+        updateDisplay();
     }
-}
+
+    // Toggle the sign of the current number
+    function toggleSign() {
+        if (displayValue === 'Error') return;
+        const currentNumber = parseFloat(displayValue);
+        if (currentNumber === 0) return;
+        displayValue = String(currentNumber * -1);
+        updateDisplay();
+    }
+
+    // Convert the current number to a percentage
+    function inputPercentage() {
+        if (displayValue === 'Error') return;
+        const currentNumber = parseFloat(displayValue);
+        displayValue = String(currentNumber / 100);
+        updateDisplay();
+    }
+
+    // Handles backspace/delete functionality with digit-by-digit deletion
+    function handleDelete() {
+        if (calculationComplete || displayValue === 'Error') {
+            resetCalculator();
+            return;
+        }
+ 
+        // Handle operator deletion when no second number entered
+        if (waitingForSecondOperand) {
+            operator = null;
+            waitingForSecondOperand = false;
+            currentEquation = String(firstOperand);
+            displayValue = currentEquation;
+        }
+        // Handle first number deletion
+        else if (operator === null) {
+            if (displayValue.length === 1) {
+                displayValue = '0';
+            } else {
+                displayValue = displayValue.slice(0, -1);
+            }
+            currentEquation = displayValue;
+        }
+        // Handle second number deletion
+        else {
+            if (displayValue === "") {
+                operator = null;
+                waitingForSecondOperand = false;
+                currentEquation = String(firstOperand);
+                displayValue = currentEquation;
+            } else {
+                if (displayValue.length === 1) {
+                    displayValue = "";
+                } else {
+                    displayValue = displayValue.slice(0, -1);
+                }
+                currentEquation = String(firstOperand) + getOperatorSymbol(operator) + displayValue;
+            }
+        }
+ 
+        updateDisplay();
+    }
 
     // Set up event listeners for button clicks
     if (buttonsContainer) {
@@ -613,6 +664,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const button = event.target;
             const action = button.dataset.action;  // The button action (clear, add, etc.)
             const value = button.dataset.value;    // For number buttons (0-9)
+
+            console.log('[Button Click]', {action, value, buttonText: button.textContent});
 
             // Map of actions to their handler functions
             const actions = {

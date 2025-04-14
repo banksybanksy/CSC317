@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator with Memory Functions</title>
     <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="styles/dark-mode.css" id="theme-style">
+    <link rel="stylesheet" href="styles/styles.css" id="theme-style">
     <script src="scripts/calculator.js" defer></script>
 </head>
 <body>
@@ -17,7 +17,6 @@
     </div>
     <div class="calculator-layout-container">
         <div class="calculator-container">
-            <div class="memory-indicator" id="memory-indicator" style="display: none;">M</div>
             <div class="display">
                 <div id="history" class="history"></div>
                 <input type="text" id="display" value="0" disabled>
@@ -75,12 +74,16 @@
         let isDarkTheme = true;
 
         // Load saved theme preference
-        if (localStorage.getItem('calculator-theme') === 'light') {
+        const savedTheme = localStorage.getItem('calculator-theme');
+        if (savedTheme === 'light') {
             themeStyle.href = 'styles/light-mode.css';
             isDarkTheme = false;
             themeToggle.textContent = 'Switch to Dark Theme';
+            document.documentElement.setAttribute('data-theme', 'light');
         } else {
+            themeStyle.href = 'styles/styles.css';
             themeToggle.textContent = 'Switch to Light Theme';
+            document.documentElement.setAttribute('data-theme', 'dark');
         }
 
         themeToggle.addEventListener('click', () => {
@@ -88,6 +91,7 @@
             themeStyle.href = isDarkTheme ? 'styles/styles.css' : 'styles/light-mode.css';
             themeToggle.textContent = isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme';
             localStorage.setItem('calculator-theme', isDarkTheme ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
         });
     </script>
 </body>

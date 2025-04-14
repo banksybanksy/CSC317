@@ -109,7 +109,7 @@ body {
     font-size: var(--display-font-size);
     padding: 10px;
     box-sizing: border-box;
-    background: transparent;
+    background: var(--calc-bg);
     color: var(--calc-text);
 }
 
@@ -135,15 +135,21 @@ body {
     min-height: 96px;
     word-wrap: break-word;
     color: var(--calc-text);
-    font-weight: 300; /* Standardized */
+    font-weight: 300;
     text-align: right;
     padding: 0;
     box-sizing: border-box;
-    margin: 0; /* Reset margin */
-    line-height: 1.1; /* Standardized */
+    margin: 0;
+    line-height: 1.1;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    background: transparent;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
 }
 
 .buttons {

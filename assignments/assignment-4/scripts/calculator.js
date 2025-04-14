@@ -1,20 +1,24 @@
 let displayElement;
 // Theme handling
 function toggleTheme() {
-    const body = document.documentElement;
-    const currentTheme = body.getAttribute('data-theme') || 'dark';
+    const html = document.documentElement;
+    const currentTheme = html.classList.contains('dark-mode') ? 'dark' : 'light';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     
-    // Set the theme attribute on the document element
-    body.setAttribute('data-theme', newTheme);
+    // Toggle the dark-mode class
+    html.classList.toggle('dark-mode');
+    
+    // Update the stylesheet link
+    const themeStyle = document.getElementById('theme-style');
+    themeStyle.href = `styles/${newTheme}-mode.css`;
     
     // Save theme preference to localStorage
     localStorage.setItem('calculator-theme', newTheme);
     
     // Update button text to indicate current theme
-    const themeToggleBtn = document.querySelector('.theme-toggle');
+    const themeToggleBtn = document.getElementById('theme-toggle');
     if (themeToggleBtn) {
-        themeToggleBtn.textContent = newTheme === 'light' ? 'Switch to Dark' : 'Switch to Light';
+        themeToggleBtn.textContent = newTheme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
     }
     
     console.log('Theme switched to:', newTheme);
@@ -92,36 +96,44 @@ function handleMemory(action) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Set up theme based on localStorage or default to dark
+    const savedTheme = localStorage.getItem('calculator-theme') || 'dark';
+    const html = document.documentElement;
+    
+    if (savedTheme === 'light') {
+        html.classList.remove('dark-mode');
+        document.getElementById('theme-style').href = 'styles/light-mode.css';
+        document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
+    } else {
+        html.classList.add('dark-mode');
+        document.getElementById('theme-style').href = 'styles/dark-mode.css';
+        document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
+    }
+    
+    // Add event listener for the theme toggle button
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    
     displayElement = document.getElementById('display');
     const historyElement = document.getElementById('history');
-    const buttonsContainer = document.querySelector('.buttons');
+    const buttonsContainer = document.querySelector('.calculator-grid');
     const memoryButtons = document.querySelector('.memory-buttons');
-    memoryButtons.style.marginBottom = '15px';
 
-    // Initialize theme
-    const savedTheme = localStorage.getItem('calculator-theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    
-    // Update theme toggle button text based on current theme
-    const themeToggleBtn = document.querySelector('.theme-toggle');
-    if (themeToggleBtn) {
-        themeToggleBtn.textContent = savedTheme === 'light' ? 'Switch to Dark' : 'Switch to Light';
-    }
-
-    // Initialize memory indicator
+    // Setup memory value and indicator
+    memoryValue = parseFloat(localStorage.getItem('calculator-memory')) || 0;
     updateMemoryIndicator();
 
-    // Assign memoryLogList here since DOM is loaded
-    memoryLogList = document.getElementById('memory-log');
+    // Make sure we have proper references to the calculator buttons
+    const acButton = document.querySelector('button[data-action="clear"]');
 
-    // Memory button handling
-    memoryButtons.addEventListener('click', (e) => {
-        const button = e.target;
-        if (button.dataset.memory) {
-            handleMemory(button.dataset.memory);
-        }
+    // Assign memoryLogList here since DOM is loaded
+    memoryLogList = document.getElementById('memory-log-list');
+    updateMemoryIndicator(); // Show memory indicator if there's a stored value
+
+    // Set up memory buttons
+    document.querySelectorAll('.memory-button').forEach(btn => {
+        const action = btn.dataset.memory;
+        btn.addEventListener('click', () => handleMemory(action));
     });
-  const acButton = document.querySelector('button[data-action="clear"]');
 
   // Calculator state variables
   let displayValue = '0';           // Current value shown in the display

@@ -1,208 +1,29 @@
 <!-- Calculator Page -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iOS Calculator - Damian Perez</title>
-    <link id="theme-style" rel="stylesheet" href="styles/styles.css">
-    <style>
-        body {
-            background-color: var(--cream, #F5F5F0);
-            color: var(--charcoal, #2F3337);
-        }
-
-        .calculator-header {
-            display: flex;
-            justify-content: space-between;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
-            z-index: 100;
-        }
-
-        .back-link,
-        .theme-toggle {
-            padding: 10px 20px;
-            background-color: #818cf8;
-            color: white;
-            text-decoration: none;
-            border: none;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .back-link:hover,
-        .theme-toggle:hover {
-            background-color: #4f46e5;
-            transform: translateY(-1px);
-        }
-
-        .calculator-layout-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 100vh;
-            padding: 80px 20px 20px;
-            gap: 20px;
-        }
-
-        .calculator-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        .calculator {
-            position: relative;
-            background-color: var(--calc-bg, #1c1c1c);
-            border-radius: 30px;
-            padding: 20px;
-            width: 100%;
-            max-width: 320px;
-            box-sizing: border-box;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .memory-indicator {
-            position: absolute;
-            top: 10px;
-            left: 15px;
-            font-size: 14px;
-            color: #818cf8;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .display {
-            background-color: var(--calc-bg, #1c1c1c);
-            border-radius: 15px;
-            padding: 15px;
-            margin-top: 20px;
-            width: 100%;
-            max-width: 320px;
-            position: relative;
-        }
-
-        .history {
-            color: #818cf8;
-            font-size: 14px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        .button {
-            background-color: #818cf8;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .button:hover {
-            background-color: #4f46e5;
-            transform: translateY(-1px);
-        }
-
-        .memory-section {
-            background-color: var(--calc-bg, #1c1c1c);
-            border-radius: 15px;
-            padding: 15px;
-            margin-top: 20px;
-            width: 100%;
-            max-width: 320px;
-            position: relative;
-        }
-
-        .memory-buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        .memory-button {
-            background-color: #818cf8;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .memory-button:hover {
-            background-color: #4f46e5;
-            transform: translateY(-1px);
-        }
-
-        .memory-button.active {
-            background-color: #4f46e5;
-        }
-
-        .memory-log-container {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            width: 100%;
-            max-width: 320px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .memory-log-container h3 {
-            color: var(--sage, #94A187);
-            margin-bottom: 10px;
-        }
-
-        .memory-log-container ul {
-            margin-left: 20px;
-            color: var(--charcoal, #2F3337);
-        }
-
-        .memory-log-container li {
-            margin-bottom: 8px;
-        }
-    </style>
+    <title>Calculator with Memory Functions</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/dark-mode.css" id="theme-style">
+    <script src="scripts/calculator.js" defer></script>
 </head>
 <body>
-    <div class="calculator-header">
-        <a href="index.html" class="back-link">Back to Portfolio</a>
-        <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
+    <div class="header-controls">
+        <a href="../index.html" class="back-button">← Back to Portfolio</a>
+        <button id="theme-toggle" class="theme-toggle-button">Switch to Light Mode</button>
     </div>
     <div class="calculator-layout-container">
         <div class="calculator-container">
-            <div class="calculator">
-                <div class="memory-indicator" id="memory-indicator" style="display: none;">M</div>
-                <div class="display">
-                    <div id="history" class="history"></div>
-                    <input type="text" id="display" value="0" disabled>
-                </div>
-                <div class="calculator-controls">
+            <div class="memory-indicator" id="memory-indicator" style="display: none;">M</div>
+            <div class="display">
+                <div id="history" class="history"></div>
+                <input type="text" id="display" value="0" disabled>
+            </div>
+            <div class="calculator-wrapper">
+                <div class="calculator-grid">
                     <div class="main-buttons">
                         <div class="buttons">
                             <button class="button utility" data-action="clear">AC</button>
@@ -230,17 +51,17 @@
                             <button class="button operator" data-action="calculate">=</button>
                         </div>
                     </div>
-                    <div class="memory-controls">
-                        <div class="memory-buttons">
-                            <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
-                            <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
-                            <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
-                            <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
-                        </div>
-                        <div class="memory-log-container" id="memory-log">
-                            <h3>Memory Log</h3>
-                            <ul id="memory-log-list"></ul>
-                        </div>
+                </div>
+                <div class="memory-section">
+                    <div class="memory-buttons">
+                        <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
+                        <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
+                        <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
+                        <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
+                    </div>
+                    <div class="memory-log-container" id="memory-log">
+                        <h3>Memory Log</h3>
+                        <ul id="memory-log-list"></ul>
                     </div>
                 </div>
             </div>

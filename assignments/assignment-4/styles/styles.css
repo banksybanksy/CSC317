@@ -1,17 +1,18 @@
 /* Theme variables - iOS Calculator Style */
-:root[data-theme='dark'] {
+/* Default to dark mode */
+:root {
     /* iOS Dark Mode Colors */
     --body-bg: #000000;
     --calc-bg: #000000;
     --calc-text: #ffffff;
-    --calc-history-text: #a0a0a0;
+    --calc-history-text: #8e8e93;
     --button-number-bg: #333333;
     --button-text: #ffffff;
     --button-operator-bg: #ff9f0a;
     --button-operator-text: #ffffff;
     --button-utility-bg: #a5a5a5;
     --button-utility-text: #000000;
-    --memory-indicator-bg: rgba(255, 255, 255, 0.2);
+    --memory-indicator-bg: rgba(255, 255, 255, 0.1);
     --memory-indicator-text: #ff9f0a;
     --memory-button-bg: #1c1c1c;
     --memory-button-text: #ffffff;
@@ -22,6 +23,11 @@
     --header-text: #ffffff;
     --button-active-opacity: 0.7;
     --button-hover-brightness: 1.2;
+    --button-gap: 12px;
+    --display-font-size: 90px;
+    --button-font-size: 35px;
+    --operator-font-size: 45px;
+    --button-size: 80px;
 }
 
 :root[data-theme='light'] {
@@ -63,21 +69,30 @@ body {
 
 .calculator-container {
     display: flex;
+    flex-direction: column;
     gap: 20px;
-    align-items: flex-start;
     padding: 20px;
     width: 100%;
-    max-width: 800px;
+    max-width: 400px;
     margin: 0 auto;
 }
 
-.calculator {
-    background-color: var(--calc-bg); 
-    border-radius: 39px; 
-    padding: 20px;
+.calculator-wrapper {
+    display: flex;
     width: 100%;
-    max-width: 375px;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.calculator {
+    background-color: var(--calc-bg);
+    border-radius: 0; /* iOS calc has no border radius on main container */
+    padding: var(--button-gap);
+    width: 100%;
+    max-width: 375px; /* Common iPhone width */
     box-sizing: border-box;
+    margin: 0 auto;
     color: var(--calc-text);
     overflow: hidden;
     flex: 0 0 auto;
@@ -119,23 +134,21 @@ body {
 
 #display {
     width: 100%;
-    background-color: transparent; 
-    border: none;
-    font-size: 90px;
     text-align: right;
-    color: var(--calc-text); 
-    margin-bottom: 20px;
-    padding: 0;
-    font-weight: 300;
-    overflow: hidden;
-    white-space: nowrap;
+    font-size: var(--display-font-size);
+    margin-bottom: var(--button-gap);
+    min-height: 96px;
+    word-wrap: break-word;
+    color: var(--calc-text);
+    line-height: 1.1;
+    padding: 0 var(--button-gap);
     text-overflow: ellipsis;
     line-height: 1;
 }
 
 .calculator #display {
-    font-size: 60px; /* Larger font for iOS style */
-    font-weight: 200; /* Lighter font weight */
+    font-size: var(--display-font-size); /* Use variable */
+    font-weight: 300; /* Lighter font weight like light mode */
     border: none;
     background: none;
     color: inherit; /* Inherit color from parent */
@@ -144,7 +157,8 @@ body {
     padding: 0;
     margin: 0;
     text-align: right; /* Ensure text stays right-aligned */
-    line-height: 1.1; /* Tighter line height */
+    line-height: 1.1; /* Adjust line height for display */
+    min-height: 96px; /* Ensure minimum height */
 }
 
 .calculator-controls {
@@ -166,61 +180,54 @@ body {
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: var(--button-gap); /* Use variable */
 }
 
+/* Base Button Styles - Updated for iOS look */
 .button {
-    background-color: var(--button-number-bg); 
-    border: none;
+    background-color: var(--button-number-bg);
     color: var(--button-text);
-    font-size: 1.8rem;
+    border: none;
     border-radius: 50%;
-    width: 75px;
-    height: 75px;
+    width: var(--button-size);
+    height: var(--button-size);
+    font-size: var(--button-font-size); /* Use variable */
+    font-weight: 400;
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 400;
+    transition: all 0.1s ease-out;
     -webkit-tap-highlight-color: transparent;
 }
 
-.button:active {
-    filter: brightness(1.2); 
-}
-
-/* Specific button styles */
-.button.utility {
-    background-color: var(--button-utility-bg);
-    color: var(--button-utility-text);
-    font-weight: 500;
-}
-
+/* Operator Button Overrides */
 .button.operator {
     background-color: var(--button-operator-bg);
     color: var(--button-operator-text);
-    font-weight: 500;
-    font-size: 2rem;
+    font-size: var(--operator-font-size); /* Use variable */
 }
 
+/* Utility Button Overrides */
+.button.utility {
+    background-color: var(--button-utility-bg);
+    color: var(--button-utility-text);
+    font-size: var(--button-font-size); /* Use base button font size */
+}
+
+/* Equals button uses operator style */
 .button[data-action="calculate"] {
      background-color: var(--button-operator-bg);
      color: var(--button-operator-text);
-     color: #fff;
 }
 
 .button.number.zero {
     grid-column: span 2;
-    width: auto;
-    border-radius: 40px; /* More oval shape for zero button */
+    width: calc(var(--button-size) * 2 + var(--button-gap)); /* Calculate width */
+    border-radius: calc(var(--button-size) / 2); /* Pill shape */
     justify-content: flex-start;
-    padding-left: 30px;
+    padding-left: calc(var(--button-size) / 2 - 4px); /* Adjust padding for text alignment */
     text-align: left;
-}
-
-.button.active-key {
-    filter: brightness(1.5) !important;
 }
 
 @media (hover: hover) {
@@ -270,7 +277,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.calculator-header {
+.header-controls {
     position: fixed;
     top: 0;
     left: 0;
@@ -284,7 +291,7 @@ body {
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
-.back-link {
+.back-button {
     color: var(--header-text);
     text-decoration: none;
     font-weight: 500;
@@ -292,40 +299,69 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 20px;
 }
 
-.back-link:before {
-    content: '←';
-    font-size: 18px;
-}
-
-.back-link:hover {
+.back-button:hover {
     color: var(--button-operator-bg);
+    background-color: rgba(255, 159, 10, 0.1);
+}
+
+.theme-toggle-button {
+    background-color: var(--button-operator-bg);
+    color: var(--button-operator-text);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Memory Buttons and Log Styles */
+.memory-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
 .memory-buttons {
     display: flex;
     gap: 8px;
     justify-content: space-between;
     margin-bottom: 15px;
+    width: 100%;
 }
 
 .memory-button {
-    background-color: var(--button-utility-bg);
-    color: var(--button-utility-text);
+    background-color: var(--memory-button-bg);
+    color: var(--memory-button-text);
     border: none;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s ease-out;
+    transition: all 0.1s ease-out;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 5px;
+    margin: 4px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .memory-button:hover {
@@ -337,25 +373,24 @@ body {
 .calculator-layout-container {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
+    align-items: center;
+    flex-direction: column;
     width: 100%;
-    max-width: 600px;
+    max-width: 700px;
+    padding-top: 60px;
 }
 
 .memory-log-container {
     background-color: var(--memory-log-bg); 
     color: var(--memory-log-text); 
     border-radius: 20px;
-    padding: 20px;
-    width: 250px;
-    flex: 0 0 auto;
+    padding: 15px;
+    width: 100%;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     overflow-y: auto;
     border: 1px solid var(--memory-log-border);
-    min-height: 400px;
-    max-height: 600px;
-    margin-left: 20px;
+    min-height: 200px;
+    max-height: 300px;
 }
 
 .memory-log-container h3 {
@@ -392,7 +427,7 @@ body {
 /* Add iOS-style active states */
 .button:active {
     opacity: var(--button-active-opacity);
-    transform: scale(0.93);
+    transform: scale(0.92);
 }
 
 .memory-button:active {
@@ -400,40 +435,8 @@ body {
     transform: scale(0.93);
 }
 
-.button.operator {
-    background-color: var(--button-operator-bg);
-    color: var(--button-operator-text);
-    font-size: 40px;
-}
-
 .button.utility {
     background-color: var(--button-utility-bg);
     color: var(--button-utility-text);
-    font-size: 32px;
-}
-
-.button.number.zero {
-    grid-column: span 2;
-    width: 168px;
-    border-radius: 40px;
-    justify-content: flex-start;
-    padding-left: 31px;
-}
-
-/* Memory indicator styling */
-.memory-indicator {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    font-size: 16px;
-    color: var(--memory-indicator-text);
-    font-weight: bold;
-    padding: 4px 8px;
-    border-radius: 50%;
-    background-color: var(--memory-indicator-bg);
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: var(--button-font-size);
 }

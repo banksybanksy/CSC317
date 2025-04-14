@@ -1,25 +1,39 @@
 :root[data-theme='light'] {
+    /* Background & general elements */
     --body-bg: #f2f2f7;
     --calc-bg: #f2f2f7;
+    --header-bg: #f2f2f7;
+    --header-text: #000000;
+
+    /* Display */
     --calc-text: #000000;
-    --calc-history-text: #666666;
-    --button-number-bg: #d4d4d2;
-    --button-text: #000000;
+    --calc-history-text: #8e8e93;
+
+    /* Buttons */
+    --button-number-bg: #e5e5ea;
     --button-operator-bg: #ff9f0a;
+    --button-utility-bg: #d1d1d6;
+    --button-text: #000000;
     --button-operator-text: #ffffff;
-    --button-utility-bg: #a5a5a5;
     --button-utility-text: #000000;
+
+    /* Memory and log */
     --memory-indicator-bg: rgba(0, 0, 0, 0.1);
     --memory-indicator-text: #ff9f0a;
-    --memory-button-bg: #d4d4d2;
-    --memory-button-text: #000000;
     --memory-log-bg: #ffffff;
     --memory-log-text: #000000;
     --memory-log-border: #e5e5ea;
-    --header-bg: #f2f2f7;
-    --header-text: #000000;
+    --memory-button-bg: #f2f2f7;
+    --memory-button-text: #000000;
+
+    /* Interaction effects */
     --button-active-opacity: 0.7;
-    --button-hover-brightness: 1.1;
+    --button-hover-brightness: 0.95;
+    --button-gap: 12px;
+    --display-font-size: 90px;
+    --button-font-size: 35px;
+    --operator-font-size: 45px;
+    --button-size: 80px;
 }
 
 body {
@@ -28,61 +42,103 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--body-bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.calculator-layout-container {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: flex-start;
+    gap: 24px; /* Increased gap slightly */
+    padding: 80px 20px 20px; /* Add padding like html */
+    width: 100%;
+    max-width: 700px; /* Increased max-width to fit both */
+    margin: 0 auto;
+    box-sizing: border-box; /* Include padding in width */
 }
 
 .calculator-container {
     display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin: auto;
+    max-width: 400px;
+}
+
+.calculator-wrapper {
+    display: flex;
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    flex: 1;
+}
+
+.memory-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin-left: 10px;
 }
 
 .calculator {
     position: relative;
     background-color: var(--calc-bg);
-    border-radius: 39px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    padding: var(--button-gap);
     width: 100%;
-    max-width: 375px;
+    max-width: 375px; /* Standardized */
     box-sizing: border-box;
-    flex: 0 0 auto;
+    margin: 0; /* Remove margin auto if centered by parent */
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 .display {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 120px;
-    justify-content: flex-end;
+    width: 100%;
+    text-align: right;
+    font-size: 48px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .history {
-    color: var(--history-text);
+    color: var(--calc-history-text);
     text-align: right;
     font-size: 24px;
     min-height: 30px;
     padding: 0 5px;
     margin-bottom: 5px;
+    height: 25px; /* Match dark mode */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 300; /* Match dark mode */
 }
 
 #display {
     width: 100%;
-    background-color: transparent;
-    border: none;
+    text-align: right;
+    font-size: var(--display-font-size);
+    margin-bottom: var(--button-gap);
+    min-height: 96px;
+    word-wrap: break-word;
     color: var(--calc-text);
-    font-size: 90px;
+    font-weight: 300; /* Standardized */
     text-align: right;
     padding: 0;
     box-sizing: border-box;
-    font-weight: 300;
-    margin-bottom: 20px;
-    line-height: 1;
+    margin: 0; /* Reset margin */
+    line-height: 1.1; /* Standardized */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -91,97 +147,101 @@ body {
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: var(--button-gap);
 }
 
+/* Base Button Styles */
 .button {
     background-color: var(--button-number-bg);
     border: none;
     border-radius: 50%;
     color: var(--button-text);
-    width: 80px;
-    height: 80px;
-    font-size: 34px;
-    font-weight: 400;
-    cursor: pointer;
+    width: var(--button-size);
+    height: var(--button-size);
+    font-size: var(--button-font-size);
     display: flex;
-    justify-content: center;
     align-items: center;
-    transition: all 0.15s ease-out;
+    justify-content: center;
+    transition: all 0.1s ease;
 }
 
+/* Active and hover effects */
 .button:active {
-    filter: brightness(1.2);
+    opacity: var(--button-active-opacity);
+    transform: scale(0.92);
 }
 
-/* Specific button styles */
-.button.utility {
-    background-color: var(--utility-btn-bg);
-    color: var(--utility-btn-text);
+@media (hover: hover) {
+    .button:hover {
+        filter: brightness(var(--button-hover-brightness));
+    }
 }
 
-.button.operator {
-    background-color: var(--operator-btn-bg);
-    color: var(--operator-btn-text);
-    font-size: 32px;
-}
+/* Specific Button Types */
 
-/* Special case for equals button */
-.button[data-action="calculate"] {
-    background-color: var(--operator-btn-bg);
-    color: var(--operator-btn-text);
-}
-
-.button.number.zero {
-    grid-column: span 2;
-    width: 168px;
-    border-radius: 40px;
-    justify-content: flex-start;
-    padding-left: 31px;
-}
-
+/* Operator buttons use a larger font for clear emphasis */
 .button.operator {
     background-color: var(--button-operator-bg);
     color: var(--button-operator-text);
-    font-size: 40px;
+    font-size: var(--operator-font-size); /* Standardized */
 }
 
+/* Utility buttons (e.g., C, +/-) */
 .button.utility {
     background-color: var(--button-utility-bg);
     color: var(--button-utility-text);
-    font-size: 32px;
+    font-size: var(--button-font-size); /* Standardized */
 }
 
+/* Equals button matching operator style */
+.button[data-action="calculate"] {
+    background-color: var(--button-operator-bg);
+    color: var(--button-operator-text);
+}
+
+/* Zero button spans two grid columns with modified style */
+.button.number.zero {
+    grid-column: span 2;
+    width: calc(var(--button-size) * 2 + var(--button-gap)); /* Standardized */
+    border-radius: calc(var(--button-size) / 2); /* Standardized Pill shape */
+    justify-content: flex-start;
+    padding-left: calc(var(--button-size) / 2 - 4px); /* Standardized */
+}
+
+/* Memory Button */
 .memory-button {
-    background-color: var(--button-utility-bg);
-    color: var(--button-utility-text);
+    background-color: var(--memory-button-bg);
+    color: var(--memory-button-text);
     border: none;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 16px;
+    width: 44px; /* Match dark mode */
+    height: 44px; /* Match dark mode */
+    font-size: 15px; /* Match dark mode */
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s ease-out;
+    transition: all 0.1s ease-out; /* Match dark mode transition */
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 5px;
+    margin: 4px; /* Match dark mode margin */
+    -webkit-tap-highlight-color: transparent;
 }
 
+/* Memory Log Container */
 .memory-log-container {
     background-color: var(--memory-log-bg);
     color: var(--memory-log-text);
     border-radius: 20px;
     padding: 20px;
     width: 250px;
-    flex: 0 0 auto;
+    flex: 0 0 auto; /* Don't grow or shrink */
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     border: 1px solid var(--memory-log-border);
-    min-height: 400px;
-    max-height: 600px;
-    margin-left: 20px;
+    min-height: 400px; /* Reduced min-height slightly if needed */
+    max-height: 550px; /* Match calc height better */
+    margin-left: 0; /* Remove margin, rely on parent gap */
+    align-self: flex-start; /* Align to top */
 }
 
 .memory-log-container h3 {
@@ -206,7 +266,6 @@ body {
     padding-bottom: 8px;
     border-bottom: 1px dashed var(--memory-log-border);
     word-wrap: break-word;
-    font-size: 14px;
     line-height: 1.4;
 }
 
@@ -215,36 +274,48 @@ body {
     margin-bottom: 0;
 }
 
-/* Active and hover effects */
-.button.active-key {
-    filter: brightness(1.5) !important;
-}
-
-@media (hover: hover) {
-    .button:hover {
-        filter: brightness(0.8);
-    }
-    .button.utility:hover {
-        filter: brightness(0.9);
-    }
-    .button.operator:hover {
-        filter: brightness(1.1);
-    }
+.memory-cleared {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #444;
+    text-align: center;
 }
 
 /* Basic Responsiveness */
-@media (max-width: 350px) {
-    .calculator {
-        padding: 15px;
-        max-width: 95%;
+@media (max-width: 720px) { /* Adjust breakpoint for layout change */
+    .calculator-layout-container {
+        flex-direction: column; /* Stack vertically on smaller screens */
+        align-items: center;
+        max-width: 375px; /* Fit calculator width */
+        gap: 20px;
     }
+    .memory-log-container {
+        width: 100%; /* Take full width when stacked */
+        max-width: 375px; /* Limit width */
+        max-height: 200px; /* Limit height when stacked */
+        min-height: 150px;
+    }
+}
+
+@media (max-width: 374px) {
+    .calculator {
+        padding: 8px;
+        max-width: 100%;
+    }
+    /* Adjust button size if needed for very small screens, ensure consistency */
+    /* Example: --button-size: 68px; */
     .button {
-        font-size: 24px;
+        /* width: var(--button-size); */ /* Uncomment and adjust if needed */
+        /* height: var(--button-size); */
+        font-size: calc(var(--button-font-size) * 0.9); 
     }
     #display {
-        font-size: 56px;
+        font-size: calc(var(--display-font-size) * 0.85); /* Further reduce */
     }
     .buttons {
-        gap: 10px;
+        gap: 8px;
+    }
+    .button.number.zero {
+        width: calc(var(--button-size) * 2 + var(--button-gap));
     }
 }

@@ -150,6 +150,11 @@ body {
     border: none;
     outline: none;
     -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    pointer-events: none;
+    outline: none;
+    -webkit-appearance: none;
     -moz-appearance: textfield;
     appearance: none;
 }

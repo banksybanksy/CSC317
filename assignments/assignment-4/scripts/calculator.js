@@ -221,22 +221,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Handles digit button presses (0-9)
   function inputDigit(digit) {
-    if (calculationComplete) {
-      // If we just completed a calculation, start a new one
-      displayValue = digit;
-      currentEquation = '';
-      firstOperand = null;
-      operator = null;
-      calculationComplete = false;
-    } else if (waitingForSecondOperand) {
-      // Start entering the second number
-      displayValue = digit;
-      waitingForSecondOperand = false;
-    } else {
-      // Continue entering a number (first or second)
-      // Replace 0 if it's the only digit, otherwise append
-      displayValue = displayValue === '0' ? digit : displayValue + digit;
+    if (displayValue === 'Error') return;
+
+    // If we just completed a calculation, start fresh
+    if (lastResult !== null) {
+        displayValue = '';
+        lastResult = null;
+        currentEquation = '';
     }
+
+    // Don't allow numbers to start with multiple zeros
+    if (displayValue === '0' && digit === '0') return;
+
+    // Replace initial zero unless decimal
+    if (displayValue === '0' && digit !== '.') {
+        displayValue = digit;
+    } else {
+        displayValue += digit;
+    }
+
+    // Update the display input
+    if (displayElement) {
+        displayElement.value = displayValue;
+    }
+
     updateDisplay();
   }
 
@@ -545,7 +553,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Update the display input
     displayElement.value = formattedValue || '0';
+
+    // Update AC/C button text
     if (acButton) {
         acButton.textContent = displayValue === '' || displayValue === '0' ? 'AC' : 'C';
     }

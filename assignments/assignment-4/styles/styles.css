@@ -1,5 +1,5 @@
 :root {
-        --body-bg: #000000;
+    --body-bg: #000000;
     --calc-bg: #000000;
     --calc-text: #ffffff;
     --calc-history-text: #8e8e93;
@@ -28,7 +28,7 @@
 }
 
 :root[data-theme="light"] {
-        --body-bg: #f2f2f7;
+   --body-bg: #f2f2f7;
     --calc-bg: #f2f2f7;
     --calc-text: #000000;
     --calc-history-text: #666666;

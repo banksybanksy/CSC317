@@ -10,18 +10,30 @@ let waitingForSecondOperand = false;
 let calculationComplete = false;
 let currentEquation = '';
 let lastResult = null;
+let memoryLogList;
 
 // Initialize the calculator when the DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements from DOM
     displayElement = document.getElementById('display');
     historyDisplay = document.getElementById('history');
     buttonsContainer = document.querySelector('.buttons');
     acButton = document.querySelector('[data-action="clear"]');
     memoryLogList = document.getElementById('memory-log-list');
+    
+    console.log('DOM loaded, elements initialized:', { 
+        display: displayElement, 
+        history: historyDisplay,
+        buttons: buttonsContainer,
+        acButton: acButton
+    });
 
-    // Initialize display
+    // Initialize display with the starting value
     if (displayElement) {
         displayElement.value = displayValue;
+        console.log('Display initialized with:', displayValue);
+    } else {
+        console.error('Display element not found!');
     }
 
 
@@ -688,7 +700,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Initialize display on load
+        // Initialize display on first load
         updateDisplay();
+    }
+    
+    // Add memory button event listeners
+    document.querySelectorAll('[data-memory]').forEach(button => {
+        button.addEventListener('click', () => {
+            const memoryAction = button.dataset.memory;
+            handleMemory(memoryAction);
+        });
     });
+    
+    console.log('Calculator initialization complete');
+});
 });

@@ -40,8 +40,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 400px;
-    margin: 20px auto;
-    overflow: hidden;
+    margin: 10px auto;
 }
 
 /* Button Styles */
@@ -74,14 +73,11 @@ button {
 /* Responsive desktop friendly adjustments */
 @media (min-width: 768px) {
   .calculator-layout-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       padding: 20px;
   }
   .calculator-container {
       max-width: 500px;
-      margin: 40px auto;
+      margin: 20px auto;
       box-shadow: 0 0 15px rgba(0,0,0,0.15);
   }
 }

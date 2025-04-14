@@ -8,6 +8,50 @@
   <!-- Default to dark mode CSS -->
   <link rel="stylesheet" href="styles/styles.css" id="theme-style">
   <script src="scripts/calculator.js" defer></script>
+  <style>
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .display-container {
+      margin-bottom: 20px;
+    }
+    .display-container input {
+      width: 100%;
+      height: 40px;
+      font-size: 24px;
+      text-align: right;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .btn {
+      height: 40px;
+      font-size: 18px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #e0e0e0;
+    }
+    .btn-utility {
+      background-color: #ccc;
+    }
+    .btn-operator {
+      background-color: #ff9900;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
   <div class="header-controls">
@@ -17,52 +61,47 @@
   </div>
   <div class="calculator-layout-container">
     <div class="calculator-container">
-      <div class="display">
-        <div id="history" class="history"></div>
-        <input type="text" id="display" value="0" disabled>
+      <div class="display-container">
+        <input type="text" class="history-display" id="history" disabled>
+        <input type="text" class="display" id="display" value="0" disabled>
       </div>
-      <div class="calculator-wrapper">
-        <div class="calculator-grid">
-          <div class="main-buttons">
-            <div class="buttons">
-              <button class="button utility" data-action="clear">AC</button>
-              <button class="button utility" data-action="negate">+/-</button>
-              <button class="button utility" data-action="percentage">%</button>
-              <button class="button utility" data-action="delete">⌫</button>
-              <button class="button operator" data-action="operator">÷</button>
-
-              <button class="button number" data-action="digit">7</button>
-              <button class="button number" data-action="digit">8</button>
-              <button class="button number" data-action="digit">9</button>
-              <button class="button operator" data-action="operator">×</button>
-
-              <button class="button number" data-action="digit">4</button>
-              <button class="button number" data-action="digit">5</button>
-              <button class="button number" data-action="digit">6</button>
-              <button class="button operator" data-action="operator">−</button>
-
-              <button class="button number" data-action="digit">1</button>
-              <button class="button number" data-action="digit">2</button>
-              <button class="button number" data-action="digit">3</button>
-              <button class="button operator" data-action="operator">+</button>
-
-              <button class="button number zero" data-action="digit">0</button>
-              <button class="button" data-action="decimal">.</button>
-              <button class="button operator" data-action="calculate">=</button>
-            </div>
-          </div>
+      <div class="calculator-grid">
+        <div class="buttons">
+          <button class="btn btn-utility" id="clear" data-action="clear">AC</button>
+          <button class="btn btn-utility" id="plus-minus" data-action="negate">±</button>
+          <button class="btn btn-utility" id="percent" data-action="percentage">%</button>
+          <button class="btn btn-operator" id="divide" data-action="operator">÷</button>
+          
+          <button class="btn btn-number" id="seven" data-action="digit">7</button>
+          <button class="btn btn-number" id="eight" data-action="digit">8</button>
+          <button class="btn btn-number" id="nine" data-action="digit">9</button>
+          <button class="btn btn-operator" id="multiply" data-action="operator">×</button>
+          
+          <button class="btn btn-number" id="four" data-action="digit">4</button>
+          <button class="btn btn-number" id="five" data-action="digit">5</button>
+          <button class="btn btn-number" id="six" data-action="digit">6</button>
+          <button class="btn btn-operator" id="subtract" data-action="operator">−</button>
+          
+          <button class="btn btn-number" id="one" data-action="digit">1</button>
+          <button class="btn btn-number" id="two" data-action="digit">2</button>
+          <button class="btn btn-number" id="three" data-action="digit">3</button>
+          <button class="btn btn-operator" id="add" data-action="operator">+</button>
+          
+          <button class="btn btn-number" id="zero" style="grid-column: span 2;" data-action="digit">0</button>
+          <button class="btn btn-number" id="decimal" data-action="decimal">.</button>
+          <button class="btn btn-operator" id="equals" data-action="calculate">=</button>
         </div>
-        <div class="memory-section">
-          <div class="memory-buttons">
-            <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
-            <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
-            <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
-            <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
-          </div>
-          <div class="memory-log-container" id="memory-log">
-            <h3>Memory Log</h3>
-            <ul id="memory-log-list"></ul>
-          </div>
+      </div>
+      <div class="memory-section">
+        <div class="memory-buttons">
+          <button class="memory-button" data-memory="mc" title="Memory Clear">MC</button>
+          <button class="memory-button" data-memory="mr" title="Memory Recall">MR</button>
+          <button class="memory-button" data-memory="mplus" title="Memory Add">M+</button>
+          <button class="memory-button" data-memory="mminus" title="Memory Subtract">M-</button>
+        </div>
+        <div class="memory-log-container" id="memory-log">
+          <h3>Memory Log</h3>
+          <ul id="memory-log-list"></ul>
         </div>
       </div>
     </div>

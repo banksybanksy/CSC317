@@ -138,10 +138,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Updates the display element and AC/C button text
   function updateDisplay() {
     if (!calculationComplete) {
-        // While input is in progress, display the current equation (e.g., "3 + 3")
-        displayElement.value = currentEquation;
+        // Show the full equation built so far along with current input
+        displayElement.value = (currentEquation ? currentEquation + " " : "") + displayValue;
     } else {
-        // After equals is pressed (or Enter), move the full equation to the history and display result
+        // After calculation, show the complete equation in history and show result in the main display
         historyDisplay.textContent = currentEquation;
         displayElement.value = displayValue;
     }

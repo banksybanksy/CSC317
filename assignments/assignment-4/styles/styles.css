@@ -99,7 +99,7 @@ body {
 .calculator-container {
   background-color: var(--calc-bg);
   padding: 36px 28px 32px 28px;
-  border-radius: 10px;
+  border-radius: 25px;
   color: var(--calc-text);
 }
 

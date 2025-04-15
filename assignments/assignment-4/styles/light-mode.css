@@ -6,11 +6,11 @@
     --calc-history-text: #666666;
     
     /* Buttons – numbers, operators, and utilities */
-    --button-number-bg: #f0f0f0;
+    --button-number-bg: #e5e5e5;
     --button-text: #000000;
     --button-operator-bg: #ff9f0a;
     --button-operator-text: #ffffff;
-    --button-utility-bg: #dcdcdc;
+    --button-utility-bg: #d1d1d1;
     --button-utility-text: #000000;
     
     /* Memory Section */
@@ -99,7 +99,7 @@
   .calculator-container {
     background-color: var(--calc-bg);
     padding: 36px 28px 32px 28px;
-    border-radius: 10px;
+    border-radius: 25px;
     color: var(--calc-text);
   }
   

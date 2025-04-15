@@ -1,25 +1,32 @@
-/* light-mode.css (Light Mode) */
 :root {
+    /* Backgrounds and general colors */
     --body-bg: #ffffff;
-    --calc-bg: #ffffff;
+    --calc-bg: #f4f4f4;
     --calc-text: #000000;
-    --calc-history-text: #8e8e93;
-    --button-number-bg: #e5e5ea;
+    --calc-history-text: #666666;
+  
+    /* Buttons – numbers, operators, and utilities */
+    --button-number-bg: #f0f0f0;
     --button-text: #000000;
-    --button-operator-bg: #007aff;
+    --button-operator-bg: #ff9f0a;
     --button-operator-text: #ffffff;
-    --button-utility-bg: #d1d1d6;
+    --button-utility-bg: #dcdcdc;
     --button-utility-text: #000000;
-    --memory-button-bg: #e5e5ea;
+  
+    /* Memory Section */
+    --memory-button-bg: #f0f0f0;
     --memory-button-text: #000000;
-    --memory-log-bg: #ffffff;
+    --memory-log-bg: #f4f4f4;
     --memory-log-text: #000000;
-    --memory-log-border: #e0e0e0;
+    --memory-log-border: #cccccc;
+  
+    /* Header */
     --header-bg: #ffffff;
     --header-text: #000000;
+  
+    /* Sizing & Transition Variables */
     --button-active-opacity: 0.7;
     --button-gap: 12px;
-    /* Smaller sizes for a compact design */
     --display-font-size: 70px;
     --button-font-size: 28px;
     --operator-font-size: 32px;
@@ -37,9 +44,10 @@
     min-height: 100vh;
   }
   
+  /* Header Controls */
   .header-controls {
     width: 100%;
-    padding: 15px 20px;
+    padding: 20px 36px;
     background-color: var(--header-bg);
     display: flex;
     justify-content: space-between;
@@ -47,18 +55,20 @@
     position: fixed;
     top: 0;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
   }
   
-  /* Back Button - More Stylish */
   .back-button {
     color: var(--header-text);
     text-decoration: none;
     font-size: 16px;
-    padding: 6px 12px;
+    padding: 8px 20px;
     border: 2px solid var(--header-text);
     border-radius: 20px;
     transition: background 0.3s, color 0.3s;
+    margin-right: 12px;
   }
+  
   .back-button:hover {
     background-color: var(--header-text);
     color: var(--header-bg);
@@ -69,11 +79,13 @@
     color: var(--button-operator-text);
     border: none;
     border-radius: 20px;
-    padding: 8px 16px;
-    font-size: 14px;
+    padding: 10px 22px;
+    font-size: 15px;
     cursor: pointer;
+    margin-left: 12px;
   }
   
+  /* Calculator Layout */
   .calculator-layout-container {
     padding-top: 70px;
     width: 100%;
@@ -83,12 +95,13 @@
   
   .calculator-container {
     background-color: var(--calc-bg);
-    padding: 20px;
+    padding: 36px 28px 32px;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     color: var(--calc-text);
   }
   
+  /* Display Styles */
   .display-container {
     margin-bottom: 10px;
   }
@@ -101,6 +114,7 @@
     background: transparent;
     text-align: right;
     opacity: 0.6;
+    transition: font-size 0.3s ease, opacity 0.3s ease;
   }
   
   .history-display.active-history {
@@ -118,6 +132,7 @@
     padding: 5px 0;
   }
   
+  /* Button Grid */
   .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -161,13 +176,28 @@
   
   .button:hover {
     transform: scale(1.05);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  }
-  .button:active {
-    transform: scale(0.95);
-    opacity: var(--button-active-opacity);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
   
+  .button:active,
+  .button.pressed {
+    filter: brightness(130%);
+    transform: scale(0.97);
+    transition: all 0.1s ease;
+  }
+  
+  .button.operator:active,
+  .button.operator.pressed {
+    background-color: #fff;
+    color: var(--button-operator-bg);
+  }
+  
+  .button.utility:active,
+  .button.utility.pressed {
+    filter: brightness(90%);
+  }
+  
+  /* Memory Section */
   .memory-section {
     margin-top: 20px;
   }

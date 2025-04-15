@@ -15,36 +15,45 @@
   <div class="calculator-layout-container">
     <div class="calculator-container">
       <div class="display-container">
-        <!-- History display will show the full equation after calculation -->
+        <!-- History display shows the equation -->
         <input type="text" class="history-display" id="history" disabled />
-        <!-- Main display shows live input and result -->
+        <!-- Main display shows current input or result -->
         <input type="text" class="display" id="display" value="0" disabled />
       </div>
       <div class="calculator">
         <div class="buttons">
-          <button class="button utility" id="clear" data-action="clear">AC</button>
-          <button class="button utility" id="plus-minus" data-action="negate">±</button>
-          <button class="button utility" id="percent" data-action="percentage">%</button>
-          <button class="button operator" id="divide" data-action="operator">÷</button>
+          <!-- Utility Buttons -->
+          <button class="button utility" id="clear" data-type="clear">AC</button>
+          <button class="button utility" id="plus-minus" data-type="negate">±</button>
+          <button class="button utility" id="percent" data-type="percentage">%</button>
+          <!-- Operator Buttons -->
+          <button class="button operator" id="divide" data-type="operator" data-value="/">÷</button>
 
-          <button class="button number" id="seven" data-action="digit">7</button>
-          <button class="button number" id="eight" data-action="digit">8</button>
-          <button class="button number" id="nine" data-action="digit">9</button>
-          <button class="button operator" id="multiply" data-action="operator">×</button>
+          <!-- Number Buttons -->
+          <button class="button number" id="seven" data-type="number" data-value="7">7</button>
+          <button class="button number" id="eight" data-type="number" data-value="8">8</button>
+          <button class="button number" id="nine" data-type="number" data-value="9">9</button>
+          <!-- Operator Button -->
+          <button class="button operator" id="multiply" data-type="operator" data-value="*">×</button>
 
-          <button class="button number" id="four" data-action="digit">4</button>
-          <button class="button number" id="five" data-action="digit">5</button>
-          <button class="button number" id="six" data-action="digit">6</button>
-          <button class="button operator" id="subtract" data-action="operator">−</button>
+          <!-- Number Buttons -->
+          <button class="button number" id="four" data-type="number" data-value="4">4</button>
+          <button class="button number" id="five" data-type="number" data-value="5">5</button>
+          <button class="button number" id="six" data-type="number" data-value="6">6</button>
+          <!-- Operator Button -->
+          <button class="button operator" id="subtract" data-type="operator" data-value="-">−</button>
 
-          <button class="button number" id="one" data-action="digit">1</button>
-          <button class="button number" id="two" data-action="digit">2</button>
-          <button class="button number" id="three" data-action="digit">3</button>
-          <button class="button operator" id="add" data-action="operator">+</button>
+          <!-- Number Buttons -->
+          <button class="button number" id="one" data-type="number" data-value="1">1</button>
+          <button class="button number" id="two" data-type="number" data-value="2">2</button>
+          <button class="button number" id="three" data-type="number" data-value="3">3</button>
+          <!-- Operator Button -->
+          <button class="button operator" id="add" data-type="operator" data-value="+">+</button>
 
-          <button class="button number zero" id="zero" data-action="digit">0</button>
-          <button class="button number" id="decimal" data-action="decimal">.</button>
-          <button class="button operator" id="equals" data-action="calculate">=</button>
+          <!-- Zero, Decimal, and Equals Buttons -->
+          <button class="button number zero" id="zero" data-type="number" data-value="0">0</button>
+          <button class="button number" id="decimal" data-type="number" data-value=".">.</button>
+          <button class="button operator" id="equals" data-type="equals">=</button>
         </div>
       </div>
       <div class="memory-section">

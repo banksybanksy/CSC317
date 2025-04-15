@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   // State variables:
+  // fullEquation: stores the part of the equation already entered (e.g., "6+")
+  // currentInput: stores the digits being typed for the current operand
+  // resultDisplayed: indicates if a calculation result was just displayed
   let fullEquation = "";
   let currentInput = "0";
   let resultDisplayed = false;
@@ -11,26 +14,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const buttons = document.querySelectorAll(".button");
 
   /**
-   * Updates the main display and clear button text.
-   * Uses the 'value' property because the display elements are <input> fields.
+   * Updates the main display:
+   * - If not in result mode, shows the full equation being built (fullEquation + currentInput).
+   * - Once equals is pressed, only the result (currentInput) is shown.
+   * Also updates the clear button text: "AC" if cleared or resultDisplayed; otherwise "C".
    */
   function updateDisplay() {
-    mainDisplay.value = (currentInput === "" ? "0" : currentInput);
+    if (resultDisplayed) {
+      mainDisplay.value = currentInput;
+    } else {
+      // Build a continuous equation display by concatenating the stored equation and current input.
+      let displayText = fullEquation + currentInput;
+      if (displayText === "") displayText = "0";
+      mainDisplay.value = displayText;
+    }
     if (clearButton) {
-      clearButton.textContent = (resultDisplayed || currentInput === "0") ? "AC" : "C";
+      clearButton.textContent =
+        resultDisplayed || (fullEquation === "" && currentInput === "0")
+          ? "AC"
+          : "C";
     }
   }
 
   /**
-   * Appends a digit or decimal point to the current input.
-   * @param {string} digit
+   * Appends a digit or a decimal point to the current operand.
+   * If a result was just displayed, a new equation is started.
+   * @param {string} digit - The pressed digit or decimal point.
    */
   function appendDigit(digit) {
     if (resultDisplayed) {
+      // Starting a new equation after a result: clear previous equation.
       fullEquation = "";
       currentInput = digit;
       resultDisplayed = false;
     } else {
+      // Replace the initial "0" with the new digit (unless a decimal is pressed).
       if (currentInput === "0" && digit !== ".") {
         currentInput = digit;
       } else {
@@ -42,21 +60,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /**
    * Appends an operator to the equation.
-   * @param {string} op
+   * If a result was just displayed, the result becomes the starting point.
+   * Instead of clearing the display, the full equation is preserved by concatenation.
+   * @param {string} op - The operator (e.g., "+", "-", "*", "/").
    */
   function appendOperator(op) {
     if (resultDisplayed) {
+      // Continue from the previous result.
       fullEquation = currentInput;
+      currentInput = "";
       resultDisplayed = false;
     }
     if (currentInput === "") {
-      // Replace the last operator if no current input.
+      // If an operator was already pressed, replace the last operator.
       if (fullEquation && /[+\-*/.]$/.test(fullEquation)) {
         fullEquation = fullEquation.slice(0, -1) + op;
       } else {
         fullEquation += op;
       }
     } else {
+      // Append the current operand and operator to fullEquation.
       fullEquation += currentInput + op;
       currentInput = "";
     }
@@ -64,10 +87,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /**
-   * Evaluates the current equation.
+   * Evaluates the expression built from fullEquation and currentInput.
+   * Moves the complete equation to the history (styled with smaller font and lower opacity)
+   * and displays the result in the main display.
    */
   function evaluateEquation() {
     let expression = fullEquation + currentInput;
+    // Remove any trailing operators or dots.
     expression = expression.replace(/[+\-*/.]+$/, "");
     if (expression === "") return;
 
@@ -77,9 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
         mainDisplay.value = "Error";
         currentInput = "";
       } else {
-        // Show the full equation in the history display.
+        // Move the complete expression to the history display.
         historyDisplay.value = expression + " =";
-        historyDisplay.classList.add("active-history");
+        historyDisplay.classList.add("active-history"); // CSS styles the history (smaller font, lower opacity)
+        // Display the result in the main area.
         currentInput = result.toString();
       }
       fullEquation = "";
@@ -93,26 +120,35 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /**
-   * Clears or backspaces the current input.
+   * Clears the calculator or performs a backspace operation.
+   * When resultDisplayed is true, or when there’s nothing to backspace, clear all.
+   * Otherwise, remove the last character from currentInput (or fullEquation if currentInput is empty).
    */
   function clearOrBackspace() {
-    if (resultDisplayed || currentInput === "0") {
+    if (resultDisplayed) {
+      // AC (All Clear): reset everything.
       fullEquation = "";
       currentInput = "0";
       resultDisplayed = false;
       historyDisplay.value = "";
       historyDisplay.classList.remove("active-history");
     } else {
-      currentInput = currentInput.slice(0, -1);
-      if (currentInput === "") currentInput = "0";
+      if (currentInput !== "") {
+        currentInput = currentInput.slice(0, -1);
+        if (currentInput === "") currentInput = "0";
+      } else if (fullEquation !== "") {
+        fullEquation = fullEquation.slice(0, -1);
+      }
     }
     updateDisplay();
   }
 
   /**
-   * Handle click events for calculator buttons.
+   * Click/tap event handler for calculator buttons.
+   * Buttons are identified with data-type ("number", "operator", "equals", "clear")
+   * and data-value (for the actual digit/operator).
    */
-  buttons.forEach(button => {
+  buttons.forEach((button) => {
     button.addEventListener("click", () => {
       const type = button.dataset.type;
       const value = button.dataset.value;
@@ -130,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /**
-   * Handle keyboard input for digits, operators, evaluation, and clearing.
+   * Keyboard input handler for digits, operators, evaluation (Enter/Equals), and backspace/escape clearing.
    */
   document.addEventListener("keydown", (event) => {
     const key = event.key;
@@ -147,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
       clearOrBackspace();
       event.preventDefault();
     } else if (key === "Escape") {
+      // Clear everything on Escape.
       fullEquation = "";
       currentInput = "0";
       resultDisplayed = false;
@@ -157,5 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Initialize the display on page load.
   updateDisplay();
 });

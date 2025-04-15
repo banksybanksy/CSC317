@@ -4,7 +4,7 @@
     --calc-bg: #f4f4f4;
     --calc-text: #000000;
     --calc-history-text: #666666;
-  
+    
     /* Buttons – numbers, operators, and utilities */
     --button-number-bg: #f0f0f0;
     --button-text: #000000;
@@ -12,19 +12,23 @@
     --button-operator-text: #ffffff;
     --button-utility-bg: #dcdcdc;
     --button-utility-text: #000000;
-  
+    
     /* Memory Section */
     --memory-button-bg: #f0f0f0;
     --memory-button-text: #000000;
     --memory-log-bg: #f4f4f4;
     --memory-log-text: #000000;
     --memory-log-border: #cccccc;
-  
+    
     /* Header */
     --header-bg: #ffffff;
     --header-text: #000000;
-  
-    /* Sizing & Transition Variables */
+    
+    /* Animation & Transition */
+    --button-flash-duration: 100ms;
+    --transition-duration: 200ms;
+    
+    /* Sizing & Spacing */
     --button-active-opacity: 0.7;
     --button-gap: 12px;
     --display-font-size: 70px;
@@ -54,7 +58,6 @@
     align-items: center;
     position: fixed;
     top: 0;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
   }
   
@@ -95,41 +98,49 @@
   
   .calculator-container {
     background-color: var(--calc-bg);
-    padding: 36px 28px 32px;
+    padding: 36px 28px 32px 28px;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     color: var(--calc-text);
   }
   
   /* Display Styles */
   .display-container {
     margin-bottom: 10px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 0 20px;
   }
   
   .history-display {
     width: 100%;
-    font-size: 20px;
+    font-size: 32px;
     color: var(--calc-history-text);
     border: none;
     background: transparent;
     text-align: right;
-    opacity: 0.6;
-    transition: font-size 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
   }
   
   .history-display.active-history {
-    font-size: 16px;
-    opacity: 0.4;
+    opacity: 0.6;
+    transform: translateY(0);
   }
   
   .display {
     width: 100%;
-    font-size: var(--display-font-size);
+    font-size: 90px;
+    line-height: 1;
     color: var(--calc-text);
     border: none;
     background: transparent;
     text-align: right;
-    padding: 5px 0;
+    padding: 0;
+    transition: all 0.3s ease;
   }
   
   /* Button Grid */
@@ -200,30 +211,42 @@
   /* Memory Section */
   .memory-section {
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
   }
   
   .memory-buttons {
     display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 15px;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
   }
   
   .memory-button {
     background-color: var(--memory-button-bg);
     color: var(--memory-button-text);
     border: none;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    font-size: 15px;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 16px;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  
+  .memory-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .memory-button:active {
+    transform: scale(0.95);
+    opacity: var(--button-active-opacity);
   }
   
   .memory-log-container {
+    width: 100%;
     background-color: var(--memory-log-bg);
     color: var(--memory-log-text);
     border: 1px solid var(--memory-log-border);
@@ -237,6 +260,7 @@
     margin-top: 0;
     font-size: 16px;
     color: var(--memory-button-text);
+    text-align: center;
   }
   
   #memory-log-list {

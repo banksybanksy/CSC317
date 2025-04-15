@@ -4,8 +4,8 @@
   --transition-duration: 200ms;
 
   /* Colors */
-  --body-bg: #000000;
-  --calc-bg: #1c1c1e;
+  --body-bg: #1c1c1e;       /* Dark gray behind the calculator */
+  --calc-bg: #1c1c1e;       /* Calculator container background remains the same */
   --calc-text: #ffffff;
   --calc-history-text: #98989f;
   --button-number-bg: #333333;
@@ -19,8 +19,14 @@
   --memory-log-bg: #1c1c1e;
   --memory-log-text: #ffffff;
   --memory-log-border: #333333;
-  --header-bg: #000000;
+  --header-bg: #1c1c1e;
   --header-text: #ffffff;
+  --button-active-opacity: 0.7;
+  --button-gap: 12px;
+  --display-font-size: 70px;
+  --button-font-size: 28px;
+  --operator-font-size: 32px;
+  --button-size: 60px;
 
   /* Sizing & Spacing */
   --button-active-opacity: 0.7;
@@ -52,7 +58,6 @@ body {
   align-items: center;
   position: fixed;
   top: 0;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
 
@@ -95,7 +100,6 @@ body {
   background-color: var(--calc-bg);
   padding: 36px 28px 32px 28px;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   color: var(--calc-text);
 }
 

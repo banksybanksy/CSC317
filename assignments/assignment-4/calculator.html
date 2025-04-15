@@ -4,12 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculator with Memory Functions</title>
+  <!-- Default stylesheet is the dark mode (styles.css) -->
   <link rel="stylesheet" href="styles/styles.css" id="theme-style" />
   <script src="scripts/calculator.js" defer></script>
 </head>
 <body>
   <div class="header-controls">
-    <a href="../index.html" class="back-button">← Back to Portfolio</a>
+    <!-- Updated Back to Profile link -->
+    <a href="index.html" class="back-button">← Back to Portfolio</a>
     <button id="theme-toggle" class="theme-toggle-button">Switch to Light Mode</button>
   </div>
   <div class="calculator-layout-container">
@@ -70,5 +72,24 @@
       </div>
     </div>
   </div>
+
+  <!-- Theme Toggle Script: Switch between dark and light mode -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeLink = document.getElementById("theme-style");
+  
+      themeToggle.addEventListener("click", () => {
+        // Use strict equality to check the current stylesheet.
+        if (themeLink.getAttribute("href") === "styles/styles.css") {
+          themeLink.setAttribute("href", "styles/light-mode.css");
+          themeToggle.textContent = "Switch to Dark Mode";
+        } else {
+          themeLink.setAttribute("href", "styles/styles.css");
+          themeToggle.textContent = "Switch to Light Mode";
+        }
+      });
+    });
+  </script>
 </body>
 </html>

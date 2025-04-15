@@ -1,120 +1,152 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // State variables
-  let currentEquation = "";
-  let isResultShown = false;
+  // State variables:
+  // 'fullEquation' stores the complete expression (e.g., "6+")
+  // 'currentInput' holds the currently typed number (or operand)
+  // 'resultDisplayed' indicates whether a calculation result was just shown
+  let fullEquation = "";
+  let currentInput = "0";
+  let resultDisplayed = false;
 
   // DOM elements
   const historyDisplay = document.querySelector(".history-display");
   const mainDisplay = document.querySelector(".display");
-  const clearButton = document.getElementById("clear"); // expects clear button to have id="clear"
+  const clearButton = document.getElementById("clear");
   const buttons = document.querySelectorAll(".button");
 
   /**
-   * Updates the main display with the current equation/result
-   * and toggles the clear button text between "AC" and "C".
+   * Updates the main display and clear button text.
+   * The main display shows the current operand (or "0" if empty).
+   * The clear button shows "AC" when cleared or a result is shown, else "C".
    */
-  const updateDisplay = () => {
-    mainDisplay.textContent = currentEquation || "0";
+  function updateDisplay() {
+    mainDisplay.textContent = (currentInput === "" ? "0" : currentInput);
     if (clearButton) {
-      clearButton.textContent = (!currentEquation || isResultShown) ? "AC" : "C";
+      // Show "AC" if the calculator is cleared or if a result was just displayed
+      clearButton.textContent = (resultDisplayed || currentInput === "0") ? "AC" : "C";
     }
-  };
+  }
 
   /**
-   * Appends input (digit, operator, or ".") to the equation.
-   * Replaces the equation if a result was just displayed and
-   * a numeric input is initiated.
-   * @param {string} value 
+   * Appends a digit or decimal point to the current input.
+   * If a result was just displayed, starts a new equation.
+   * @param {string} digit - The pressed digit or decimal point.
    */
-  const appendInput = (value) => {
-    // If result is shown and a number or dot is pressed, clear for new input.
-    if (isResultShown) {
-      if ("0123456789.".includes(value)) {
-        currentEquation = value;
+  function appendDigit(digit) {
+    if (resultDisplayed) {
+      // Start a new equation after a result is shown.
+      fullEquation = "";
+      currentInput = digit;
+      resultDisplayed = false;
+    } else {
+      // Replace "0" with the digit unless a decimal point is pressed.
+      if (currentInput === "0" && digit !== ".") {
+        currentInput = digit;
       } else {
-        // If an operator is pressed after a result, continue from current result.
-        currentEquation = mainDisplay.textContent + value;
+        currentInput += digit;
       }
-      isResultShown = false;
-      updateDisplay();
-      return;
     }
-
-    // Prevent starting the equation with an operator (except minus).
-    if (!currentEquation && /[+/*.]/.test(value)) {
-      return;
-    }
-
-    // Prevent consecutive operators; if the last character is an operator,
-    // replace it with the new operator.
-    const lastChar = currentEquation.slice(-1);
-    if (/[+\-*/.]/.test(lastChar) && /[+\-*/.]/.test(value)) {
-      currentEquation = currentEquation.slice(0, -1) + value;
-      updateDisplay();
-      return;
-    }
-
-    // Append input and update display.
-    currentEquation += value;
     updateDisplay();
-  };
+  }
+
+  /**
+   * Appends an operator to the equation.
+   * If a result was just displayed, uses that result as the starting operand.
+   * Moves the current input into the full equation, then clears it for the next operand.
+   * If no current input exists, replaces the last operator with the new one.
+   * @param {string} op - The operator (+, -, *, or /).
+   */
+  function appendOperator(op) {
+    if (resultDisplayed) {
+      // Continue equation from the result.
+      fullEquation = currentInput;
+      resultDisplayed = false;
+    }
+    if (currentInput === "") {
+      // If currentInput is empty, replace the last operator in fullEquation.
+      if (fullEquation && /[+\-*/.]$/.test(fullEquation)) {
+        fullEquation = fullEquation.slice(0, -1) + op;
+      } else {
+        fullEquation += op;
+      }
+    } else {
+      // Append currentInput and operator to the full equation,
+      // then clear currentInput to wait for the next operand.
+      fullEquation += currentInput + op;
+      currentInput = "";
+    }
+    updateDisplay();
+  }
 
   /**
    * Evaluates the current equation.
-   * Moves the full equation with an "=" sign into history,
-   * displays the result, and handles exceptions (invalid expressions,
-   * division by zero, etc.).
+   * Moves the full expression (without trailing operators) to the history display
+   * and shows the result in the main display.
    */
-  const evaluateEquation = () => {
-    if (!currentEquation) return;
-
+  function evaluateEquation() {
+    // Build the complete expression.
+    let expression = fullEquation + currentInput;
     // Trim any trailing operators or dots.
-    let equationToEval = currentEquation.replace(/[+\-*/.]+$/, "");
+    expression = expression.replace(/[+\-*/.]+$/, "");
+    if (expression === "") return;
+
     try {
-      const result = eval(equationToEval);
-      // Check for division by zero or other non-finite results.
+      let result = eval(expression);
       if (!isFinite(result)) {
         mainDisplay.textContent = "Error";
+        currentInput = "";
       } else {
-        historyDisplay.textContent = currentEquation + " =";
-        currentEquation = result.toString();
-        isResultShown = true;
+        // Move the complete equation into the history display.
+        historyDisplay.textContent = expression + " =";
+        historyDisplay.classList.add("active-history"); // CSS handles smaller font and lower opacity.
+        // Show the result.
+        currentInput = result.toString();
       }
-    } catch (error) {
+      // Clear the stored equation and set result flag.
+      fullEquation = "";
+      resultDisplayed = true;
+      updateDisplay();
+    } catch (e) {
       mainDisplay.textContent = "Error";
+      currentInput = "";
+      fullEquation = "";
     }
-    updateDisplay();
-  };
+  }
 
   /**
-   * Clears the equation or deletes the last character.
-   * If the equation is empty or a result is shown, perform AC (clear all).
+   * Clears the current input, or if nothing is being edited or a result is shown, clears everything.
+   * This function implements both "AC" (clear all) and "C" (backspace) behaviors.
    */
-  const clearOrBackspace = () => {
-    if (!currentEquation || isResultShown) {
-      // AC: clear everything
-      currentEquation = "";
+  function clearOrBackspace() {
+    if (resultDisplayed || currentInput === "0") {
+      // Clear all.
+      fullEquation = "";
+      currentInput = "0";
+      resultDisplayed = false;
       historyDisplay.textContent = "";
-      isResultShown = false;
+      historyDisplay.classList.remove("active-history");
     } else {
-      // C: remove last character (backspace)
-      currentEquation = currentEquation.slice(0, -1);
+      // Remove the last character from currentInput.
+      currentInput = currentInput.slice(0, -1);
+      if (currentInput === "") currentInput = "0";
     }
     updateDisplay();
-  };
+  }
 
   /**
-   * Click/tap handler for calculator buttons.
-   * Expects buttons to have data attributes: data-type and data-value.
-   * data-type is one of: number, operator, equals, clear.
+   * Handles click/tap events on calculator buttons.
+   * Expected button data attributes:
+   * - data-type: "number", "operator", "equals", "clear"
+   * - data-value: the digit or operator value (if applicable)
    */
   buttons.forEach(button => {
     button.addEventListener("click", () => {
       const type = button.dataset.type;
       const value = button.dataset.value;
 
-      if (type === "number" || type === "operator") {
-        appendInput(value);
+      if (type === "number") {
+        appendDigit(value);
+      } else if (type === "operator") {
+        appendOperator(value);
       } else if (type === "equals") {
         evaluateEquation();
       } else if (type === "clear") {
@@ -124,21 +156,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /**
-   * Keyboard event listener supports:
-   * - Numbers and dots (0-9, .)
-   * - Operators (+, -, *, /)
-   * - Enter or "=" to evaluate
-   * - Backspace for clear (C/AC)
-   * - Escape as an alternative for AC
+   * Handles keyboard input for digits, operators, evaluation, and clearing.
    */
   document.addEventListener("keydown", (event) => {
     const key = event.key;
 
     if ("0123456789.".includes(key)) {
-      appendInput(key);
+      appendDigit(key);
       event.preventDefault();
     } else if (["+", "-", "*", "/"].includes(key)) {
-      appendInput(key);
+      appendOperator(key);
       event.preventDefault();
     } else if (key === "Enter" || key === "=") {
       evaluateEquation();
@@ -147,15 +174,17 @@ document.addEventListener("DOMContentLoaded", () => {
       clearOrBackspace();
       event.preventDefault();
     } else if (key === "Escape") {
-      // Treat Escape as AC to clear everything.
-      currentEquation = "";
+      // Treat Escape as AC.
+      fullEquation = "";
+      currentInput = "0";
+      resultDisplayed = false;
       historyDisplay.textContent = "";
-      isResultShown = false;
+      historyDisplay.classList.remove("active-history");
       updateDisplay();
       event.preventDefault();
     }
   });
 
-  // Initialize display on load.
+  // Initialize display on page load.
   updateDisplay();
 });

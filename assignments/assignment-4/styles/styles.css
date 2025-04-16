@@ -1,32 +1,48 @@
-:root {
-  /* Animation & Transition */
-  --button-flash-duration: 100ms;
-  --transition-duration: 200ms;
+/**
+ * Dark Theme CSS Variables
+ * This file defines the dark theme styling for the calculator.
+ * A matching light theme is available in light-mode.css
+ */
 
-  /* Colors */
-  --body-bg: #1c1c1e;       /* Dark gray behind the calculator */
-  --calc-bg: #1c1c1e;       /* Calculator container background remains the same */
-  --calc-text: #ffffff;
-  --calc-history-text: #98989f;
-  --button-number-bg: #333333;
-  --button-text: #ffffff;
-  --button-operator-bg: #ff9f0a;
-  --button-operator-text: #ffffff;
-  --button-utility-bg: #a5a5a5;
+:root {
+  /* Timing Variables */
+  --button-flash-duration: 100ms;  /* Duration for button press visual feedback */
+  --transition-duration: 200ms;    /* Standard transition timing */
+
+  /* Color Scheme - Dark Theme */
+  --body-bg: #1c1c1e;              /* Main background color */
+  --calc-bg: #1c1c1e;              /* Calculator background */
+  --calc-text: #ffffff;            /* Primary text color */
+  --calc-history-text: #98989f;    /* Subdued text for history display */
+  
+  /* Button Colors */
+  --button-number-bg: #333333;     /* Number buttons background */
+  --button-text: #ffffff;          /* Number buttons text */
+  --button-operator-bg: #ff9f0a;   /* Operator buttons (+, -, ×, ÷) */
+  --button-operator-text: #ffffff; 
+  --button-utility-bg: #a5a5a5;    /* Utility buttons (AC, ±, %) */
   --button-utility-text: #000000;
-  --memory-button-bg: #333333;
+  
+  /* Memory Section Colors */
+  --memory-button-bg: #333333;     /* Memory operation buttons */
   --memory-button-text: #ffffff;
-  --memory-log-bg: #1c1c1e;
+  --memory-log-bg: #1c1c1e;        /* Memory log panel */
   --memory-log-text: #ffffff;
   --memory-log-border: #333333;
-  --header-bg: #1c1c1e;
+  
+  /* Header Colors */
+  --header-bg: #1c1c1e;           /* Top navigation bar */
   --header-text: #ffffff;
-  --button-active-opacity: 0.7;
-  --button-gap: 12px;
-  --display-font-size: 70px;
-  --button-font-size: 28px;
-  --operator-font-size: 32px;
-  --button-size: 60px;
+  
+  /* Interactive States */
+  --button-active-opacity: 0.7;    /* Opacity for pressed buttons */
+  
+  /* Layout & Typography */
+  --button-gap: 12px;              /* Space between buttons */
+  --button-size: 60px;             /* Standard button dimensions */
+  --display-font-size: 70px;       /* Main display text size */
+  --button-font-size: 28px;        /* Number button text size */
+  --operator-font-size: 32px;      /* Operator button text size */
 
   /* Sizing & Spacing */
   --button-active-opacity: 0.7;

@@ -1,3 +1,8 @@
+/* Light Theme CSS Variables
+ * This file defines the light theme styling for the calculator.
+ * A matching dark theme is available in styles.css
+ */
+
 :root {
     /* Backgrounds and general colors */
     --body-bg: #ffffff;
@@ -6,7 +11,7 @@
     --calc-history-text: #666666;
     
     /* Buttons – numbers, operators, and utilities */
-    --button-number-bg: #e5e5e5;
+    --button-number-bg: #e5e5e5; 
     --button-text: #000000;
     --button-operator-bg: #ff9f0a;
     --button-operator-text: #ffffff;

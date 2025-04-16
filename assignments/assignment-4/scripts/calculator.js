@@ -1,40 +1,26 @@
+/* Calculator.js */
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Calculator state variables:
-  // 'fullEquation' holds the already-entered portion (e.g., "6+")
-  // 'currentInput' holds the digits being typed for the current operand
-  // 'resultDisplayed' flags if a calculation result was just shown
   let fullEquation = "";
   let currentInput = "0";
   let resultDisplayed = false;
-
-  // Memory state variable (initially 0)
   let memoryValue = 0;
 
-  // DOM elements for main calculator display and buttons
+  // DOM references
   const historyDisplay = document.querySelector(".history-display");
   const mainDisplay = document.querySelector(".display");
   const clearButton = document.getElementById("clear");
   const buttons = document.querySelectorAll(".button");
-
-  // DOM elements for Memory Log
   const memoryButtons = document.querySelectorAll(".memory-button");
   const memoryLogList = document.getElementById("memory-log-list");
 
-  /**
-   * Appends a new entry to the Memory Log.
-   * @param {string} message - The message to be logged.
-   */
+  // Add entry to memory log
   function logMemoryOperation(message) {
     const li = document.createElement("li");
     li.textContent = message;
     memoryLogList.appendChild(li);
   }
 
-  /**
-   * Updates the main display and clear button.
-   * - If a result is displayed, the main display shows currentInput.
-   * - Otherwise, it shows the concatenation of fullEquation and currentInput.
-   */
   function updateDisplay() {
     if (resultDisplayed) {
       mainDisplay.value = currentInput;
@@ -53,11 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /**
-   * Appends a digit or decimal point to the current input.
-   * Starts a new equation if a result was just displayed.
-   * @param {string} digit - The pressed digit or decimal point.
-   */
   function appendDigit(digit) {
     if (resultDisplayed) {
       fullEquation = "";
@@ -73,11 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDisplay();
   }
 
-  /**
-   * Appends an operator to the equation.
-   * If a result is displayed, the currentInput is used as the starting point.
-   * @param {string} op - The operator (e.g., "+", "-", "*", "/").
-   */
   function appendOperator(op) {
     if (resultDisplayed) {
       fullEquation = currentInput;
@@ -169,12 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDisplay();
   }
 
-  /**
-   * Handles click/tap events on calculator buttons.
-   * Expects buttons to have:
-   * - data-type: "number", "operator", "equals", "clear"
-   * - data-value: the digit or operator value (if applicable)
-   */
+  // Button click events
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
       const type = button.dataset.type;
@@ -192,9 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /**
-   * Handles keyboard input for digits, operators, evaluation, and clearing.
-   */
+  // Keyboard input
   document.addEventListener("keydown", (event) => {
     const key = event.key;
     if ("0123456789.".includes(key)) {
@@ -220,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Memory Functionality: Handle Memory Buttons
+  // Memory button events
   memoryButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const action = button.dataset.memory;
@@ -248,6 +217,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Initialize display on page load.
   updateDisplay();
 });

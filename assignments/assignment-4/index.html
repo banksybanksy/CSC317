@@ -5,6 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Base styles -->
+    <link rel="stylesheet" href="styles/styles.css">
     <!-- Default theme -->
     <link id="theme-stylesheet" rel="stylesheet" href="styles/styles.css">
 
@@ -237,69 +239,58 @@
 
 <hr>
 
-<!-- Footer -->
-<footer>
-    <p>&copy; 2025 Damian Perez | All Rights Reserved</p>
-</footer>
-
 <!-- Theme Switcher -->
 <div class="theme-switcher" role="region" aria-label="Theme Selection">
     <p>Select Theme:</p>
     <div class="theme-buttons">
         <button 
             class="theme-button active" 
-            onclick="switchTheme('assign3-styles')"
-            aria-label="Switch to default theme"
+            onclick="switchTheme('styles', this)"
+            aria-label="Switch to styles theme"
             aria-pressed="true">
-            Default
+            styles
         </button>
         <button 
             class="theme-button" 
-            onclick="switchTheme('assign3-ai-1')"
-            aria-label="Switch to AI Style 1 theme"
+            onclick="switchTheme('assign3-ai-1', this)"
+            aria-label="Switch to ai-1 theme"
             aria-pressed="false">
-            AI Style 1
+            ai-1
         </button>
         <button 
             class="theme-button" 
-            onclick="switchTheme('assign3-ai-2')"
-            aria-label="Switch to AI Style 2 theme"
+            onclick="switchTheme('assign3-ai-2', this)"
+            aria-label="Switch to ai-2 theme"
             aria-pressed="false">
-            AI Style 2
+            ai-2
         </button>
         <button 
             class="theme-button" 
-            onclick="switchTheme('assign3-hybrid')"
-            aria-label="Switch to Hybrid theme"
+            onclick="switchTheme('assign3-hybrid', this)"
+            aria-label="Switch to hybrid theme"
             aria-pressed="false">
-            Hybrid
+            hybrid
         </button>
     </div>
 </div>
 
 <script>
     // Theme switching function
-    function switchTheme(themeName) {
+    function switchTheme(themeName, button) {
         // Update the stylesheet
         document.getElementById('theme-stylesheet').href = 'styles/' + themeName + '.css';
-        
-        // Save theme preference
-        localStorage.setItem('portfolio-theme', themeName);
         
         // Update button states
         const buttons = document.querySelectorAll('.theme-button');
         buttons.forEach(button => {
-            const buttonTheme = button.getAttribute('onclick').match(/switchTheme\('(.+?)'\)/)[1];
-            button.classList.toggle('active', buttonTheme === themeName);
-            button.setAttribute('aria-pressed', buttonTheme === themeName);
+            button.classList.remove('active');
+            button.setAttribute('aria-pressed', 'false');
         });
+        
+        // Highlight the clicked button
+        button.classList.add('active');
+        button.setAttribute('aria-pressed', 'true');
     }
-
-    // Load saved theme preference
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedTheme = localStorage.getItem('portfolio-theme') || 'assign3-styles';
-        switchTheme(savedTheme);
-    });
 </script>
 
 </body>

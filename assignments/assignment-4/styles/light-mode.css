@@ -5,8 +5,8 @@
 
 :root {
     /* Backgrounds and general colors */
-    --body-bg: #ffffff;
-    --calc-bg: #f4f4f4;
+    --body-bg: #f8f8f8; /* Match calculator background */
+    --calc-bg: #f8f8f8;
     --calc-text: #000000;
     --calc-history-text: #666666;
     

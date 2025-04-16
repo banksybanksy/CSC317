@@ -44,6 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
       fullEquation = "";
       currentInput = digit;
       resultDisplayed = false;
+      // Clear history display when starting new equation
+      historyDisplay.value = "";
+      historyDisplay.classList.remove("active-history");
     } else {
       if (currentInput === "0" && digit !== ".") {
         currentInput = digit;

@@ -1,293 +1,267 @@
-/**
- * Dark Theme CSS Variables
- * This file defines the dark theme styling for the calculator.
- * A matching light theme is available in light-mode.css
- */
-
-:root {
-  /* Timing Variables */
-  --button-flash-duration: 100ms;  /* Duration for button press visual feedback */
-  --transition-duration: 200ms;    /* Standard transition timing */
-
-  /* Color Scheme - Dark Theme */
-  --body-bg: #1c1c1e;              /* Main background color */
-  --calc-bg: #1c1c1e;              /* Calculator background */
-  --calc-text: #ffffff;            /* Primary text color */
-  --calc-history-text: #98989f;    /* Subdued text for history display */
-  
-  /* Button Colors */
-  --button-number-bg: #333333;     /* Number buttons background */
-  --button-text: #ffffff;          /* Number buttons text */
-  --button-operator-bg: #ff9f0a;   /* Operator buttons (+, -, ×, ÷) */
-  --button-operator-text: #ffffff; 
-  --button-utility-bg: #a5a5a5;    /* Utility buttons (AC, ±, %) */
-  --button-utility-text: #000000;
-  
-  /* Memory Section Colors */
-  --memory-button-bg: #333333;     /* Memory operation buttons */
-  --memory-button-text: #ffffff;
-  --memory-log-bg: #1c1c1e;        /* Memory log panel */
-  --memory-log-text: #ffffff;
-  --memory-log-border: #333333;
-  
-  /* Header Colors */
-  --header-bg: #1c1c1e;           /* Top navigation bar */
-  --header-text: #ffffff;
-  
-  /* Interactive States */
-  --button-active-opacity: 0.7;    /* Opacity for pressed buttons */
-  
-  /* Layout & Typography */
-  --button-gap: 12px;              /* Space between buttons */
-  --button-size: 60px;             /* Standard button dimensions */
-  --display-font-size: 70px;       /* Main display text size */
-  --button-font-size: 28px;        /* Number button text size */
-  --operator-font-size: 32px;      /* Operator button text size */
-
-  /* Sizing & Spacing */
-  --button-active-opacity: 0.7;
-  --button-gap: 12px;
-  --display-font-size: 70px;
-  --button-font-size: 28px;
-  --operator-font-size: 32px;
-  --button-size: 60px;
-}
-
-body {
-  background-color: var(--body-bg);
+/* Basic CSS for Portfolio Website */
+* {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-}
-
-/* Header Controls */
-.header-controls {
-  width: 100%;
-  padding: 20px 36px;
-  background-color: var(--header-bg);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
   box-sizing: border-box;
 }
 
-.back-button {
-  color: var(--header-text);
-  text-decoration: none;
+/* Colors */
+:root {
+  --sage: #94A187;
+  --cream: #F5F5F0;
+  --charcoal: #2F3337;
+  --stone: #D7D7D2;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 16px;
-  padding: 8px 20px;
-  border: 2px solid var(--header-text);
-  border-radius: 20px;
-  transition: background 0.3s, color 0.3s;
-  margin-right: 12px;
+  line-height: 1.6;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  padding: 2rem;
 }
 
-.back-button:hover {
-  background-color: var(--header-text);
-  color: var(--header-bg);
-}
-
-.theme-toggle-button {
-  background-color: var(--button-operator-bg);
-  color: var(--button-operator-text);
-  border: none;
-  border-radius: 20px;
-  padding: 10px 22px;
-  font-size: 15px;
-  cursor: pointer;
-  margin-left: 12px;
-}
-
-/* Calculator Layout */
-.calculator-layout-container {
-  padding-top: 70px;
-  width: 100%;
-  max-width: 350px;
-  margin: 0 auto;
-}
-
-.calculator-container {
-  background-color: var(--calc-bg);
-  padding: 36px 28px 32px 28px;
-  border-radius: 100px;
-  color: var(--calc-text);
-}
-
-/* Display Styles */
-.display-container {
-  margin-bottom: 10px;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  padding: 0 20px;
-}
-
-.history-display {
-  width: 100%;
-  font-size: 32px;
-  color: var(--calc-history-text);
-  border: none;
-  background: transparent;
-  text-align: right;
-  opacity: 0;
-  transition: all 0.3s ease;
-  margin-bottom: 5px;
-}
-
-.history-display.active-history {
-  opacity: 0.6;
-  transform: translateY(0);
-}
-
-.display {
-  width: 100%;
-  font-size: 90px;
-  line-height: 1;
-  color: var(--calc-text);
-  border: none;
-  background: transparent;
-  text-align: right;
-  padding: 0;
-  transition: all 0.3s ease;
-}
-
-/* Button Grid */
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--button-gap);
-}
-
-.button {
-  background-color: var(--button-number-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 50%;
-  width: var(--button-size);
-  height: var(--button-size);
-  font-size: var(--button-font-size);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.button.operator {
-  background-color: var(--button-operator-bg);
-  color: var(--button-operator-text);
-  font-size: var(--operator-font-size);
-}
-
-.button.utility {
-  background-color: var(--button-utility-bg);
-  color: var(--button-utility-text);
-  font-size: var(--button-font-size);
-}
-
-.button.number.zero {
-  grid-column: span 2;
-  width: calc(var(--button-size) * 2 + var(--button-gap));
-  border-radius: calc(var(--button-size) / 2);
-  justify-content: flex-start;
-  padding-left: calc(var(--button-size) / 2 - 4px);
-}
-
-.button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.button:active,
-.button.pressed {
-  filter: brightness(130%);
-  transform: scale(0.97);
-  transition: all 0.1s ease;
-}
-
-.button.operator:active,
-.button.operator.pressed {
-  background-color: #fff;
-  color: var(--button-operator-bg);
-}
-
-.button.utility:active,
-.button.utility.pressed {
-  filter: brightness(90%);
-}
-
-/* Memory Section */
-.memory-section {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-.memory-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  width: 100%;
-}
-
-.memory-button {
-  background-color: var(--memory-button-bg);
-  color: var(--memory-button-text);
-  border: none;
-  border-radius: 10px;
-  padding: 10px 16px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.memory-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.memory-button:active {
-  transform: scale(0.95);
-  opacity: var(--button-active-opacity);
-}
-
-.memory-log-container {
-  width: 100%;
-  background-color: var(--memory-log-bg);
-  color: var(--memory-log-text);
-  border: 1px solid var(--memory-log-border);
-  border-radius: 10px;
-  padding: 15px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.memory-log-container h3 {
-  margin-top: 0;
-  font-size: 16px;
-  color: var(--memory-button-text);
+header {
   text-align: center;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--stone);
 }
 
-#memory-log-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+header h1 {
+  font-size: 2.5rem;
+  color: var(--sage);
+  margin-bottom: 1rem;
 }
 
-#memory-log-list li {
-  margin-bottom: 8px;
-  border-bottom: 1px dashed var(--memory-log-border);
-  font-size: 14px;
-  line-height: 1.4;
+nav {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+nav a {
+  color: var(--charcoal);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  margin: 0 1rem;
+}
+
+nav a:hover {
+  background-color: var(--sage);
+  color: var(--cream);
+}
+
+section {
+  background-color: white;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+  color: var(--sage);
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--stone);
+  padding-bottom: 0.5rem;
+}
+
+ul, ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+#projects article {
+  border: 1px solid var(--stone);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+#projects h3 {
+  color: var(--sage);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--stone);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button {
+  background-color: var(--sage);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+  border-top: 2px solid var(--stone);
+}
+
+/* Styles moved from index.html inline <style> block */
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+/* Theme Switcher */
+.theme-switcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    border: 1px solid #e1e1e1;
+}
+
+.theme-switcher p {
+    margin: 0 0 12px 0;
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+}
+
+.theme-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.theme-button {
+    padding: 10px 20px;
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    background: #f8f8f8;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    transition: all 0.2s ease;
+    min-width: 100px;
+    text-align: center;
+}
+
+.theme-button:hover {
+    background: #eef2ff;
+    border-color: #818cf8;
+    color: #4f46e5;
+    transform: translateY(-1px);
+}
+
+/* Project styles */
+.project-preview {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.project-preview img {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    height: auto;
+}
+
+.project-link {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #818cf8; /* Using theme color directly for default */
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.project-link:hover {
+    background-color: #0056b3; /* Consider making this themeable too */
+}
+
+.theme-button.active {
+    background: #818cf8;
+    border-color: #4f46e5;
+    color: white;
+    font-weight: 600;
+}
+
+/* Make theme switcher responsive */
+@media (max-width: 768px) {
+    .theme-switcher {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+    }
+
+    .theme-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .theme-button {
+        flex: 1;
+        min-width: 90px;
+    }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+
+  nav a {
+    display: block;
+    margin: 0.5rem 0;
+  }
+
+  section {
+    padding: 1.5rem;
+  }
+}
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  section {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  nav {
+    display: none;
+  }
 }

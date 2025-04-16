@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Appends a digit to the current input
   function appendDigit(digit) {
+    // Prevent multiple decimals in one number
+    if (digit === "." && currentInput.includes(".")) return;
     if (resultDisplayed) {
       fullEquation = "";
       currentInput = digit;
@@ -72,71 +74,36 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDisplay();
   }
 
-  // Safe evaluator using shunting-yard algorithm
+  // Evaluate an expression with correct * / before + - (no parentheses)
   function safeEvaluate(expr) {
-    const tokens = expr.match(/(\d+\.?\d*|\.\d+|[+\-*/()])/g);
-    if (!tokens) return null;
-    const outputQueue = [];
-    const operatorStack = [];
-    const precedence = { '+': 1, '-': 1, '*': 2, '/': 2 };
-    const associativity = { '+': 'L', '-': 'L', '*': 'L', '/': 'L' };
-
-    // Convert tokens to postfix notation
-    tokens.forEach(token => {
-      if (!isNaN(token)) {
-        outputQueue.push(parseFloat(token));
-      } else if ("+-*/".includes(token)) {
-        while (operatorStack.length) {
-          const opTop = operatorStack[operatorStack.length - 1];
-          if ("+-*/".includes(opTop) &&
-              ((associativity[token] === 'L' && precedence[token] <= precedence[opTop]) ||
-               (associativity[token] === 'R' && precedence[token] < precedence[opTop]))) {
-            outputQueue.push(operatorStack.pop());
-          } else {
-            break;
-          }
-        }
-        operatorStack.push(token);
-      } else if (token === "(") {
-        operatorStack.push(token);
-      } else if (token === ")") {
-        while (operatorStack.length && operatorStack[operatorStack.length - 1] !== "(") {
-          outputQueue.push(operatorStack.pop());
-        }
-        if (operatorStack[operatorStack.length - 1] === "(") {
-          operatorStack.pop();
-        } else {
-          throw new Error("Mismatched parentheses");
-        }
+    // Split numbers and operators
+    const parts = expr.split(/([+\-*/])/).filter(s => s);
+    if (parts.length % 2 === 0) throw new Error("Invalid expression");
+    // First pass: handle * and /
+    const stack = [];
+    stack.push(parseFloat(parts[0]));
+    for (let i = 1; i < parts.length; i += 2) {
+      const op = parts[i];
+      const num = parseFloat(parts[i+1]);
+      if (isNaN(num)) throw new Error("Invalid number");
+      if (op === '*' || op === '/') {
+        const prev = stack.pop();
+        if (op === '/' && num === 0) throw new Error("Division by zero");
+        stack.push(op === '*' ? prev * num : prev / num);
+      } else {
+        stack.push(op);
+        stack.push(num);
       }
-    });
-    while (operatorStack.length) {
-      const op = operatorStack.pop();
-      if (op === "(" || op === ")") throw new Error("Mismatched parentheses");
-      outputQueue.push(op);
     }
-
-    // Evaluate postfix expression
-    const evaluationStack = [];
-    outputQueue.forEach(token => {
-      if (typeof token === 'number') {
-        evaluationStack.push(token);
-      } else if ("+-*/".includes(token)) {
-        const b = evaluationStack.pop();
-        const a = evaluationStack.pop();
-        if (token === '/' && b === 0) throw new Error("Division by zero");
-        let res;
-        switch (token) {
-          case '+': res = a + b; break;
-          case '-': res = a - b; break;
-          case '*': res = a * b; break;
-          case '/': res = a / b; break;
-        }
-        evaluationStack.push(res);
-      }
-    });
-    if (evaluationStack.length !== 1) throw new Error("Invalid expression");
-    return evaluationStack[0];
+    // Second pass: handle + and -
+    let result = stack[0];
+    for (let i = 1; i < stack.length; i += 2) {
+      const op = stack[i];
+      const num = stack[i+1];
+      if (op === '+') result += num;
+      else result -= num;
+    }
+    return result;
   }
 
   // Evaluates the complete expression (fullEquation + currentInput)
@@ -151,13 +118,18 @@ document.addEventListener("DOMContentLoaded", () => {
       historyDisplay.classList.add("active-history");
       currentInput = result.toString();
       fullEquation = "";
+      // Show result and update
+      resultDisplayed = true;
+      updateDisplay();
+      return;
     } catch (e) {
-      mainDisplay.value = "Error";
-      currentInput = "";
+      // Show error and keep it visible
+      currentInput = "Error";
       fullEquation = "";
+      resultDisplayed = true;
+      updateDisplay();
+      return;
     }
-    resultDisplayed = true;
-    updateDisplay();
   }
 
   // Clears the calculator or performs a backspace operation
@@ -179,6 +151,25 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDisplay();
   }
 
+  // Toggle positive/negative for current input
+  function toggleNegate() {
+    if (currentInput === "0" || currentInput === "") return;
+    if (currentInput.charAt(0) === "-") {
+      currentInput = currentInput.slice(1);
+    } else {
+      currentInput = "-" + currentInput;
+    }
+    updateDisplay();
+  }
+
+  // Convert current input to a percentage
+  function convertPercentage() {
+    let value = parseFloat(currentInput) || 0;
+    value = value / 100;
+    currentInput = value.toString();
+    updateDisplay();
+  }
+
   // Button click events
   buttons.forEach(button => {
     button.addEventListener("click", () => {
@@ -188,6 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (type === "operator") appendOperator(value);
       else if (type === "equals") evaluateEquation();
       else if (type === "clear") clearOrBackspace();
+      else if (type === "negate") toggleNegate();
+      else if (type === "percentage") convertPercentage();
     });
   });
 
@@ -205,6 +198,9 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
     } else if (key === "Backspace") {
       clearOrBackspace();
+      event.preventDefault();
+    } else if (key === "%") {
+      convertPercentage();
       event.preventDefault();
     } else if (key === "Escape") {
       fullEquation = "";

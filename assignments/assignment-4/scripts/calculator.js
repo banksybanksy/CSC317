@@ -14,49 +14,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const memoryButtons = document.querySelectorAll(".memory-button");
   const memoryLogList = document.getElementById("memory-log-list");
 
-  // Add entry to memory log
+  // Adds a message to the memory log
   function logMemoryOperation(message) {
     const li = document.createElement("li");
     li.textContent = message;
     memoryLogList.appendChild(li);
   }
 
+  // Updates the display based on current state
   function updateDisplay() {
     if (resultDisplayed) {
       mainDisplay.value = currentInput;
     } else {
       let displayText = fullEquation + currentInput;
       if (displayText === "") displayText = "0";
-      // Replace operators with proper symbols for display
       displayText = displayText.replace(/\//g, '÷').replace(/\*/g, '×');
       mainDisplay.value = displayText;
     }
-    if (clearButton) {
-      clearButton.textContent =
-        resultDisplayed || (fullEquation === "" && currentInput === "0")
-          ? "AC"
-          : "C";
-    }
+    clearButton.textContent =
+      resultDisplayed || (fullEquation === "" && currentInput === "0")
+        ? "AC"
+        : "C";
   }
 
+  // Appends a digit to the current input
   function appendDigit(digit) {
     if (resultDisplayed) {
       fullEquation = "";
       currentInput = digit;
       resultDisplayed = false;
-      // Clear history display when starting new equation
       historyDisplay.value = "";
       historyDisplay.classList.remove("active-history");
     } else {
-      if (currentInput === "0" && digit !== ".") {
-        currentInput = digit;
-      } else {
-        currentInput += digit;
-      }
+      currentInput = currentInput === "0" && digit !== "." ? digit : currentInput + digit;
     }
     updateDisplay();
   }
 
+  // Appends an operator to the current input
   function appendOperator(op) {
     if (resultDisplayed) {
       fullEquation = currentInput;
@@ -64,72 +59,108 @@ document.addEventListener("DOMContentLoaded", () => {
       resultDisplayed = false;
     }
     if (currentInput === "") {
-      // If already pressed, replace the last operator.
       if (fullEquation && /[+\-*/.]+$/.test(fullEquation)) {
         fullEquation = fullEquation.slice(0, -1) + op;
       } else {
         fullEquation += op;
       }
     } else {
-      // Don't allow operations after an error
-      if (currentInput === "Error") {
-        currentInput = "0";
-      }
+      if (currentInput === "Error") currentInput = "0";
       fullEquation += currentInput + op;
       currentInput = "";
     }
     updateDisplay();
   }
 
-  /**
-   * Evaluates the complete expression (fullEquation + currentInput).
-   * The full expression (without trailing operators) is moved to the history display.
-   * The main display shows the computed result.
-   */
+  // Safe evaluator using shunting-yard algorithm
+  function safeEvaluate(expr) {
+    const tokens = expr.match(/(\d+\.?\d*|\.\d+|[+\-*/()])/g);
+    if (!tokens) return null;
+    const outputQueue = [];
+    const operatorStack = [];
+    const precedence = { '+': 1, '-': 1, '*': 2, '/': 2 };
+    const associativity = { '+': 'L', '-': 'L', '*': 'L', '/': 'L' };
+
+    // Convert tokens to postfix notation
+    tokens.forEach(token => {
+      if (!isNaN(token)) {
+        outputQueue.push(parseFloat(token));
+      } else if ("+-*/".includes(token)) {
+        while (operatorStack.length) {
+          const opTop = operatorStack[operatorStack.length - 1];
+          if ("+-*/".includes(opTop) &&
+              ((associativity[token] === 'L' && precedence[token] <= precedence[opTop]) ||
+               (associativity[token] === 'R' && precedence[token] < precedence[opTop]))) {
+            outputQueue.push(operatorStack.pop());
+          } else {
+            break;
+          }
+        }
+        operatorStack.push(token);
+      } else if (token === "(") {
+        operatorStack.push(token);
+      } else if (token === ")") {
+        while (operatorStack.length && operatorStack[operatorStack.length - 1] !== "(") {
+          outputQueue.push(operatorStack.pop());
+        }
+        if (operatorStack[operatorStack.length - 1] === "(") {
+          operatorStack.pop();
+        } else {
+          throw new Error("Mismatched parentheses");
+        }
+      }
+    });
+    while (operatorStack.length) {
+      const op = operatorStack.pop();
+      if (op === "(" || op === ")") throw new Error("Mismatched parentheses");
+      outputQueue.push(op);
+    }
+
+    // Evaluate postfix expression
+    const evaluationStack = [];
+    outputQueue.forEach(token => {
+      if (typeof token === 'number') {
+        evaluationStack.push(token);
+      } else if ("+-*/".includes(token)) {
+        const b = evaluationStack.pop();
+        const a = evaluationStack.pop();
+        if (token === '/' && b === 0) throw new Error("Division by zero");
+        let res;
+        switch (token) {
+          case '+': res = a + b; break;
+          case '-': res = a - b; break;
+          case '*': res = a * b; break;
+          case '/': res = a / b; break;
+        }
+        evaluationStack.push(res);
+      }
+    });
+    if (evaluationStack.length !== 1) throw new Error("Invalid expression");
+    return evaluationStack[0];
+  }
+
+  // Evaluates the complete expression (fullEquation + currentInput)
   function evaluateEquation() {
     let expression = fullEquation + currentInput;
     expression = expression.replace(/[+\-*/.]+$/, "");
     if (expression === "") return;
-
-    // Check for division by zero
-    if (expression.includes('/0')) {
-      mainDisplay.value = "Error";
-      currentInput = "";
-      fullEquation = "";
-      resultDisplayed = true;
-      updateDisplay();
-      return;
-    }
-
     try {
-      let result = eval(expression);
-      if (!isFinite(result)) {
-        mainDisplay.value = "Error";
-        currentInput = "";
-        fullEquation = "";
-      } else {
-        // Format the expression for display using proper symbols
-        let displayExpression = expression.replace(/\//g, '÷').replace(/\*/g, '×');
-        historyDisplay.value = displayExpression + " =";
-        historyDisplay.classList.add("active-history");
-        currentInput = result.toString();
-        fullEquation = "";
-      }
-      resultDisplayed = true;
-      updateDisplay();
+      const result = safeEvaluate(expression);
+      const displayExpression = expression.replace(/\//g, '÷').replace(/\*/g, '×');
+      historyDisplay.value = displayExpression + " =";
+      historyDisplay.classList.add("active-history");
+      currentInput = result.toString();
+      fullEquation = "";
     } catch (e) {
       mainDisplay.value = "Error";
       currentInput = "";
       fullEquation = "";
-      resultDisplayed = true;
-      updateDisplay();
     }
+    resultDisplayed = true;
+    updateDisplay();
   }
 
-  /**
-   * Clears the calculator or performs a backspace operation.
-   * If a result is shown or nothing is present, performs All Clear; otherwise, backspaces.
-   */
+  // Clears the calculator or performs a backspace operation
   function clearOrBackspace() {
     if (resultDisplayed) {
       fullEquation = "";
@@ -149,20 +180,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Button click events
-  buttons.forEach((button) => {
+  buttons.forEach(button => {
     button.addEventListener("click", () => {
       const type = button.dataset.type;
       const value = button.dataset.value;
-
-      if (type === "number") {
-        appendDigit(value);
-      } else if (type === "operator") {
-        appendOperator(value);
-      } else if (type === "equals") {
-        evaluateEquation();
-      } else if (type === "clear") {
-        clearOrBackspace();
-      }
+      if (type === "number") appendDigit(value);
+      else if (type === "operator") appendOperator(value);
+      else if (type === "equals") evaluateEquation();
+      else if (type === "clear") clearOrBackspace();
     });
   });
 
@@ -193,10 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Memory button events
-  memoryButtons.forEach((button) => {
+  memoryButtons.forEach(button => {
     button.addEventListener("click", () => {
       const action = button.dataset.memory;
-      // Parse the current input; if invalid, default to 0.
       const currentVal = parseFloat(currentInput) || 0;
       switch (action) {
         case "mplus":

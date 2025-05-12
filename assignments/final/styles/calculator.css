@@ -1,0 +1,365 @@
+/**
+ * Dark Theme CSS Variables
+ * This file defines the dark theme styling for the calculator.
+ * A matching light theme is available in light-mode.css
+ */
+
+:root {
+  /* Timing Variables */
+  --button-flash-duration: 100ms;  /* Duration for button press visual feedback */
+  --transition-duration: 200ms;    /* Standard transition timing */
+
+  /* Color Scheme - Dark Theme */
+  --body-bg: #1c1c1e;              /* Main background color */
+  --calc-bg: #1c1c1e;              /* Calculator background */
+  --calc-text: #ffffff;            /* Primary text color */
+  --calc-history-text: #98989f;    /* Subdued text for history display */
+  
+  /* Button Colors */
+  --button-number-bg: #333333;     /* Number buttons background */
+  --button-text: #ffffff;          /* Number buttons text */
+  --button-operator-bg: #ff9f0a;   /* Operator buttons (+, -, ×, ÷) */
+  --button-operator-text: #ffffff; 
+  --button-utility-bg: #a5a5a5;    /* Utility buttons (AC, ±, %) */
+  --button-utility-text: #000000;
+  
+  /* Memory Section Colors */
+  --memory-button-bg: #333333;     /* Memory operation buttons */
+  --memory-button-text: #ffffff;
+  --memory-log-bg: #1c1c1e;        /* Memory log panel */
+  --memory-log-text: #ffffff;
+  --memory-log-border: #333333;
+  
+  /* Header Colors */
+  --header-bg: #1c1c1e;           /* Top navigation bar */
+  --header-text: #ffffff;
+  
+  /* Interactive States */
+  --button-active-opacity: 0.7;    /* Opacity for pressed buttons */
+  
+  /* Layout & Typography */
+  --button-gap: 12px;              /* Space between buttons */
+  --button-size: 60px;             /* Standard button dimensions */
+  --display-font-size: 70px;       /* Main display text size */
+  --button-font-size: 28px;        /* Number button text size */
+  --operator-font-size: 32px;      /* Operator button text size */
+
+  /* Sizing & Spacing */
+  --button-active-opacity: 0.7;
+  --button-gap: 12px;
+  --display-font-size: 70px;
+  --button-font-size: 28px;
+  --operator-font-size: 32px;
+  --button-size: 60px;
+}
+
+body {
+  background-color: var(--body-bg);
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Header Controls */
+.header-controls {
+  width: 100%;
+  padding: 16px 20px;
+  background-color: var(--header-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+@media (min-width: 481px) {
+  .header-controls {
+    padding: 20px 36px;
+  }
+}
+
+.back-button {
+  color: var(--header-text);
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 20px;
+  border: 2px solid var(--header-text);
+  border-radius: 20px;
+  transition: background 0.3s, color 0.3s;
+  margin-right: 12px;
+}
+
+.back-button:hover {
+  background-color: var(--header-text);
+  color: var(--header-bg);
+}
+
+.theme-toggle-button {
+  background-color: var(--button-operator-bg);
+  color: var(--button-operator-text);
+  border: none;
+  border-radius: 20px;
+  padding: 10px 22px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 12px;
+}
+
+/* Calculator Layout */
+.calculator-layout-container {
+  padding-top: 70px;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .calculator-layout-container {
+    padding-top: 60px;
+  }
+}
+
+.calculator-container {
+  background-color: var(--calc-bg);
+  padding: 36px 28px 32px 28px;
+  border-radius: 100px;
+  color: var(--calc-text);
+}
+
+/* Display Styles */
+.display-container {
+  margin-bottom: 10px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 0 20px;
+}
+
+.history-display {
+  width: 100%;
+  font-size: 32px;
+  color: var(--calc-history-text);
+  border: none;
+  background: transparent;
+  text-align: right;
+  opacity: 0;
+  transition: all 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.history-display.active-history {
+  opacity: 0.6;
+  transform: translateY(0);
+}
+
+.display {
+  width: 100%;
+  font-size: 90px;
+  line-height: 1;
+  color: var(--calc-text);
+  border: none;
+  background: transparent;
+  text-align: right;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+/* Button Grid */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--button-gap);
+}
+
+.button {
+  background-color: var(--button-number-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 50%;
+  width: var(--button-size);
+  height: var(--button-size);
+  font-size: var(--button-font-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.button.operator {
+  background-color: var(--button-operator-bg);
+  color: var(--button-operator-text);
+  font-size: var(--operator-font-size);
+}
+
+.button.utility {
+  background-color: var(--button-utility-bg);
+  color: var(--button-utility-text);
+  font-size: var(--button-font-size);
+}
+
+.button.number.zero {
+  grid-column: span 2;
+  width: calc(var(--button-size) * 2 + var(--button-gap));
+  border-radius: calc(var(--button-size) / 2);
+  justify-content: flex-start;
+  padding-left: calc(var(--button-size) / 2 - 4px);
+}
+
+.button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.button:active,
+.button.pressed {
+  filter: brightness(130%);
+  transform: scale(0.97);
+  transition: all 0.1s ease;
+}
+
+.button.operator:active,
+.button.operator.pressed {
+  background-color: #fff;
+  color: var(--button-operator-bg);
+}
+
+.button.utility:active,
+.button.utility.pressed {
+  filter: brightness(90%);
+}
+
+/* Memory Section */
+.memory-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  :root {
+    --button-size: 50px;
+    --button-font-size: 24px;
+    --operator-font-size: 28px;
+    --display-font-size: 56px;
+  }
+
+  .calculator-container {
+    padding: 20px 16px 16px 16px;
+  }
+
+  .display {
+    font-size: var(--display-font-size);
+  }
+
+  .memory-section {
+    margin-top: 15px;
+    gap: 10px;
+  }
+
+  .memory-buttons {
+    gap: 8px;
+  }
+
+  .memory-button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  :root {
+    --button-size: 55px;
+    --button-font-size: 26px;
+    --operator-font-size: 30px;
+    --display-font-size: 64px;
+  }
+
+  .calculator-container {
+    padding: 28px 20px 24px 20px;
+  }
+}
+
+@media (min-width: 769px) {
+  .memory-button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .memory-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.memory-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.memory-button {
+  background-color: var(--memory-button-bg);
+  color: var(--memory-button-text);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.memory-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.memory-button:active {
+  transform: scale(0.95);
+  opacity: var(--button-active-opacity);
+}
+
+.memory-log-container {
+  width: 100%;
+  background-color: var(--memory-log-bg);
+  color: var(--memory-log-text);
+  border: 1px solid var(--memory-log-border);
+  border-radius: 10px;
+  padding: 15px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.memory-log-container h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: var(--memory-button-text);
+  text-align: center;
+}
+
+#memory-log-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#memory-log-list li {
+  margin-bottom: 8px;
+  border-bottom: 1px dashed var(--memory-log-border);
+  font-size: 14px;
+  line-height: 1.4;
+}

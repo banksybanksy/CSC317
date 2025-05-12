@@ -1,0 +1,185 @@
+/* AI-1: Mexico-inspired CSS stylesheet for my portfolio website */
+
+@keyframes mariachi-dance {
+    0% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+    100% { transform: rotate(-5deg); }
+}
+
+@keyframes chili-pepper-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px) rotate(15deg); }
+}
+
+@keyframes salsa-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes mexican-flag-wave {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 0; }
+}
+
+:root {
+    /* MAXIMUM MEXICO COLORS */
+    --mexico-red: #CE1126;
+    --mexico-green: #006847;
+    --mexico-white: #FFFFFF;
+    --tequila-gold: #FFD700;
+    --chili-red: #FF2400;
+    --agave-green: #4CBB17;
+    --mariachi-yellow: #FFD700;
+}
+
+body {
+    background: repeating-linear-gradient(
+            45deg,
+            var(--mexico-red),
+            var(--mexico-green) 10px,
+            var(--mexico-white) 20px
+    );
+    background-size: 200% 200%;
+    animation: mexican-flag-wave 5s linear infinite;
+    font-family: 'Comic Sans MS', cursive;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewport="0 0 100 100" style="fill:black;font-size:24px;"><text y="50%">🌶️</text></svg>'), auto;
+}
+
+/* MARIACHI PARTY BACKGROUND */
+body::before {
+    content: "🎺🌮🌯🇲🇽";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 50px;
+    opacity: 0.1;
+    z-index: -1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    animation: mariachi-dance 2s infinite;
+}
+
+/* MAXIMUM HEADER FIESTA */
+h1 {
+    color: var(--mexico-red);
+    text-shadow:
+            3px 3px 0 var(--mexico-green),
+            5px 5px 0 var(--tequila-gold);
+    text-align: center;
+    animation: salsa-spin 10s linear infinite;
+}
+
+/* CHILI PEPPER NAVIGATION */
+nav {
+    background: linear-gradient(
+            to right,
+            var(--chili-red),
+            var(--agave-green)
+    );
+    padding: 15px;
+    text-align: center;
+}
+
+nav a {
+    color: var(--mexico-white);
+    margin: 0 15px;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    animation: chili-pepper-bounce 1s infinite;
+}
+
+nav a::after {
+    content: "🌶️";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+nav a:hover::after {
+    opacity: 1;
+}
+
+/* SECTIONS WITH MAXIMUM MEXICANESS */
+section {
+    background: repeating-radial-gradient(
+            circle at center,
+            var(--mexico-white),
+            var(--tequila-gold) 10px
+    );
+    border: 10px double var(--mexico-red);
+    box-shadow:
+            0 0 0 5px var(--mexico-green),
+            0 0 0 10px var(--tequila-gold);
+    padding: 30px;
+    margin: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+section::before {
+    content: "🇲🇽";
+    position: absolute;
+    font-size: 200px;
+    opacity: 0.1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    z-index: -1;
+}
+
+/* COMPLETELY UNNECESSARY BUTTON ANIMATIONS */
+button {
+    background: var(--mexico-red);
+    color: var(--mexico-white);
+    border: 5px solid var(--mexico-green);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: "¡VAMOS!";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--mexico-green);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: top 0.3s;
+}
+
+button:hover::after {
+    top: 0;
+}
+
+/* FORM WITH MAXIMUM FLAVOR */
+form {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><text x="50" y="50" text-anchor="middle" font-size="50">🌮</text></svg>') repeat;
+    border: 10px solid var(--mexico-red);
+    padding: 30px;
+    animation: mariachi-dance 3s infinite;
+}
+
+/* RESPONSIVE MADNESS */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    nav a {
+        display: block;
+        margin: 10px 0;
+        animation: chili-pepper-bounce 0.5s infinite;
+    }
+}

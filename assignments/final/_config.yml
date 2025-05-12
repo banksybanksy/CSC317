@@ -1,2 +1,15 @@
 exclude:
-  - node_modules 
+  - node_modules
+  - assignments
+  - controllers
+  - config
+  - middleware
+  - models
+  - utils
+  - app.js
+  - package.json
+  - package-lock.json
+  - Procfile
+  - render.yaml
+  - .DS_Store
+  - README.md 

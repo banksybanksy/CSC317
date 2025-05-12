@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | After the Credits</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar pro-navbar">
+      <div class="navbar-section navbar-brand-section">
+        <a href="/" class="brand-link <%= path === '/' ? 'active' : '' %>"><span class="brand-text">After the Credits</span></a>
+      </div>
+      <ul class="nav-links navbar-section navbar-center">
+        <li><a href="/about" class="<%= path === '/about' ? 'active' : '' %>">About</a></li>
+        <li><a href="/movies" class="<%= path === '/movies' ? 'active' : '' %>">Movies</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/user/profile" class="<%= path === '/user/profile' ? 'active' : '' %>">Profile</a></li>
+          <li><a href="/user/settings" class="<%= path === '/user/settings' ? 'active' : '' %>">Settings</a></li>
+          <li><a href="/auth/logout" title="Logout" aria-label="Logout">Logout</a></li>
+        <% } %>
+      </ul>
+      <% if (!isAuthenticated) { %>
+      <div class="nav-auth navbar-section navbar-auth">
+        <a href="/auth/login" class="auth-link <%= path === '/auth/login' ? 'active' : '' %>" title="Login" aria-label="Login">Login</a>
+        <a href="/auth/register" class="auth-link <%= path === '/auth/register' ? 'active' : '' %>" title="Register" aria-label="Register">Register</a>
+      </div>
+      <% } %>
+    </nav>
+  </header>
+
+  <main>
